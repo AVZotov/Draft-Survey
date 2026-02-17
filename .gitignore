@@ -47,4 +47,5 @@ data/backups/
 *.sqlite
 bin/
 dist/
+.idea/
 
