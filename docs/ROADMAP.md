@@ -79,9 +79,10 @@
 ### 1.4 Storage Layer
 **Location:** `internal/storage/`
 
-**Decision Point:** JSON files OR SQLite embedded?
+**Decision Point:** JSON files
 - JSON: Simple, no dependencies, human-readable
-- SQLite: Better queries, single file DB, ACID transactions
+- Interim desision with naming convention: YYYY-MM-DD_IMOxxxxxxx_type.json
+
 
 **Tasks:**
 - [ ] Survey CRUD operations
