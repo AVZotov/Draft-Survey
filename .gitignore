@@ -1,0 +1,50 @@
+# Ignore everything
+*
+
+# Allow directories
+!*/
+
+# Allow Go source files
+!**/*.go
+!go.mod
+!go.sum
+
+# Allow configs (but not local overrides)
+!**/*.yaml
+!**/*.yml
+!**/*.toml
+!*.env.example
+!.gitignore
+
+# Allow web assets
+!**/*.html
+!**/*.css
+!**/*.js
+
+# Allow documentation
+!**/*.md
+!**/*.txt
+
+# Allow dictionaries
+!data/dictionaries/*.json
+
+# Allow GitHub Actions
+!.github/workflows/*.yml
+
+# Allow Makefile and gitkeep
+!Makefile
+!**/.gitkeep
+
+# Always ignore — sensitive and generated
+.env
+configs/local.yaml
+configs/local.toml
+data/surveys/
+data/temp/
+data/backups/
+*.log
+*.db
+*.sqlite
+bin/
+dist/
+
