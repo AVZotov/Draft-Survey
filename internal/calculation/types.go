@@ -90,6 +90,7 @@ type CargoOperation struct {
 	Packing           string
 	Port              string
 }
+
 type Vessel struct {
 	Name              string
 	Flag              string
