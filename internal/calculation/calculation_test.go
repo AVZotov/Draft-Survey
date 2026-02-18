@@ -44,6 +44,7 @@ func getVessel() Vessel {
 		KeelFWD:        0.000,
 		KeelMID:        0.000,
 		KeelAFT:        0.000,
+		VesselType:     VesselTypeMarine,
 	}
 }
 
@@ -141,7 +142,6 @@ func TestCalcDraftsWKeel(t *testing.T) {
 	meanDraft := MeanDrafts(marks)
 	vessel := getVessel()
 	ppCorrections := CalcFullLBPPPCorrections(meanDraft, vessel)
-
 	draftsWKeel := CalcDraftsWKeel(meanDraft, ppCorrections, vessel)
 
 	if FWDDraftsWKeelExpected != draftsWKeel.FWDDraftWKeel {
@@ -152,5 +152,19 @@ func TestCalcDraftsWKeel(t *testing.T) {
 	}
 	if AFTDraftsWKeelExpected != draftsWKeel.AFTDraftWKeel {
 		t.Errorf("Expected %f, got %f", AFTDraftsWKeelExpected, draftsWKeel.AFTDraftWKeel)
+	}
+}
+
+func TestCalcMMC(t *testing.T) {
+	MMCExpected := 4.542
+	marks := getMarks()
+	meanDraft := MeanDrafts(marks)
+	vessel := getVessel()
+	ppCorrections := CalcFullLBPPPCorrections(meanDraft, vessel)
+	draftsWKeel := CalcDraftsWKeel(meanDraft, ppCorrections, vessel)
+	MMC := CalcMMC(draftsWKeel, vessel.VesselType)
+
+	if MMCExpected != MMC {
+		t.Errorf("Expected %f, got %f", MMCExpected, MMC)
 	}
 }

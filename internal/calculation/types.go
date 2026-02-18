@@ -116,6 +116,7 @@ type Vessel struct {
 	KeelFWD           float64
 	KeelMID           float64
 	KeelAFT           float64
+	VesselType        VesselType
 }
 
 type LCFDirection string
@@ -150,3 +151,11 @@ type DraftsWKeel struct {
 	MIDDraftWKeel float64
 	AFTDraftWKeel float64
 }
+
+type VesselType string
+
+const (
+	VesselTypeMarine VesselType = "marine"
+	VesselTypeRiver  VesselType = "river"
+	VesselTypeBarge  VesselType = "barge"
+)

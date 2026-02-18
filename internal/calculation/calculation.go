@@ -1,7 +1,5 @@
 package calculation
 
-import "fmt"
-
 func (fwt FreshWaterTank) GetWeight() float64 {
 	return fwt.Volume
 }
@@ -48,7 +46,6 @@ func CalcFullLBPPPCorrections(m MeanDraft, v Vessel) PPCorrections {
 		dAftDir *= -1
 	}
 	LBM := round3(v.LBP - dAftDir + dFwdDir)
-	fmt.Println(LBM)
 	return PPCorrections{
 		FWDCorrection: round3(dFwdDir * trim / LBM),
 		MIDCorrection: round3(dMidDir * trim / LBM),
@@ -66,4 +63,20 @@ func CalcDraftsWKeel(meanDraft MeanDraft, ppCorrections PPCorrections, vessel Ve
 		MIDDraftWKeel: round3(meanDraft.DraftMIDmean + ppCorrections.MIDCorrection + keelCorrectionMid),
 		AFTDraftWKeel: round3(meanDraft.DraftAFTmean + ppCorrections.AFTCorrection + keelCorrectionAft),
 	}
+}
+
+func CalcMMC(draftsWKeel DraftsWKeel, vesselType VesselType) float64 {
+	if vesselType == VesselTypeMarine {
+		return round3((draftsWKeel.FWDDraftWKeel + 6*draftsWKeel.MIDDraftWKeel + draftsWKeel.AFTDraftWKeel) / 8)
+	}
+
+	if vesselType == VesselTypeRiver {
+		return round3((draftsWKeel.FWDDraftWKeel + 4*draftsWKeel.MIDDraftWKeel + draftsWKeel.AFTDraftWKeel) / 6)
+	}
+
+	if vesselType == VesselTypeBarge {
+		return round3((3*draftsWKeel.FWDDraftWKeel + 14*draftsWKeel.MIDDraftWKeel + 3*draftsWKeel.AFTDraftWKeel) / 20)
+	}
+
+	return 0
 }
