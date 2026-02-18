@@ -23,21 +23,27 @@ func getBallastWaterTank() BallastWaterTank {
 
 func getMarks() Marks {
 	return Marks{
-		FWDPort:      7.1,
-		FWDStarboard: 7.2,
-		MIDPort:      7.3,
-		MIDStarboard: 7.4,
-		AFTPort:      7.5,
-		AFTStarboard: 7.6,
+		FWDPort:      3.41,
+		FWDStarboard: 3.41,
+		MIDPort:      4.51,
+		MIDStarboard: 4.54,
+		AFTPort:      5.69,
+		AFTStarboard: 5.70,
 	}
 }
 
 func getVessel() Vessel {
 	return Vessel{
-		DistancePPFWD: 1.400,
-		DistancePPMID: 0.400,
-		DistancePPAFT: 9.950,
-		LBP:           182.000,
+		DistancePPFWD:  1.400,
+		DistancePPMID:  0.400,
+		DistancePPAFT:  9.950,
+		PPFWDDirection: PPDirectionAft,
+		PPMIDDirection: PPDirectionAft,
+		PPAFTDirection: PPDirectionForward,
+		LBP:            182.000,
+		KeelFWD:        0.000,
+		KeelMID:        0.000,
+		KeelAFT:        0.000,
 	}
 }
 
@@ -88,9 +94,9 @@ func TestTotalBallastWater(t *testing.T) {
 }
 
 func TestMeanDrafts(t *testing.T) {
-	draftFWDExpected := 7.15
-	draftMIDExpected := 7.35
-	draftAFTExpected := 7.55
+	draftFWDExpected := 3.410
+	draftMIDExpected := 4.525
+	draftAFTExpected := 5.695
 
 	marks := getMarks()
 	meanDrafts := MeanDrafts(marks)
@@ -107,15 +113,19 @@ func TestMeanDrafts(t *testing.T) {
 }
 
 func TestCalcPPCorrections(t *testing.T) {
-	fwdCorrectionExpected := 0.002
-	aftCorrectionExpected := -0.011
+	fwdCorrectionExpected := -0.019
+	midCorrectionExpected := -0.005
+	aftCorrectionExpected := 0.133
 
 	meanDrafts := MeanDrafts(getMarks())
 	vessel := getVessel()
-	ppCorrections := CalcPPCorrections(meanDrafts, vessel)
+	ppCorrections := CalcFullLBPPPCorrections(meanDrafts, vessel)
 
 	if fwdCorrectionExpected != ppCorrections.FWDCorrection {
 		t.Errorf("Expected %f, got %f", fwdCorrectionExpected, ppCorrections.FWDCorrection)
+	}
+	if midCorrectionExpected != ppCorrections.MIDCorrection {
+		t.Errorf("Expected %f, got %f", midCorrectionExpected, ppCorrections.MIDCorrection)
 	}
 	if aftCorrectionExpected != ppCorrections.AFTCorrection {
 		t.Errorf("Expected %f, got %f", aftCorrectionExpected, ppCorrections.AFTCorrection)

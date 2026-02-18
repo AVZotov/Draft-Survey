@@ -91,6 +91,13 @@ type CargoOperation struct {
 	Port              string
 }
 
+type PPDirection string
+
+const (
+	PPDirectionForward PPDirection = "F"
+	PPDirectionAft     PPDirection = "A"
+)
+
 type Vessel struct {
 	Name              string
 	Flag              string
@@ -102,7 +109,13 @@ type Vessel struct {
 	DistancePPFWD     float64
 	DistancePPMID     float64
 	DistancePPAFT     float64
+	PPFWDDirection    PPDirection
+	PPMIDDirection    PPDirection
+	PPAFTDirection    PPDirection
 	LBP               float64
+	KeelFWD           float64
+	KeelMID           float64
+	KeelAFT           float64
 }
 
 type LCFDirection string
@@ -128,5 +141,6 @@ type MeanDraft struct {
 
 type PPCorrections struct {
 	FWDCorrection float64
+	MIDCorrection float64
 	AFTCorrection float64
 }
