@@ -31,3 +31,10 @@ func MeanDrafts(m Marks) MeanDraft {
 		DraftAFTmean: round3((m.AFTPort + m.AFTStarboard) / 2),
 	}
 }
+
+func CalcPPCorrections(m MeanDraft, v Vessel) PPCorrections {
+	return PPCorrections{
+		FWDCorrection: round3((m.DraftMIDmean - m.DraftFWDmean) * v.DistancePPFWD / v.LBP),
+		AFTCorrection: round3((m.DraftMIDmean - m.DraftAFTmean) * v.DistancePPAFT / v.LBP),
+	}
+}

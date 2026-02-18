@@ -99,6 +99,10 @@ type Vessel struct {
 	BuiltCountry      string
 	BuiltYear         int
 	HydrostaticTables string
+	DistancePPFWD     float64
+	DistancePPMID     float64
+	DistancePPAFT     float64
+	LBP               float64
 }
 
 type LCFDirection string
@@ -120,4 +124,9 @@ type MeanDraft struct {
 	DraftFWDmean float64
 	DraftMIDmean float64
 	DraftAFTmean float64
+}
+
+type PPCorrections struct {
+	FWDCorrection float64
+	AFTCorrection float64
 }

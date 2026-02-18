@@ -21,6 +21,26 @@ func getBallastWaterTank() BallastWaterTank {
 	}
 }
 
+func getMarks() Marks {
+	return Marks{
+		FWDPort:      7.1,
+		FWDStarboard: 7.2,
+		MIDPort:      7.3,
+		MIDStarboard: 7.4,
+		AFTPort:      7.5,
+		AFTStarboard: 7.6,
+	}
+}
+
+func getVessel() Vessel {
+	return Vessel{
+		DistancePPFWD: 1.400,
+		DistancePPMID: 0.400,
+		DistancePPAFT: 9.950,
+		LBP:           182.000,
+	}
+}
+
 func TestFreshWaterTank_GetWeight(t *testing.T) {
 	const weight = 3.5
 	tank := getFreshWaterTank()
@@ -72,14 +92,7 @@ func TestMeanDrafts(t *testing.T) {
 	draftMIDExpected := 7.35
 	draftAFTExpected := 7.55
 
-	marks := Marks{
-		FWDPort:      7.1,
-		FWDStarboard: 7.2,
-		MIDPort:      7.3,
-		MIDStarboard: 7.4,
-		AFTPort:      7.5,
-		AFTStarboard: 7.6,
-	}
+	marks := getMarks()
 	meanDrafts := MeanDrafts(marks)
 
 	if meanDrafts.DraftFWDmean != draftFWDExpected {
@@ -90,5 +103,21 @@ func TestMeanDrafts(t *testing.T) {
 	}
 	if meanDrafts.DraftAFTmean != draftAFTExpected {
 		t.Errorf("Expected %f, got %f", draftAFTExpected, meanDrafts.DraftAFTmean)
+	}
+}
+
+func TestCalcPPCorrections(t *testing.T) {
+	fwdCorrectionExpected := 0.002
+	aftCorrectionExpected := -0.011
+
+	meanDrafts := MeanDrafts(getMarks())
+	vessel := getVessel()
+	ppCorrections := CalcPPCorrections(meanDrafts, vessel)
+
+	if fwdCorrectionExpected != ppCorrections.FWDCorrection {
+		t.Errorf("Expected %f, got %f", fwdCorrectionExpected, ppCorrections.FWDCorrection)
+	}
+	if aftCorrectionExpected != ppCorrections.AFTCorrection {
+		t.Errorf("Expected %f, got %f", aftCorrectionExpected, ppCorrections.AFTCorrection)
 	}
 }
