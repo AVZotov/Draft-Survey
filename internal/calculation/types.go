@@ -115,3 +115,9 @@ type Survey struct {
 	CargoOperation CargoOperation
 	Vessel         Vessel
 }
+
+type MeanDraft struct {
+	DraftFWDmean float64
+	DraftMIDmean float64
+	DraftAFTmean float64
+}

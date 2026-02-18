@@ -66,3 +66,29 @@ func TestTotalBallastWater(t *testing.T) {
 		t.Errorf("Expected %f, got %f", weight, totalWeight)
 	}
 }
+
+func TestMeanDrafts(t *testing.T) {
+	draftFWDExpected := 7.15
+	draftMIDExpected := 7.35
+	draftAFTExpected := 7.55
+
+	marks := Marks{
+		FWDPort:      7.1,
+		FWDStarboard: 7.2,
+		MIDPort:      7.3,
+		MIDStarboard: 7.4,
+		AFTPort:      7.5,
+		AFTStarboard: 7.6,
+	}
+	meanDrafts := MeanDrafts(marks)
+
+	if meanDrafts.DraftFWDmean != draftFWDExpected {
+		t.Errorf("Expected %f, got %f", draftFWDExpected, meanDrafts.DraftFWDmean)
+	}
+	if meanDrafts.DraftMIDmean != draftMIDExpected {
+		t.Errorf("Expected %f, got %f", draftMIDExpected, meanDrafts.DraftMIDmean)
+	}
+	if meanDrafts.DraftAFTmean != draftAFTExpected {
+		t.Errorf("Expected %f, got %f", draftAFTExpected, meanDrafts.DraftAFTmean)
+	}
+}

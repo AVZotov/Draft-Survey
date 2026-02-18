@@ -23,3 +23,11 @@ func TotalBallastWater(bwt []BallastWaterTank) float64 {
 	}
 	return total
 }
+
+func MeanDrafts(m Marks) MeanDraft {
+	return MeanDraft{
+		DraftFWDmean: round3((m.FWDPort + m.FWDStarboard) / 2),
+		DraftMIDmean: round3((m.MIDPort + m.MIDStarboard) / 2),
+		DraftAFTmean: round3((m.AFTPort + m.AFTStarboard) / 2),
+	}
+}
