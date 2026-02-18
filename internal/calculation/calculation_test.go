@@ -131,3 +131,26 @@ func TestCalcPPCorrections(t *testing.T) {
 		t.Errorf("Expected %f, got %f", aftCorrectionExpected, ppCorrections.AFTCorrection)
 	}
 }
+
+func TestCalcDraftsWKeel(t *testing.T) {
+	FWDDraftsWKeelExpected := 3.391
+	MIDDraftsWKeelExpected := 4.520
+	AFTDraftsWKeelExpected := 5.828
+
+	marks := getMarks()
+	meanDraft := MeanDrafts(marks)
+	vessel := getVessel()
+	ppCorrections := CalcFullLBPPPCorrections(meanDraft, vessel)
+
+	draftsWKeel := CalcDraftsWKeel(meanDraft, ppCorrections, vessel)
+
+	if FWDDraftsWKeelExpected != draftsWKeel.FWDDraftWKeel {
+		t.Errorf("Expected %f, got %f", FWDDraftsWKeelExpected, draftsWKeel.FWDDraftWKeel)
+	}
+	if MIDDraftsWKeelExpected != draftsWKeel.MIDDraftWKeel {
+		t.Errorf("Expected %f, got %f", MIDDraftsWKeelExpected, draftsWKeel.MIDDraftWKeel)
+	}
+	if AFTDraftsWKeelExpected != draftsWKeel.AFTDraftWKeel {
+		t.Errorf("Expected %f, got %f", AFTDraftsWKeelExpected, draftsWKeel.AFTDraftWKeel)
+	}
+}

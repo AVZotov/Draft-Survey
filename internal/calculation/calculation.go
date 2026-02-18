@@ -56,6 +56,14 @@ func CalcFullLBPPPCorrections(m MeanDraft, v Vessel) PPCorrections {
 	}
 }
 
-func CalcDraftsWKeel() {
+func CalcDraftsWKeel(meanDraft MeanDraft, ppCorrections PPCorrections, vessel Vessel) DraftsWKeel {
+	keelCorrectionFwd := -1 * vessel.KeelFWD / 1000
+	keelCorrectionMid := -1 * vessel.KeelMID / 1000
+	keelCorrectionAft := -1 * vessel.KeelAFT / 1000
 
+	return DraftsWKeel{
+		FWDDraftWKeel: round3(meanDraft.DraftFWDmean + ppCorrections.FWDCorrection + keelCorrectionFwd),
+		MIDDraftWKeel: round3(meanDraft.DraftMIDmean + ppCorrections.MIDCorrection + keelCorrectionMid),
+		AFTDraftWKeel: round3(meanDraft.DraftAFTmean + ppCorrections.AFTCorrection + keelCorrectionAft),
+	}
 }

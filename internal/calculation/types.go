@@ -144,3 +144,9 @@ type PPCorrections struct {
 	MIDCorrection float64
 	AFTCorrection float64
 }
+
+type DraftsWKeel struct {
+	FWDDraftWKeel float64
+	MIDDraftWKeel float64
+	AFTDraftWKeel float64
+}
