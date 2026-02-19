@@ -129,7 +129,7 @@ func CalcFirstTrimCorrection(dwk DraftsWKeel, tpc float64, lcf float64, lbp floa
 
 func CalcSecondTrimCorrection(dwk DraftsWKeel, mtcRows []MTCRow, lbp float64) float64 {
 	var lowerMtcRow, upperMtcRow MTCRow
-	if mtcRows[0].MTC < mtcRows[1].MTC {
+	if mtcRows[0].Draft < mtcRows[1].Draft {
 		lowerMtcRow = mtcRows[0]
 		upperMtcRow = mtcRows[1]
 	} else {
@@ -141,4 +141,11 @@ func CalcSecondTrimCorrection(dwk DraftsWKeel, mtcRows []MTCRow, lbp float64) fl
 	trueTrim := dwk.AFTDraftWKeel - dwk.FWDDraftWKeel
 
 	return round3(50 * math.Pow(trueTrim, 2) * deltaMtc / lbp)
+}
+
+func CalcListCorrection(marks Marks, tpcListPort, tpcListStarboard float64) float64 {
+	if marks.MIDPort == marks.MIDStarboard {
+		return 0.0
+	}
+	return round3(6 * math.Abs(marks.MIDPort-marks.MIDStarboard) * math.Abs(tpcListPort-tpcListStarboard))
 }

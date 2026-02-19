@@ -21,6 +21,13 @@ func getBallastWaterTank() BallastWaterTank {
 	}
 }
 
+func getInitDraftData() InitialDraft {
+	return InitialDraft{
+		TPCListPort:      49.665,
+		TPCListStarboard: 49.688,
+	}
+}
+
 func getMarks() Marks {
 	return Marks{
 		FWDPort:      3.41,
@@ -245,5 +252,15 @@ func TestCalcSecondTrimCorrection(t *testing.T) {
 
 	if secondTrimCorrectionExpected != secondTrimCorrectionGot {
 		t.Errorf("Expected %f, got %f", secondTrimCorrectionExpected, secondTrimCorrectionGot)
+	}
+}
+
+func TestCalcListCorrection(t *testing.T) {
+	listCorrectionExpected := 0.004
+	marks := getMarks()
+	initDS := getInitDraftData()
+	listCorrectionGot := CalcListCorrection(marks, initDS.TPCListPort, initDS.TPCListStarboard)
+	if listCorrectionExpected != listCorrectionGot {
+		t.Errorf("Expected %f, got %f", listCorrectionExpected, listCorrectionGot)
 	}
 }

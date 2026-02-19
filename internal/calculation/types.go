@@ -60,6 +60,8 @@ type InitialDraft struct {
 	FinishedAt        time.Time
 	MTCRows           []MTCRow
 	HydrostaticRows   []HydrostaticRow
+	TPCListPort       float64
+	TPCListStarboard  float64
 }
 
 type FinalDraft struct {
@@ -73,6 +75,8 @@ type FinalDraft struct {
 	FinishedAt        time.Time
 	MTCRows           []MTCRow
 	HydrostaticRows   []HydrostaticRow
+	TPCListPort       float64
+	TPCListStarboard  float64
 }
 
 type Job struct {
