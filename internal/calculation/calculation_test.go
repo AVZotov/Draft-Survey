@@ -48,6 +48,13 @@ func getVessel() Vessel {
 	}
 }
 
+func getInitHydrostaticRows() []HydrostaticRow {
+	return []HydrostaticRow{
+		{Draft: 4.54, Displacement: 21226},
+		{Draft: 4.55, Displacement: 21227},
+	}
+}
+
 func TestFreshWaterTank_GetWeight(t *testing.T) {
 	const weight = 3.5
 	tank := getFreshWaterTank()
@@ -166,5 +173,14 @@ func TestCalcMMC(t *testing.T) {
 
 	if MMCExpected != MMC {
 		t.Errorf("Expected %f, got %f", MMCExpected, MMC)
+	}
+}
+
+func TestInterpolate(t *testing.T) {
+	expected := 21236.000
+	got := Interpolate(4.542, 4.540, 21226.000, 4.550, 21276.000)
+
+	if expected != got {
+		t.Errorf("Expected %f, got %f", expected, got)
 	}
 }

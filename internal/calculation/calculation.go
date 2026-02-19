@@ -80,3 +80,8 @@ func CalcMMC(draftsWKeel DraftsWKeel, vesselType VesselType) float64 {
 
 	return 0
 }
+
+func Interpolate(fact, lowerDraft, lowerValue, upperDraft, upperValue float64) float64 {
+	result := lowerValue + ((fact - lowerDraft) * (upperValue - lowerValue) / (upperDraft - lowerDraft))
+	return result
+}
