@@ -55,6 +55,13 @@ func getInitHydrostaticRows() []HydrostaticRow {
 	}
 }
 
+func getInitMtcRows() []MTCRow {
+	return []MTCRow{
+		{Draft: 4.04, MTC: 529.4},
+		{Draft: 5.04, MTC: 548.0},
+	}
+}
+
 func TestFreshWaterTank_GetWeight(t *testing.T) {
 	const weight = 3.5
 	tank := getFreshWaterTank()
@@ -223,5 +230,20 @@ func TestCalcFirstTrimCorrection(t *testing.T) {
 
 	if firstTrimCorrectionExpected != firstTrimCorrectionGot {
 		t.Errorf("Expected %f, got %f", firstTrimCorrectionExpected, firstTrimCorrectionGot)
+	}
+}
+
+func TestCalcSecondTrimCorrection(t *testing.T) {
+	secondTrimCorrectionExpected := 30.347
+	marks := getMarks()
+	meanDraft := MeanDrafts(marks)
+	vessel := getVessel()
+	ppCorrections := CalcFullLBPPPCorrections(meanDraft, vessel)
+	draftsWKeel := CalcDraftsWKeel(meanDraft, ppCorrections, vessel)
+	mtcRows := getInitMtcRows()
+	secondTrimCorrectionGot := CalcSecondTrimCorrection(draftsWKeel, mtcRows, vessel.LBP)
+
+	if secondTrimCorrectionExpected != secondTrimCorrectionGot {
+		t.Errorf("Expected %f, got %f", secondTrimCorrectionExpected, secondTrimCorrectionGot)
 	}
 }
