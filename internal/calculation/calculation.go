@@ -149,3 +149,8 @@ func CalcListCorrection(marks Marks, tpcListPort, tpcListStarboard float64) floa
 	}
 	return round3(6 * math.Abs(marks.MIDPort-marks.MIDStarboard) * math.Abs(tpcListPort-tpcListStarboard))
 }
+
+func CalcDensityCorrection(displacement float64, firstTrim float64, secondTrim float64, listCorrection float64, density float64) float64 {
+	displacementCorrected := displacement + firstTrim + secondTrim + listCorrection
+	return round3(displacementCorrected * (density - 1.025) / 1.025)
+}

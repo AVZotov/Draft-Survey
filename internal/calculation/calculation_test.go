@@ -25,6 +25,7 @@ func getInitDraftData() InitialDraft {
 	return InitialDraft{
 		TPCListPort:      49.665,
 		TPCListStarboard: 49.688,
+		Density:          1.023,
 	}
 }
 
@@ -262,5 +263,27 @@ func TestCalcListCorrection(t *testing.T) {
 	listCorrectionGot := CalcListCorrection(marks, initDS.TPCListPort, initDS.TPCListStarboard)
 	if listCorrectionExpected != listCorrectionGot {
 		t.Errorf("Expected %f, got %f", listCorrectionExpected, listCorrectionGot)
+	}
+}
+
+func TestCalcDensityCorrection(t *testing.T) {
+	densityCorrExpected := -40.596
+	marks := getMarks()
+	meanDraft := MeanDrafts(marks)
+	vessel := getVessel()
+	ppCorrections := CalcFullLBPPPCorrections(meanDraft, vessel)
+	draftsWKeel := CalcDraftsWKeel(meanDraft, ppCorrections, vessel)
+	mmc := CalcMMC(draftsWKeel, vessel.VesselType)
+	hr := getInitHydrostaticRows()
+	displacement, tpc, lcf := CalcHydrostatics(mmc, hr)
+	mtcRows := getInitMtcRows()
+	initDS := getInitDraftData()
+	firstTrim := CalcFirstTrimCorrection(draftsWKeel, tpc, lcf, vessel.LBP)
+	secondTrim := CalcSecondTrimCorrection(draftsWKeel, mtcRows, vessel.LBP)
+	listCorrection := CalcListCorrection(marks, initDS.TPCListPort, initDS.TPCListStarboard)
+	densityCorrGot := CalcDensityCorrection(displacement, firstTrim, secondTrim, listCorrection, initDS.Density)
+
+	if densityCorrExpected != densityCorrGot {
+		t.Errorf("Expected %f, got %f", densityCorrExpected, densityCorrGot)
 	}
 }
