@@ -188,7 +188,7 @@ func TestInterpolate(t *testing.T) {
 func TestCalcHydrostatics(t *testing.T) {
 	displasementExpected := 21236.000
 	tpcExpected := 49.700
-	lcfExpected := 6.928
+	lcfExpected := -6.928
 	marks := getMarks()
 	meanDraft := MeanDrafts(marks)
 	vessel := getVessel()
@@ -206,5 +206,22 @@ func TestCalcHydrostatics(t *testing.T) {
 	}
 	if lcfExpected != lcfGot {
 		t.Errorf("Expected %f, got %f", lcfExpected, lcfGot)
+	}
+}
+
+func TestCalcFirstTrimCorrection(t *testing.T) {
+	firstTrimCorrectionExpected := -461.050
+	marks := getMarks()
+	meanDraft := MeanDrafts(marks)
+	vessel := getVessel()
+	ppCorrections := CalcFullLBPPPCorrections(meanDraft, vessel)
+	draftsWKeel := CalcDraftsWKeel(meanDraft, ppCorrections, vessel)
+	mmc := CalcMMC(draftsWKeel, vessel.VesselType)
+	hr := getInitHydrostaticRows()
+	_, tpc, lcf := CalcHydrostatics(mmc, hr)
+	firstTrimCorrectionGot := CalcFirstTrimCorrection(draftsWKeel, tpc, lcf, vessel.LBP)
+
+	if firstTrimCorrectionExpected != firstTrimCorrectionGot {
+		t.Errorf("Expected %f, got %f", firstTrimCorrectionExpected, firstTrimCorrectionGot)
 	}
 }

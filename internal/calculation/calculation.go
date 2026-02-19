@@ -1,5 +1,7 @@
 package calculation
 
+import "math"
+
 func (fwt FreshWaterTank) GetWeight() float64 {
 	return fwt.Volume
 }
@@ -100,14 +102,27 @@ func CalcHydrostatics(mmc float64, hr []HydrostaticRow) (displacement float64, t
 	lowerLcf := lower.LCF
 	upperLcf := upper.LCF
 
-	if lower.LCFDirection == LCFDirectionAft {
+	if lower.LCFDirection == LCFDirectionForward {
 		lowerLcf *= -1
 	}
-	if upper.LCFDirection == LCFDirectionAft {
+	if upper.LCFDirection == LCFDirectionForward {
 		upperLcf *= -1
 	}
 
 	lcf = Interpolate(mmc, lower.Draft, lowerLcf, upper.Draft, upperLcf)
 
 	return displacement, tpc, lcf
+}
+
+func CalcFirstTrimCorrection(dwk DraftsWKeel, tpc float64, lcf float64, lbp float64) float64 {
+	trueTrim := dwk.AFTDraftWKeel - dwk.FWDDraftWKeel
+	var firstTrimCorrection float64
+
+	if trueTrim < 0 && lcf >= 0 || trueTrim > 0 && lcf <= 0 {
+		firstTrimCorrection = -1 * (math.Abs(trueTrim * tpc * lcf * 100 / lbp))
+	} else {
+		firstTrimCorrection = math.Abs(trueTrim * tpc * lcf * 100 / lbp)
+	}
+
+	return round3(firstTrimCorrection)
 }
