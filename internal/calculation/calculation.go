@@ -82,6 +82,32 @@ func CalcMMC(draftsWKeel DraftsWKeel, vesselType VesselType) float64 {
 }
 
 func Interpolate(fact, lowerDraft, lowerValue, upperDraft, upperValue float64) float64 {
-	result := lowerValue + ((fact - lowerDraft) * (upperValue - lowerValue) / (upperDraft - lowerDraft))
+	result := round3(lowerValue + ((fact - lowerDraft) * (upperValue - lowerValue) / (upperDraft - lowerDraft)))
 	return result
+}
+
+func CalcHydrostatics(mmc float64, hr []HydrostaticRow) (displacement float64, tpc float64, lcf float64) {
+	var lower, upper HydrostaticRow
+	if hr[0].Draft < hr[1].Draft {
+		lower = hr[0]
+		upper = hr[1]
+	} else {
+		lower = hr[1]
+		upper = hr[0]
+	}
+	displacement = Interpolate(mmc, lower.Draft, lower.Displacement, upper.Draft, upper.Displacement)
+	tpc = Interpolate(mmc, lower.Draft, lower.TPC, upper.Draft, upper.TPC)
+	lowerLcf := lower.LCF
+	upperLcf := upper.LCF
+
+	if lower.LCFDirection == LCFDirectionAft {
+		lowerLcf *= -1
+	}
+	if upper.LCFDirection == LCFDirectionAft {
+		upperLcf *= -1
+	}
+
+	lcf = Interpolate(mmc, lower.Draft, lowerLcf, upper.Draft, upperLcf)
+
+	return displacement, tpc, lcf
 }

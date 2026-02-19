@@ -50,8 +50,8 @@ func getVessel() Vessel {
 
 func getInitHydrostaticRows() []HydrostaticRow {
 	return []HydrostaticRow{
-		{Draft: 4.54, Displacement: 21226},
-		{Draft: 4.55, Displacement: 21227},
+		{Draft: 4.54, Displacement: 21226, TPC: 49.7, LCF: 6.93, LCFDirection: LCFDirectionForward},
+		{Draft: 4.55, Displacement: 21276, TPC: 49.7, LCF: 6.92, LCFDirection: LCFDirectionForward},
 	}
 }
 
@@ -182,5 +182,29 @@ func TestInterpolate(t *testing.T) {
 
 	if expected != got {
 		t.Errorf("Expected %f, got %f", expected, got)
+	}
+}
+
+func TestCalcHydrostatics(t *testing.T) {
+	displasementExpected := 21236.000
+	tpcExpected := 49.700
+	lcfExpected := 6.928
+	marks := getMarks()
+	meanDraft := MeanDrafts(marks)
+	vessel := getVessel()
+	ppCorrections := CalcFullLBPPPCorrections(meanDraft, vessel)
+	draftsWKeel := CalcDraftsWKeel(meanDraft, ppCorrections, vessel)
+	mmc := CalcMMC(draftsWKeel, vessel.VesselType)
+	hr := getInitHydrostaticRows()
+	displasementGot, tpcGot, lcfGot := CalcHydrostatics(mmc, hr)
+
+	if displasementExpected != displasementGot {
+		t.Errorf("Expected %f, got %f", displasementExpected, displasementGot)
+	}
+	if tpcExpected != tpcGot {
+		t.Errorf("Expected %f, got %f", tpcExpected, tpcGot)
+	}
+	if lcfExpected != lcfGot {
+		t.Errorf("Expected %f, got %f", lcfExpected, lcfGot)
 	}
 }
