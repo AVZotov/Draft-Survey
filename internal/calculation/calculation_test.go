@@ -12,12 +12,24 @@ func getFreshWaterTank() FreshWaterTank {
 	}
 }
 
+func getInitFreshWaterTanks() []FreshWaterTank {
+	return []FreshWaterTank{
+		{Name: "FW P", Sounding: 364.000, Volume: 364.000},
+	}
+}
+
 func getBallastWaterTank() BallastWaterTank {
 	return BallastWaterTank{
 		Name:     "test",
 		Sounding: 3.5,
 		Volume:   3.5,
 		Density:  1.025,
+	}
+}
+
+func getInitBallastWaterTanks() []BallastWaterTank {
+	return []BallastWaterTank{
+		{Name: "FPT", Sounding: 10347.899, Volume: 10347.899, Density: 1.025},
 	}
 }
 
@@ -70,6 +82,13 @@ func getInitMtcRows() []MTCRow {
 	}
 }
 
+func getInitDeductibles() Deductibles {
+	return Deductibles{
+		HFO: 683.868,
+		MDO: 89.130,
+	}
+}
+
 func TestFreshWaterTank_GetWeight(t *testing.T) {
 	const weight = 3.5
 	tank := getFreshWaterTank()
@@ -89,14 +108,10 @@ func TestBallastWaterTank_GetWeight(t *testing.T) {
 }
 
 func TestTotalFreshWater(t *testing.T) {
-	const weight = 17.5
-	tank := getFreshWaterTank()
-	var freshWaterTanks []FreshWaterTank
+	const weight = 364.000
+	tanks := getInitFreshWaterTanks()
 
-	for i := 0; i < 5; i++ {
-		freshWaterTanks = append(freshWaterTanks, tank)
-	}
-	totalWeight := TotalFreshWater(freshWaterTanks)
+	totalWeight := TotalFreshWater(tanks)
 	if totalWeight != weight {
 		t.Errorf("Expected %f, got %f", weight, totalWeight)
 	}
@@ -285,5 +300,17 @@ func TestCalcDensityCorrection(t *testing.T) {
 
 	if densityCorrExpected != densityCorrGot {
 		t.Errorf("Expected %f, got %f", densityCorrExpected, densityCorrGot)
+	}
+}
+
+func TestCalcTotalDeductibles(t *testing.T) {
+	totalDeductiblesExpected := 11743.594
+	bwt := getInitBallastWaterTanks()
+	fwt := getInitFreshWaterTanks()
+	d := getInitDeductibles()
+	totalDeductiblesGot := CalcTotalDeductibles(bwt, fwt, d)
+
+	if totalDeductiblesExpected != totalDeductiblesGot {
+		t.Errorf("Expected %f, got %f", totalDeductiblesExpected, totalDeductiblesGot)
 	}
 }

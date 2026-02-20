@@ -154,3 +154,10 @@ func CalcDensityCorrection(displacement float64, firstTrim float64, secondTrim f
 	displacementCorrected := displacement + firstTrim + secondTrim + listCorrection
 	return round3(displacementCorrected * (density - 1.025) / 1.025)
 }
+
+func CalcTotalDeductibles(bwt []BallastWaterTank, fwt []FreshWaterTank, d Deductibles) float64 {
+	tbw := TotalBallastWater(bwt)
+	tfw := TotalFreshWater(fwt)
+
+	return round3(tbw + tfw + d.HFO + d.MDO + d.Luboil + d.BilgeWater + d.SewageWater + d.Others)
+}
