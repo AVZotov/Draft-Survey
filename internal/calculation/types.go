@@ -128,6 +128,7 @@ type LCFDirection string
 const (
 	LCFDirectionForward LCFDirection = "F"
 	LCFDirectionAft     LCFDirection = "A"
+	LCFDirectionFromAP  LCFDirection = "AP"
 )
 
 type Survey struct {

@@ -28,8 +28,8 @@ func getPolarStarTrimnoListMarks() Marks {
 
 func getPolarStarTrimnoListHydrostaticRows() []HydrostaticRow {
 	return []HydrostaticRow{
-		{Draft: 4.617, Displacement: 19182.7, TPC: 45.2, LCF: 98.457},
-		{Draft: 4.667, Displacement: 19409.0, TPC: 45.3, LCF: 98.405},
+		{Draft: 4.617, Displacement: 19182.7, TPC: 45.2, LCF: 98.457, LCFDirection: LCFDirectionFromAP},
+		{Draft: 4.667, Displacement: 19409.0, TPC: 45.3, LCF: 98.405, LCFDirection: LCFDirectionFromAP},
 	}
 }
 
@@ -101,5 +101,30 @@ func TestPolarStar_TrimnoList_MMC(t *testing.T) {
 
 	if got != 4.644 {
 		t.Errorf("MMC: expected 4.644, got %f", got)
+	}
+}
+
+func TestPolarStar_TrimnoListCalcHydrostatics(t *testing.T) {
+	displasementExpected := 19304.902
+	tpcExpected := 45.254
+	lcfExpected := -6.929
+	marks := getPolarStarTrimnoListMarks()
+	vessel := getPolarStarTrimnoListVessel()
+	meanDraft := MeanDrafts(marks)
+	ppCorrections := CalcFullLBPPPCorrections(meanDraft, vessel)
+	draftsWKeel := CalcDraftsWKeel(meanDraft, ppCorrections, vessel)
+	mmc := CalcMMC(draftsWKeel, vessel.VesselType)
+	hr := getPolarStarTrimnoListHydrostaticRows()
+
+	displasementGot, tpcGot, lcfGot := CalcHydrostatics(mmc, hr, vessel)
+
+	if displasementExpected != displasementGot {
+		t.Errorf("Expected %f, got %f", displasementExpected, displasementGot)
+	}
+	if tpcExpected != tpcGot {
+		t.Errorf("Expected %f, got %f", tpcExpected, tpcGot)
+	}
+	if lcfExpected != lcfGot {
+		t.Errorf("Expected %f, got %f", lcfExpected, lcfGot)
 	}
 }

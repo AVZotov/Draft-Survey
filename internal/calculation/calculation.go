@@ -88,7 +88,7 @@ func Interpolate(fact, lowerDraft, lowerValue, upperDraft, upperValue float64) f
 	return result
 }
 
-func CalcHydrostatics(mmc float64, hr []HydrostaticRow) (displacement float64, tpc float64, lcf float64) {
+func CalcHydrostatics(mmc float64, hr []HydrostaticRow, vessel Vessel) (displacement float64, tpc float64, lcf float64) {
 	var lower, upper HydrostaticRow
 	if hr[0].Draft < hr[1].Draft {
 		lower = hr[0]
@@ -99,14 +99,20 @@ func CalcHydrostatics(mmc float64, hr []HydrostaticRow) (displacement float64, t
 	}
 	displacement = Interpolate(mmc, lower.Draft, lower.Displacement, upper.Draft, upper.Displacement)
 	tpc = Interpolate(mmc, lower.Draft, lower.TPC, upper.Draft, upper.TPC)
+	const k3 = 0.045
 	lowerLcf := lower.LCF
 	upperLcf := upper.LCF
 
-	if lower.LCFDirection == LCFDirectionForward {
-		lowerLcf *= -1
-	}
-	if upper.LCFDirection == LCFDirectionForward {
-		upperLcf *= -1
+	if lower.LCFDirection == LCFDirectionFromAP || lower.LCF > vessel.LBP*k3 {
+		lowerLcf = (vessel.LBP / 2) - lower.LCF
+		upperLcf = (vessel.LBP / 2) - upper.LCF
+	} else {
+		if lower.LCFDirection == LCFDirectionForward {
+			lowerLcf *= -1
+		}
+		if upper.LCFDirection == LCFDirectionForward {
+			upperLcf *= -1
+		}
 	}
 
 	lcf = Interpolate(mmc, lower.Draft, lowerLcf, upper.Draft, upperLcf)

@@ -226,7 +226,7 @@ func TestCalcHydrostatics(t *testing.T) {
 	draftsWKeel := CalcDraftsWKeel(meanDraft, ppCorrections, vessel)
 	mmc := CalcMMC(draftsWKeel, vessel.VesselType)
 	hr := getInitHydrostaticRows()
-	displasementGot, tpcGot, lcfGot := CalcHydrostatics(mmc, hr)
+	displasementGot, tpcGot, lcfGot := CalcHydrostatics(mmc, hr, vessel)
 
 	if displasementExpected != displasementGot {
 		t.Errorf("Expected %f, got %f", displasementExpected, displasementGot)
@@ -248,7 +248,7 @@ func TestCalcFirstTrimCorrection(t *testing.T) {
 	draftsWKeel := CalcDraftsWKeel(meanDraft, ppCorrections, vessel)
 	mmc := CalcMMC(draftsWKeel, vessel.VesselType)
 	hr := getInitHydrostaticRows()
-	_, tpc, lcf := CalcHydrostatics(mmc, hr)
+	_, tpc, lcf := CalcHydrostatics(mmc, hr, vessel)
 	firstTrimCorrectionGot := CalcFirstTrimCorrection(draftsWKeel, tpc, lcf, vessel.LBP)
 
 	if firstTrimCorrectionExpected != firstTrimCorrectionGot {
@@ -290,7 +290,7 @@ func TestCalcDensityCorrection(t *testing.T) {
 	draftsWKeel := CalcDraftsWKeel(meanDraft, ppCorrections, vessel)
 	mmc := CalcMMC(draftsWKeel, vessel.VesselType)
 	hr := getInitHydrostaticRows()
-	displacement, tpc, lcf := CalcHydrostatics(mmc, hr)
+	displacement, tpc, lcf := CalcHydrostatics(mmc, hr, vessel)
 	mtcRows := getInitMtcRows()
 	initDS := getInitDraftData()
 	firstTrim := CalcFirstTrimCorrection(draftsWKeel, tpc, lcf, vessel.LBP)
@@ -328,7 +328,7 @@ func TestCalcNetDisplacement(t *testing.T) {
 	draftsWKeel := CalcDraftsWKeel(meanDraft, ppCorrections, vessel)
 	mmc := CalcMMC(draftsWKeel, vessel.VesselType)
 	hr := getInitHydrostaticRows()
-	displacement, tpc, lcf := CalcHydrostatics(mmc, hr)
+	displacement, tpc, lcf := CalcHydrostatics(mmc, hr, vessel)
 	mtcRows := getInitMtcRows()
 	initDS := getInitDraftData()
 	firstTrim := CalcFirstTrimCorrection(draftsWKeel, tpc, lcf, vessel.LBP)
