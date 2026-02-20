@@ -314,3 +314,39 @@ func TestCalcTotalDeductibles(t *testing.T) {
 		t.Errorf("Expected %f, got %f", totalDeductiblesExpected, totalDeductiblesGot)
 	}
 }
+
+func TestCalcNetDisplacement(t *testing.T) {
+	netDisplacementExpected := 9021.111
+	bwt := getInitBallastWaterTanks()
+	fwt := getInitFreshWaterTanks()
+	d := getInitDeductibles()
+	totalDeductibles := CalcTotalDeductibles(bwt, fwt, d)
+	marks := getMarks()
+	meanDraft := MeanDrafts(marks)
+	vessel := getVessel()
+	ppCorrections := CalcFullLBPPPCorrections(meanDraft, vessel)
+	draftsWKeel := CalcDraftsWKeel(meanDraft, ppCorrections, vessel)
+	mmc := CalcMMC(draftsWKeel, vessel.VesselType)
+	hr := getInitHydrostaticRows()
+	displacement, tpc, lcf := CalcHydrostatics(mmc, hr)
+	mtcRows := getInitMtcRows()
+	initDS := getInitDraftData()
+	firstTrim := CalcFirstTrimCorrection(draftsWKeel, tpc, lcf, vessel.LBP)
+	secondTrim := CalcSecondTrimCorrection(draftsWKeel, mtcRows, vessel.LBP)
+	listCorrection := CalcListCorrection(marks, initDS.TPCListPort, initDS.TPCListStarboard)
+	densityCorr := CalcDensityCorrection(displacement, firstTrim, secondTrim, listCorrection, initDS.Density)
+	netDisplacementGot := CalcNetDisplacement(displacement, firstTrim, secondTrim, listCorrection, densityCorr, totalDeductibles)
+	if netDisplacementExpected != netDisplacementGot {
+		t.Errorf("Expected %f, got %f", netDisplacementExpected, netDisplacementGot)
+	}
+}
+
+func TestCalcCargoWeight(t *testing.T) {
+	netDisplacementIni := 9000.000
+	netDisplacementFin := 49000.000
+	cargoWeightExpected := 40000.000
+	cargoWeightGot := CalcCargoWeight(netDisplacementIni, netDisplacementFin)
+	if cargoWeightExpected != cargoWeightGot {
+		t.Errorf("Expected %f, got %f", cargoWeightExpected, cargoWeightGot)
+	}
+}

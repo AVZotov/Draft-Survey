@@ -161,3 +161,12 @@ func CalcTotalDeductibles(bwt []BallastWaterTank, fwt []FreshWaterTank, d Deduct
 
 	return round3(tbw + tfw + d.HFO + d.MDO + d.Luboil + d.BilgeWater + d.SewageWater + d.Others)
 }
+
+func CalcNetDisplacement(displacement, firstTrim, secondTrim, listCorrection, densityCorrection, totalDeductibles float64) float64 {
+	displCorrToDensity := displacement + firstTrim + secondTrim + listCorrection + densityCorrection
+	return round3(displCorrToDensity - totalDeductibles)
+}
+
+func CalcCargoWeight(netDisplacementIni, netDisplacementFin float64) float64 {
+	return round3(math.Abs(netDisplacementFin - netDisplacementIni))
+}
