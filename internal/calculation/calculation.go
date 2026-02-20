@@ -69,15 +69,15 @@ func CalcDraftsWKeel(meanDraft MeanDraft, ppCorrections PPCorrections, vessel Ve
 
 func CalcMMC(draftsWKeel DraftsWKeel, vesselType VesselType) float64 {
 	if vesselType == VesselTypeMarine {
-		return round3((draftsWKeel.FWDDraftWKeel + 6*draftsWKeel.MIDDraftWKeel + draftsWKeel.AFTDraftWKeel) / 8)
+		return round3((draftsWKeel.FWDDraftWKeel + round3(6*draftsWKeel.MIDDraftWKeel) + draftsWKeel.AFTDraftWKeel) / 8)
 	}
 
 	if vesselType == VesselTypeRiver {
-		return round3((draftsWKeel.FWDDraftWKeel + 4*draftsWKeel.MIDDraftWKeel + draftsWKeel.AFTDraftWKeel) / 6)
+		return round3((draftsWKeel.FWDDraftWKeel + round3(4*draftsWKeel.MIDDraftWKeel) + draftsWKeel.AFTDraftWKeel) / 6)
 	}
 
 	if vesselType == VesselTypeBarge {
-		return round3((3*draftsWKeel.FWDDraftWKeel + 14*draftsWKeel.MIDDraftWKeel + 3*draftsWKeel.AFTDraftWKeel) / 20)
+		return round3((round3(3*draftsWKeel.FWDDraftWKeel) + round3(14*draftsWKeel.MIDDraftWKeel) + round3(3*draftsWKeel.AFTDraftWKeel)) / 20)
 	}
 
 	return 0
@@ -151,7 +151,7 @@ func CalcListCorrection(marks Marks, tpcListPort, tpcListStarboard float64) floa
 }
 
 func CalcDensityCorrection(displacement float64, firstTrim float64, secondTrim float64, listCorrection float64, density float64) float64 {
-	displacementCorrected := displacement + firstTrim + secondTrim + listCorrection
+	displacementCorrected := round3(displacement + firstTrim + secondTrim + listCorrection)
 	return round3(displacementCorrected * (density - 1.025) / 1.025)
 }
 
@@ -163,7 +163,7 @@ func CalcTotalDeductibles(bwt []BallastWaterTank, fwt []FreshWaterTank, d Deduct
 }
 
 func CalcNetDisplacement(displacement, firstTrim, secondTrim, listCorrection, densityCorrection, totalDeductibles float64) float64 {
-	displCorrToDensity := displacement + firstTrim + secondTrim + listCorrection + densityCorrection
+	displCorrToDensity := round3(displacement + firstTrim + secondTrim + listCorrection + densityCorrection)
 	return round3(displCorrToDensity - totalDeductibles)
 }
 
