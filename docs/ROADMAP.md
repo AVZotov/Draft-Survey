@@ -34,17 +34,17 @@
 
 **Goal:** Working draft survey calculator with local storage
 
-### 1.1 Core Mathematics Module ⭐ HIGHEST PRIORITY
+### 1.1 Core Mathematics Module ⭐ HIGHEST PRIORITY ✅ COMPLETE
 **Location:** `internal/calculation/`
 
 **Tasks:**
-- [ ] Implement UNECE 1992 formulas:
+- [X] Implement UNECE 1992 formulas:
   - Quarter Mean Draft
   - First Trim Correction (FTC)
   - Second Trim Correction (STC)
   - Density Correction
   - Displacement calculation
-- [ ] Unit tests with hardcoded "golden" test data
+- [X] Unit tests with hardcoded "golden" test data
 - [ ] Validation logic for input ranges
 
 **Deliverable:** Calculation engine that passes all test cases
