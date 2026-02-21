@@ -68,6 +68,7 @@ func getVesselData() vessel.VesselData {
 		KeelMid:        0.000,
 		KeelAft:        0.000,
 		VesselType:     vessel.VesselTypeMarine,
+		Lightship:      8390.000,
 	}
 }
 
@@ -371,5 +372,55 @@ func TestCalcCargoWeight(t *testing.T) {
 	cargoWeightGot := CalcCargoWeight(netDisplacementIni, netDisplacementFin)
 	if cargoWeightExpected != cargoWeightGot {
 		t.Errorf("Expected %f, got %f", cargoWeightExpected, cargoWeightGot)
+	}
+}
+
+func TestCalcConstant(t *testing.T) {
+	constantExpected := 631.111
+	bwt := getInitBallastWaterTanks()
+	fwt := getInitFreshWaterTanks()
+	d := getInitDeductibles()
+	totalDeductibles := CalcTotalDeductibles(bwt, fwt, d)
+	marks := getMarks()
+	meanDraft := MeanDrafts(marks)
+	vesselData := getVesselData()
+	ppCorrections := CalcFullLBPPPCorrections(meanDraft, vesselData)
+	draftsWKeel := CalcDraftsWKeel(meanDraft, ppCorrections, vesselData)
+	mmc := CalcMMC(draftsWKeel, vesselData)
+	hr := getInitHydrostaticRows()
+	hydrostatics := CalcHydrostatics(mmc, hr, vesselData)
+	mtcRows := getInitMtcRows()
+	initDS := getInitDraftData()
+	firstTrim := CalcFirstTrimCorrection(draftsWKeel, hydrostatics.TPC, hydrostatics.LCF, vesselData.LBP)
+	secondTrim := CalcSecondTrimCorrection(draftsWKeel, mtcRows, vesselData.LBP)
+	listCorrection := CalcListCorrection(marks, initDS.TPCListPort, initDS.TPCListStarboard)
+	densityCorr := CalcDensityCorrection(hydrostatics.Displacement, firstTrim, secondTrim, listCorrection, initDS.Density)
+	netDisplacement := CalcNetDisplacement(hydrostatics.Displacement, firstTrim, secondTrim, listCorrection, densityCorr, totalDeductibles)
+	constantGot := CalcConstant(netDisplacement, vesselData.Lightship)
+	if constantExpected != constantGot {
+		t.Errorf("Expected %f, got %f", constantExpected, constantGot)
+	}
+}
+
+func TestCalcCurrentDWT(t *testing.T) {
+	constantExpected := 12374.705
+	marks := getMarks()
+	meanDraft := MeanDrafts(marks)
+	vesselData := getVesselData()
+	ppCorrections := CalcFullLBPPPCorrections(meanDraft, vesselData)
+	draftsWKeel := CalcDraftsWKeel(meanDraft, ppCorrections, vesselData)
+	mmc := CalcMMC(draftsWKeel, vesselData)
+	hr := getInitHydrostaticRows()
+	hydrostatics := CalcHydrostatics(mmc, hr, vesselData)
+	mtcRows := getInitMtcRows()
+	initDS := getInitDraftData()
+	firstTrim := CalcFirstTrimCorrection(draftsWKeel, hydrostatics.TPC, hydrostatics.LCF, vesselData.LBP)
+	secondTrim := CalcSecondTrimCorrection(draftsWKeel, mtcRows, vesselData.LBP)
+	listCorrection := CalcListCorrection(marks, initDS.TPCListPort, initDS.TPCListStarboard)
+	densityCorr := CalcDensityCorrection(hydrostatics.Displacement, firstTrim, secondTrim, listCorrection, initDS.Density)
+	displCorrToDensity := round3(hydrostatics.Displacement + firstTrim + secondTrim + listCorrection + densityCorr)
+	DWTGot := CalcCurrentDWT(displCorrToDensity, vesselData.Lightship)
+	if constantExpected != DWTGot {
+		t.Errorf("Expected %f, got %f", constantExpected, DWTGot)
 	}
 }
