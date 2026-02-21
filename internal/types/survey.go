@@ -2,24 +2,26 @@ package types
 
 import (
 	"time"
+
+	"github.com/AVZotov/draft-survey/internal/vessel"
 )
 
 type MeanDraft struct {
-	DraftFWDmean float64
-	DraftMIDmean float64
-	DraftAFTmean float64
+	DraftFwdMean float64
+	DraftMidMean float64
+	DraftAftMean float64
 }
 
 type PPCorrections struct {
-	FWDCorrection float64
-	MIDCorrection float64
-	AFTCorrection float64
+	FwdCorrection float64
+	MidCorrection float64
+	AftCorrection float64
 }
 
 type DraftsWKeel struct {
-	FWDDraftWKeel float64
-	MIDDraftWKeel float64
-	AFTDraftWKeel float64
+	FwdDraftWKeel float64
+	MidDraftWKeel float64
+	AftDraftWKeel float64
 }
 
 type InitialDraft struct {
@@ -75,5 +77,5 @@ type Survey struct {
 	FinalDraft     FinalDraft
 	Job            Job
 	CargoOperation CargoOperation
-	VesselGeometry VesselGeometry
+	VesselData     vessel.VesselData
 }

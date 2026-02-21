@@ -11,11 +11,20 @@ type FreshWaterTank struct {
 	Volume   float64
 }
 
+func (fwt FreshWaterTank) GetWeight() float64 {
+	const density = 1.0
+	return fwt.Volume * density
+}
+
 type BallastWaterTank struct {
 	Name     string
 	Sounding float64
 	Volume   float64
 	Density  float64
+}
+
+func (bwt BallastWaterTank) GetWeight() float64 {
+	return bwt.Volume * bwt.Density
 }
 
 type Deductibles struct {
