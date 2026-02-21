@@ -1,4 +1,4 @@
-package calculation
+package types
 
 import (
 	"time"

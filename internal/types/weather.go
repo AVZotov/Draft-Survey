@@ -1,4 +1,4 @@
-package calculation
+package types
 
 type SeaConditionType string
 

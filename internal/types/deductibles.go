@@ -1,4 +1,4 @@
-package calculation
+package types
 
 type OtherDeductibles struct {
 	Others     float64
