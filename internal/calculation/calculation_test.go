@@ -43,12 +43,12 @@ func getInitDraftData() InitialDraft {
 
 func getMarks() Marks {
 	return Marks{
-		FWDPort:      3.41,
-		FWDStarboard: 3.41,
-		MIDPort:      4.51,
-		MIDStarboard: 4.54,
-		AFTPort:      5.69,
-		AFTStarboard: 5.70,
+		FwdPort:      3.41,
+		FwdStarboard: 3.41,
+		MidPort:      4.51,
+		MidStarboard: 4.54,
+		AftPort:      5.69,
+		AftStarboard: 5.70,
 	}
 }
 

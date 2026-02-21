@@ -4,38 +4,6 @@ import (
 	"time"
 )
 
-type FreshWaterTank struct {
-	Name     string
-	Sounding float64
-	Volume   float64
-}
-
-type BallastWaterTank struct {
-	Name     string
-	Sounding float64
-	Volume   float64
-	Density  float64
-}
-
-type Deductibles struct {
-	HFO         float64
-	MDO         float64
-	Luboil      float64
-	BilgeWater  float64
-	SewageWater float64
-	Others      float64
-	OthersName  string
-}
-
-type Marks struct {
-	FWDPort      float64
-	FWDStarboard float64
-	MIDPort      float64
-	MIDStarboard float64
-	AFTPort      float64
-	AFTStarboard float64
-}
-
 type HydrostaticRow struct {
 	Draft        float64
 	Displacement float64

@@ -28,9 +28,9 @@ func TotalBallastWater(bwt []BallastWaterTank) float64 {
 
 func MeanDrafts(m Marks) MeanDraft {
 	return MeanDraft{
-		DraftFWDmean: round3((m.FWDPort + m.FWDStarboard) / 2),
-		DraftMIDmean: round3((m.MIDPort + m.MIDStarboard) / 2),
-		DraftAFTmean: round3((m.AFTPort + m.AFTStarboard) / 2),
+		DraftFWDmean: round3((m.FwdPort + m.FwdStarboard) / 2),
+		DraftMIDmean: round3((m.MidPort + m.MidStarboard) / 2),
+		DraftAFTmean: round3((m.AftPort + m.AftStarboard) / 2),
 	}
 }
 
@@ -182,10 +182,10 @@ func CalcSecondTrimCorrection(dwk DraftsWKeel, mtcRows []MTCRow, lbp float64) fl
 }
 
 func CalcListCorrection(marks Marks, tpcListPort, tpcListStarboard float64) float64 {
-	if marks.MIDPort == marks.MIDStarboard {
+	if marks.MidPort == marks.MidStarboard {
 		return 0.0
 	}
-	return round3(6 * math.Abs(marks.MIDPort-marks.MIDStarboard) * math.Abs(tpcListPort-tpcListStarboard))
+	return round3(6 * math.Abs(marks.MidPort-marks.MidStarboard) * math.Abs(tpcListPort-tpcListStarboard))
 }
 
 func CalcDensityCorrection(displacement float64, firstTrim float64, secondTrim float64, listCorrection float64, density float64) float64 {

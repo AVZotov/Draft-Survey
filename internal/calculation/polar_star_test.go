@@ -22,9 +22,9 @@ func getPolarStarTrimnoListVessel() Vessel {
 
 func getPolarStarTrimnoListMarks() Marks {
 	return Marks{
-		FWDPort: 3.33, FWDStarboard: 3.33,
-		MIDPort: 4.64, MIDStarboard: 4.64,
-		AFTPort: 6.12, AFTStarboard: 6.12,
+		FwdPort: 3.33, FwdStarboard: 3.33,
+		MidPort: 4.64, MidStarboard: 4.64,
+		AftPort: 6.12, AftStarboard: 6.12,
 	}
 }
 
@@ -208,9 +208,9 @@ func getPolarStarTrimListVessel() Vessel {
 
 func getPolarStarTrimListMarks() Marks {
 	return Marks{
-		FWDPort: 3.39, FWDStarboard: 3.36,
-		MIDPort: 4.64, MIDStarboard: 4.54,
-		AFTPort: 6.12, AFTStarboard: 6.12,
+		FwdPort: 3.39, FwdStarboard: 3.36,
+		MidPort: 4.64, MidStarboard: 4.54,
+		AftPort: 6.12, AftStarboard: 6.12,
 	}
 }
 
