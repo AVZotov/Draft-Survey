@@ -128,3 +128,62 @@ func TestPolarStar_TrimnoListCalcHydrostatics(t *testing.T) {
 		t.Errorf("Expected %f, got %f", lcfExpected, lcfGot)
 	}
 }
+
+func TestPolarStar_TrimnoList_FirstTrimCorrection(t *testing.T) {
+	marks := getPolarStarTrimnoListMarks()
+	vessel := getPolarStarTrimnoListVessel()
+	meanDraft := MeanDrafts(marks)
+	ppCorrections := CalcFullLBPPPCorrections(meanDraft, vessel)
+	draftsWKeel := CalcDraftsWKeel(meanDraft, ppCorrections, vessel)
+	mmc := CalcMMC(draftsWKeel, vessel.VesselType)
+	hr := getPolarStarTrimnoListHydrostaticRows()
+	_, tpc, lcf := CalcHydrostatics(mmc, hr, vessel)
+	got := CalcFirstTrimCorrection(draftsWKeel, tpc, lcf, vessel.LBP)
+
+	if got != -487.653 {
+		t.Errorf("1st trim: expected -487.653, got %f", got)
+	}
+}
+
+func TestPolarStar_TrimnoList_SecondTrimCorrection(t *testing.T) {
+	marks := getPolarStarTrimnoListMarks()
+	vessel := getPolarStarTrimnoListVessel()
+	meanDraft := MeanDrafts(marks)
+	ppCorrections := CalcFullLBPPPCorrections(meanDraft, vessel)
+	draftsWKeel := CalcDraftsWKeel(meanDraft, ppCorrections, vessel)
+	mtcRows := getPolarStarTrimnoListMTCRows()
+	got := CalcSecondTrimCorrection(draftsWKeel, mtcRows, vessel.LBP)
+
+	if got != 59.088 {
+		t.Errorf("2nd trim: expected 59.088, got %f", got)
+	}
+}
+
+func TestPolarStar_TrimnoList_ListCorrection(t *testing.T) {
+	marks := getPolarStarTrimnoListMarks()
+	got := CalcListCorrection(marks, 0, 0)
+
+	if got != 0 {
+		t.Errorf("List corr: expected 0, got %f", got)
+	}
+}
+
+func TestPolarStar_TrimnoList_DensityCorrection(t *testing.T) {
+	marks := getPolarStarTrimnoListMarks()
+	vessel := getPolarStarTrimnoListVessel()
+	meanDraft := MeanDrafts(marks)
+	ppCorrections := CalcFullLBPPPCorrections(meanDraft, vessel)
+	draftsWKeel := CalcDraftsWKeel(meanDraft, ppCorrections, vessel)
+	mmc := CalcMMC(draftsWKeel, vessel.VesselType)
+	hr := getPolarStarTrimnoListHydrostaticRows()
+	displacement, tpc, lcf := CalcHydrostatics(mmc, hr, vessel)
+	mtcRows := getPolarStarTrimnoListMTCRows()
+	firstTrim := CalcFirstTrimCorrection(draftsWKeel, tpc, lcf, vessel.LBP)
+	secondTrim := CalcSecondTrimCorrection(draftsWKeel, mtcRows, vessel.LBP)
+	listCorrection := CalcListCorrection(marks, 0, 0)
+	got := CalcDensityCorrection(displacement, firstTrim, secondTrim, listCorrection, 1.017)
+
+	if got != -147.328 {
+		t.Errorf("Density corr: expected -147.328, got %f", got)
+	}
+}
