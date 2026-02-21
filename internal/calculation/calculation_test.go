@@ -150,7 +150,7 @@ func TestMeanDrafts(t *testing.T) {
 	}
 }
 
-func TestCalcPPCorrections(t *testing.T) {
+func TestCalcFullLBPPPCorrections(t *testing.T) {
 	fwdCorrectionExpected := -0.019
 	midCorrectionExpected := -0.005
 	aftCorrectionExpected := 0.133
@@ -158,6 +158,26 @@ func TestCalcPPCorrections(t *testing.T) {
 	meanDrafts := MeanDrafts(getMarks())
 	vessel := getVessel()
 	ppCorrections := CalcFullLBPPPCorrections(meanDrafts, vessel)
+
+	if fwdCorrectionExpected != ppCorrections.FWDCorrection {
+		t.Errorf("Expected %f, got %f", fwdCorrectionExpected, ppCorrections.FWDCorrection)
+	}
+	if midCorrectionExpected != ppCorrections.MIDCorrection {
+		t.Errorf("Expected %f, got %f", midCorrectionExpected, ppCorrections.MIDCorrection)
+	}
+	if aftCorrectionExpected != ppCorrections.AFTCorrection {
+		t.Errorf("Expected %f, got %f", aftCorrectionExpected, ppCorrections.AFTCorrection)
+	}
+}
+
+func TestCalcHalfLBPPPCorrections(t *testing.T) {
+	fwdCorrectionExpected := -0.017
+	midCorrectionExpected := -0.005
+	aftCorrectionExpected := 0.144
+
+	meanDrafts := MeanDrafts(getMarks())
+	vessel := getVessel()
+	ppCorrections := CalcHalfLBPPPCorrections(meanDrafts, vessel)
 
 	if fwdCorrectionExpected != ppCorrections.FWDCorrection {
 		t.Errorf("Expected %f, got %f", fwdCorrectionExpected, ppCorrections.FWDCorrection)

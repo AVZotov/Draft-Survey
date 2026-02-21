@@ -55,6 +55,34 @@ func CalcFullLBPPPCorrections(m MeanDraft, v Vessel) PPCorrections {
 	}
 }
 
+func CalcHalfLBPPPCorrections(m MeanDraft, v Vessel) PPCorrections {
+	var dFwdDir, dMidDir, dAftDir float64
+
+	if dFwdDir = v.DistancePPFWD; v.PPFWDDirection == PPDirectionAft {
+		dFwdDir *= -1
+	}
+	if dMidDir = v.DistancePPMID; v.PPMIDDirection == PPDirectionAft {
+		dMidDir *= -1
+	}
+	if dAftDir = v.DistancePPAFT; v.PPAFTDirection == PPDirectionAft {
+		dAftDir *= -1
+	}
+
+	LBMMidFwd := round3((v.LBP / 2) - dMidDir - dFwdDir)
+	LBMAftMid := round3((v.LBP / 2) - dAftDir - dMidDir)
+
+	fwdCorr := round3(dFwdDir * (m.DraftMIDmean - m.DraftFWDmean) / LBMMidFwd)
+	midCorr := round3(dMidDir * (m.DraftMIDmean - m.DraftFWDmean) / LBMMidFwd)
+	midWKeel := round3(m.DraftMIDmean + midCorr - (v.KeelMID / 1000))
+	aftCorr := round3(dAftDir * (m.DraftAFTmean - midWKeel) / LBMAftMid)
+
+	return PPCorrections{
+		FWDCorrection: fwdCorr,
+		MIDCorrection: midCorr,
+		AFTCorrection: aftCorr,
+	}
+}
+
 func CalcDraftsWKeel(meanDraft MeanDraft, ppCorrections PPCorrections, vessel Vessel) DraftsWKeel {
 	keelCorrectionFwd := -1 * vessel.KeelFWD / 1000
 	keelCorrectionMid := -1 * vessel.KeelMID / 1000

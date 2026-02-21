@@ -121,6 +121,7 @@ type Vessel struct {
 	KeelMID           float64
 	KeelAFT           float64
 	VesselType        VesselType
+	CorrectionMethod  CorrectionMethod
 }
 
 type LCFDirection string
@@ -163,4 +164,11 @@ const (
 	VesselTypeMarine VesselType = "marine"
 	VesselTypeRiver  VesselType = "river"
 	VesselTypeBarge  VesselType = "barge"
+)
+
+type CorrectionMethod string
+
+const (
+	CorrectionMethodFullLBP CorrectionMethod = "Full LBP"
+	CorrectionMethodHalfLBP CorrectionMethod = "Half LBP"
 )
