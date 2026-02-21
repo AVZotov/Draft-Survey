@@ -47,11 +47,11 @@ func CalcFullLBPPPCorrections(m MeanDraft, v Vessel) PPCorrections {
 	if dAftDir = v.DistancePPAFT; v.PPAFTDirection == PPDirectionAft {
 		dAftDir *= -1
 	}
-	LBM := round3(v.LBP - dAftDir + dFwdDir)
+	lbm := round3(v.LBP - dAftDir + dFwdDir)
 	return PPCorrections{
-		FWDCorrection: round3(dFwdDir * trim / LBM),
-		MIDCorrection: round3(dMidDir * trim / LBM),
-		AFTCorrection: round3(dAftDir * trim / LBM),
+		FWDCorrection: round3(dFwdDir * trim / lbm),
+		MIDCorrection: round3(dMidDir * trim / lbm),
+		AFTCorrection: round3(dAftDir * trim / lbm),
 	}
 }
 
@@ -68,13 +68,13 @@ func CalcHalfLBPPPCorrections(m MeanDraft, v Vessel) PPCorrections {
 		dAftDir *= -1
 	}
 
-	LBMMidFwd := round3((v.LBP / 2) - dMidDir - dFwdDir)
-	LBMAftMid := round3((v.LBP / 2) - dAftDir - dMidDir)
+	lbmMidFwd := round3((v.LBP / 2) - dMidDir - dFwdDir)
+	lbmAftMid := round3((v.LBP / 2) - dAftDir - dMidDir)
 
-	fwdCorr := round3(dFwdDir * (m.DraftMIDmean - m.DraftFWDmean) / LBMMidFwd)
-	midCorr := round3(dMidDir * (m.DraftMIDmean - m.DraftFWDmean) / LBMMidFwd)
+	fwdCorr := round3(dFwdDir * (m.DraftMIDmean - m.DraftFWDmean) / lbmMidFwd)
+	midCorr := round3(dMidDir * (m.DraftMIDmean - m.DraftFWDmean) / lbmMidFwd)
 	midWKeel := round3(m.DraftMIDmean + midCorr - (v.KeelMID / 1000))
-	aftCorr := round3(dAftDir * (m.DraftAFTmean - midWKeel) / LBMAftMid)
+	aftCorr := round3(dAftDir * (m.DraftAFTmean - midWKeel) / lbmAftMid)
 
 	return PPCorrections{
 		FWDCorrection: fwdCorr,
@@ -116,7 +116,7 @@ func Interpolate(fact, lowerDraft, lowerValue, upperDraft, upperValue float64) f
 	return result
 }
 
-func CalcHydrostatics(mmc float64, hr []HydrostaticRow, vessel Vessel) (displacement float64, tpc float64, lcf float64) {
+func CalcHydrostatics(mmc float64, hr []HydrostaticRow, vessel Vessel) Hydrostatics {
 	var lower, upper HydrostaticRow
 	if hr[0].Draft < hr[1].Draft {
 		lower = hr[0]
@@ -125,8 +125,8 @@ func CalcHydrostatics(mmc float64, hr []HydrostaticRow, vessel Vessel) (displace
 		lower = hr[1]
 		upper = hr[0]
 	}
-	displacement = Interpolate(mmc, lower.Draft, lower.Displacement, upper.Draft, upper.Displacement)
-	tpc = Interpolate(mmc, lower.Draft, lower.TPC, upper.Draft, upper.TPC)
+	displacement := Interpolate(mmc, lower.Draft, lower.Displacement, upper.Draft, upper.Displacement)
+	tpc := Interpolate(mmc, lower.Draft, lower.TPC, upper.Draft, upper.TPC)
 	const k3 = 0.045
 	lowerLcf := lower.LCF
 	upperLcf := upper.LCF
@@ -143,9 +143,13 @@ func CalcHydrostatics(mmc float64, hr []HydrostaticRow, vessel Vessel) (displace
 		}
 	}
 
-	lcf = Interpolate(mmc, lower.Draft, lowerLcf, upper.Draft, upperLcf)
+	lcf := Interpolate(mmc, lower.Draft, lowerLcf, upper.Draft, upperLcf)
 
-	return displacement, tpc, lcf
+	return Hydrostatics{
+		Displacement: displacement,
+		TPC:          tpc,
+		LCF:          lcf,
+	}
 }
 
 func CalcFirstTrimCorrection(dwk DraftsWKeel, tpc float64, lcf float64, lbp float64) float64 {

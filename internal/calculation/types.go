@@ -172,3 +172,9 @@ const (
 	CorrectionMethodFullLBP CorrectionMethod = "Full LBP"
 	CorrectionMethodHalfLBP CorrectionMethod = "Half LBP"
 )
+
+type Hydrostatics struct {
+	Displacement float64
+	TPC          float64
+	LCF          float64
+}

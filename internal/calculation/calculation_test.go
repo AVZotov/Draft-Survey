@@ -213,16 +213,16 @@ func TestCalcDraftsWKeel(t *testing.T) {
 }
 
 func TestCalcMMC(t *testing.T) {
-	MMCExpected := 4.542
+	mmcExpected := 4.542
 	marks := getMarks()
 	meanDraft := MeanDrafts(marks)
 	vessel := getVessel()
 	ppCorrections := CalcFullLBPPPCorrections(meanDraft, vessel)
 	draftsWKeel := CalcDraftsWKeel(meanDraft, ppCorrections, vessel)
-	MMC := CalcMMC(draftsWKeel, vessel.VesselType)
+	mmc := CalcMMC(draftsWKeel, vessel.VesselType)
 
-	if MMCExpected != MMC {
-		t.Errorf("Expected %f, got %f", MMCExpected, MMC)
+	if mmcExpected != mmc {
+		t.Errorf("Expected %f, got %f", mmcExpected, mmc)
 	}
 }
 
@@ -246,16 +246,16 @@ func TestCalcHydrostatics(t *testing.T) {
 	draftsWKeel := CalcDraftsWKeel(meanDraft, ppCorrections, vessel)
 	mmc := CalcMMC(draftsWKeel, vessel.VesselType)
 	hr := getInitHydrostaticRows()
-	displasementGot, tpcGot, lcfGot := CalcHydrostatics(mmc, hr, vessel)
+	hydrostatics := CalcHydrostatics(mmc, hr, vessel)
 
-	if displasementExpected != displasementGot {
-		t.Errorf("Expected %f, got %f", displasementExpected, displasementGot)
+	if displasementExpected != hydrostatics.Displacement {
+		t.Errorf("Expected %f, got %f", displasementExpected, hydrostatics.Displacement)
 	}
-	if tpcExpected != tpcGot {
-		t.Errorf("Expected %f, got %f", tpcExpected, tpcGot)
+	if tpcExpected != hydrostatics.TPC {
+		t.Errorf("Expected %f, got %f", tpcExpected, hydrostatics.TPC)
 	}
-	if lcfExpected != lcfGot {
-		t.Errorf("Expected %f, got %f", lcfExpected, lcfGot)
+	if lcfExpected != hydrostatics.LCF {
+		t.Errorf("Expected %f, got %f", lcfExpected, hydrostatics.LCF)
 	}
 }
 
@@ -268,8 +268,8 @@ func TestCalcFirstTrimCorrection(t *testing.T) {
 	draftsWKeel := CalcDraftsWKeel(meanDraft, ppCorrections, vessel)
 	mmc := CalcMMC(draftsWKeel, vessel.VesselType)
 	hr := getInitHydrostaticRows()
-	_, tpc, lcf := CalcHydrostatics(mmc, hr, vessel)
-	firstTrimCorrectionGot := CalcFirstTrimCorrection(draftsWKeel, tpc, lcf, vessel.LBP)
+	hydrostatics := CalcHydrostatics(mmc, hr, vessel)
+	firstTrimCorrectionGot := CalcFirstTrimCorrection(draftsWKeel, hydrostatics.TPC, hydrostatics.LCF, vessel.LBP)
 
 	if firstTrimCorrectionExpected != firstTrimCorrectionGot {
 		t.Errorf("Expected %f, got %f", firstTrimCorrectionExpected, firstTrimCorrectionGot)
@@ -310,13 +310,13 @@ func TestCalcDensityCorrection(t *testing.T) {
 	draftsWKeel := CalcDraftsWKeel(meanDraft, ppCorrections, vessel)
 	mmc := CalcMMC(draftsWKeel, vessel.VesselType)
 	hr := getInitHydrostaticRows()
-	displacement, tpc, lcf := CalcHydrostatics(mmc, hr, vessel)
+	hydrostatics := CalcHydrostatics(mmc, hr, vessel)
 	mtcRows := getInitMtcRows()
 	initDS := getInitDraftData()
-	firstTrim := CalcFirstTrimCorrection(draftsWKeel, tpc, lcf, vessel.LBP)
+	firstTrim := CalcFirstTrimCorrection(draftsWKeel, hydrostatics.TPC, hydrostatics.LCF, vessel.LBP)
 	secondTrim := CalcSecondTrimCorrection(draftsWKeel, mtcRows, vessel.LBP)
 	listCorrection := CalcListCorrection(marks, initDS.TPCListPort, initDS.TPCListStarboard)
-	densityCorrGot := CalcDensityCorrection(displacement, firstTrim, secondTrim, listCorrection, initDS.Density)
+	densityCorrGot := CalcDensityCorrection(hydrostatics.Displacement, firstTrim, secondTrim, listCorrection, initDS.Density)
 
 	if densityCorrExpected != densityCorrGot {
 		t.Errorf("Expected %f, got %f", densityCorrExpected, densityCorrGot)
@@ -348,14 +348,14 @@ func TestCalcNetDisplacement(t *testing.T) {
 	draftsWKeel := CalcDraftsWKeel(meanDraft, ppCorrections, vessel)
 	mmc := CalcMMC(draftsWKeel, vessel.VesselType)
 	hr := getInitHydrostaticRows()
-	displacement, tpc, lcf := CalcHydrostatics(mmc, hr, vessel)
+	hydrostatics := CalcHydrostatics(mmc, hr, vessel)
 	mtcRows := getInitMtcRows()
 	initDS := getInitDraftData()
-	firstTrim := CalcFirstTrimCorrection(draftsWKeel, tpc, lcf, vessel.LBP)
+	firstTrim := CalcFirstTrimCorrection(draftsWKeel, hydrostatics.TPC, hydrostatics.LCF, vessel.LBP)
 	secondTrim := CalcSecondTrimCorrection(draftsWKeel, mtcRows, vessel.LBP)
 	listCorrection := CalcListCorrection(marks, initDS.TPCListPort, initDS.TPCListStarboard)
-	densityCorr := CalcDensityCorrection(displacement, firstTrim, secondTrim, listCorrection, initDS.Density)
-	netDisplacementGot := CalcNetDisplacement(displacement, firstTrim, secondTrim, listCorrection, densityCorr, totalDeductibles)
+	densityCorr := CalcDensityCorrection(hydrostatics.Displacement, firstTrim, secondTrim, listCorrection, initDS.Density)
+	netDisplacementGot := CalcNetDisplacement(hydrostatics.Displacement, firstTrim, secondTrim, listCorrection, densityCorr, totalDeductibles)
 	if netDisplacementExpected != netDisplacementGot {
 		t.Errorf("Expected %f, got %f", netDisplacementExpected, netDisplacementGot)
 	}
