@@ -14,10 +14,11 @@ A tool for calculating cargo weight on maritime vessels using the draft survey m
 ```
 cmd/server/       — entry point
 internal/         — core business logic
-  calculation/    — draft survey math
-  vessel/         — vessel data
+  calculation/    — draft survey math (UNECE 1992)
+  vessel/         — vessel data (VesselData, enums)
+  types/          — shared domain types (Survey, Marks, Deductibles, etc.)
   report/         — PDF generation
-  storage/        — data persistence
+  storage/        — data persistence (Repository pattern)
   errors/         — custom errors
   logger/         — logging
 web/              — templates and static assets

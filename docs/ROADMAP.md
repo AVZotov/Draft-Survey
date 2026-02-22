@@ -51,16 +51,22 @@
 
 ---
 
-### 1.2 Vessel Data Module
-**Location:** `internal/vessel/`
+### 1.2 Vessel Data Module ✅ COMPLETE
+**Location:** `internal/vessel/`, `internal/types/`
 
 **Tasks:**
-- [ ] Vessel information structure (name, IMO, flag, port)
-- [ ] Hydrostatic tables storage/parsing
-- [ ] Draft readings input (fore/aft/mid — port & starboard)
-- [ ] JSON serialization
+- [x] VesselData structure (name, IMO, flag, dimensions, summer marks)
+- [x] Vessel geometry (LBP, PP corrections, Keel thickness)
+- [x] Shared domain types package (Marks, Deductibles, Hydrostatics, SeaCondition, Survey)
+- [x] SeaCondition types (Wave and Ice conditions)
+- [x] CalcConstant and CalcCurrentDWT functions
 
-**Deliverable:** Vessel data can be saved and loaded
+**Decisions Made:**
+- `internal/types/` — shared domain types used by both calculation and vessel packages
+- `internal/vessel/` — vessel passport data (VesselData)
+- Storage interface deferred to Phase 1.4 (Repository pattern planned)
+
+**Deliverable:** Complete vessel data structures with domain types
 
 ---
 
