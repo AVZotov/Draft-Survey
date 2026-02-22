@@ -68,6 +68,5 @@ func (j JSONStore) GetAll() ([]*types.Survey, error) {
 }
 
 func (j JSONStore) Delete(id string) error {
-	//TODO implement me
-	panic("implement me")
+	return os.Remove(filepath.Join(j.Path, id+".json"))
 }
