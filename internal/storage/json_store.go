@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/AVZotov/draft-survey/internal/types"
 )
@@ -63,8 +64,23 @@ func (j JSONStore) GetBy(field SurveyField, value string) (*types.Survey, error)
 }
 
 func (j JSONStore) GetAll() ([]*types.Survey, error) {
-	//TODO implement me
-	panic("implement me")
+	var surveys []*types.Survey
+	files, err := os.ReadDir(j.Path)
+	if err != nil {
+		return nil, err
+	}
+	for _, file := range files {
+		if file.IsDir() {
+			continue
+		}
+		id := strings.TrimSuffix(file.Name(), ".json")
+		survey, err := j.Get(id)
+		if err != nil {
+			return nil, err
+		}
+		surveys = append(surveys, survey)
+	}
+	return surveys, nil
 }
 
 func (j JSONStore) Delete(id string) error {
