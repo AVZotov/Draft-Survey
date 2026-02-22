@@ -58,11 +58,6 @@ func (j JSONStore) Get(id string) (*types.Survey, error) {
 	return survey, nil
 }
 
-func (j JSONStore) GetBy(field SurveyField, value string) (*types.Survey, error) {
-	//TODO implement me
-	panic("implement me")
-}
-
 func (j JSONStore) GetAll() ([]*types.Survey, error) {
 	var surveys []*types.Survey
 	files, err := os.ReadDir(j.Path)
