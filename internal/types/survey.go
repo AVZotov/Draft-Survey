@@ -73,6 +73,7 @@ type CargoOperation struct {
 }
 
 type Survey struct {
+	Surveyor       *User
 	ID             string
 	InitialDraft   InitialDraft
 	FinalDraft     FinalDraft
