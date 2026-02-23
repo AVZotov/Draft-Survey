@@ -73,6 +73,7 @@ type CargoOperation struct {
 }
 
 type Survey struct {
+	ID             string
 	InitialDraft   InitialDraft
 	FinalDraft     FinalDraft
 	Job            Job
