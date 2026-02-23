@@ -82,19 +82,20 @@
 
 ---
 
-### 1.4 Storage Layer
+### 1.4 Storage Layer ✅ COMPLETE
 **Location:** `internal/storage/`
+Last Updated → 2026-02-23
 
 **Decision Point:** JSON files
 - JSON: Simple, no dependencies, human-readable
-- Interim desision with naming convention: YYYY-MM-DD_IMOxxxxxxx_type.json
+- Final decision with naming convention: UUID.json
 
 
 **Tasks:**
-- [ ] Survey CRUD operations
-- [ ] Auto-save drafts (temp files in `data/temp/`)
-- [ ] List/search surveys
-- [ ] Backup mechanism (copy to `data/backups/`)
+- [X] Survey CRUD operations
+- [X] Auto-save drafts (temp files in `data/temp/`) will be implemented in service layer
+- [X] List All surveys
+- [X] Backup mechanism (copy to `data/backups/`)
 
 **Deliverable:** Surveys persist between app restarts
 
