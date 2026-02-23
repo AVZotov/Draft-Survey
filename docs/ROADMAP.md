@@ -70,15 +70,26 @@
 
 ---
 
-### 1.3 User Profile (Local)
-**Location:** `internal/storage/` (or new `internal/user/`)
+### 1.3 User Profile (Local) ✅ COMPLETE
+**Location:** `internal/types/`, `internal/storage/`
 
 **Tasks:**
-- [ ] Surveyor profile (name, position, company, signature)
-- [ ] Local storage (no authentication yet)
-- [ ] Profile persistence in JSON
+- [x] Surveyor profile (name, position, company, employee ID)
+- [x] Local storage (no authentication)
+- [x] Profile persistence in JSON (user.json)
+- [x] UserRepository interface
+- [x] UserStore implementation
+- [x] Unit tests (SaveAndGet, GetWithNoUser, Delete)
+- [x] Surveyor field added to Survey struct
 
-**Deliverable:** Surveyor can set up profile once
+**Decisions Made:**
+- `User` type in `internal/types/` — consistent with Survey pattern, avoids circular imports
+- `UserRepository` interface in `internal/storage/repository.go` — single place for all storage interfaces
+- `UserStore` in `internal/storage/user_store.go` — renamed `json_store.go` → `survey_store.go` for consistency
+- `Survey.Surveyor *User` — pointer allows nil (survey can exist without surveyor profile)
+- Logout = `UserStore.Delete()` removes `user.json` from disk
+
+**Deliverable:** Surveyor can set up profile once, profile persists between app restarts
 
 ---
 
