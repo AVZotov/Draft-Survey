@@ -42,6 +42,16 @@ func getSurveys() []*types.Survey {
 	return surveys
 }
 
+func getUser() *types.User {
+	return &types.User{
+		LastName:   "Dow",
+		FirstName:  "John",
+		Company:    "NoName",
+		Position:   "Manager",
+		EmployeeID: "12345",
+	}
+}
+
 func TestJSONStore_SaveAndGet(t *testing.T) {
 	dir := t.TempDir()
 	surveyExpected := getSurvey()
@@ -98,5 +108,48 @@ func TestJSONStore_GetAll(t *testing.T) {
 		if !reflect.DeepEqual(survey, surveysGot[i]) {
 			t.Errorf("Expected %v, got %v", surveysExpected[i], surveysGot[i])
 		}
+	}
+}
+
+func TestUserStore_SaveAndGet(t *testing.T) {
+	dir := t.TempDir()
+	userExpected := getUser()
+	store := UserStore{Path: dir}
+	if err := store.Save(userExpected); err != nil {
+		t.Fatal(err)
+	}
+	userGot, err := store.Get()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !reflect.DeepEqual(userExpected, userGot) {
+		t.Errorf("Expected %v, got %v", userExpected, userGot)
+	}
+}
+
+func TestUserStore_GetWithNoUser(t *testing.T) {
+	dir := t.TempDir()
+	store := UserStore{Path: dir}
+	_, err := store.Get()
+	if err == nil {
+		t.Fatal("User store should not have any user")
+	}
+}
+
+func TestUserStore_Delete(t *testing.T) {
+	dir := t.TempDir()
+	userExpected := getUser()
+	store := UserStore{Path: dir}
+	if err := store.Save(userExpected); err != nil {
+		t.Fatal(err)
+	}
+
+	if err := store.Delete(); err != nil {
+		t.Fatal(err)
+	}
+
+	userGot, err := store.Get()
+	if err == nil {
+		t.Errorf("Expected error, got %#v", userGot)
 	}
 }
