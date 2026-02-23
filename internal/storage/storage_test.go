@@ -2,6 +2,7 @@ package storage
 
 import (
 	"reflect"
+	"strconv"
 	"testing"
 
 	"github.com/AVZotov/draft-survey/internal/types"
@@ -31,6 +32,14 @@ func getSurvey() *types.Survey {
 		},
 		VesselData: vessel.VesselData{},
 	}
+}
+
+func getSurveys() []*types.Survey {
+	var surveys []*types.Survey
+	for range 4 {
+		surveys = append(surveys, getSurvey())
+	}
+	return surveys
 }
 
 func TestJSONStore_SaveAndGet(t *testing.T) {
@@ -64,5 +73,30 @@ func TestJSONStore_Delete(t *testing.T) {
 	surveyGot, err := store.Get(id)
 	if err == nil {
 		t.Errorf("Expected error, got %#v", surveyGot)
+	}
+}
+
+func TestJSONStore_GetAll(t *testing.T) {
+	dir := t.TempDir()
+	surveysExpected := getSurveys()
+	store := JSONStore{Path: dir, TempPath: dir}
+
+	for i, survey := range surveysExpected {
+		if err := store.Save(id+strconv.Itoa(i), survey); err != nil {
+		}
+	}
+
+	surveysGot, err := store.GetAll()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(surveysExpected) != len(surveysGot) {
+		t.Errorf("Slice length expected %d, got %d", len(surveysExpected), len(surveysGot))
+	}
+
+	for i, survey := range surveysExpected {
+		if !reflect.DeepEqual(survey, surveysGot[i]) {
+			t.Errorf("Expected %v, got %v", surveysExpected[i], surveysGot[i])
+		}
 	}
 }
