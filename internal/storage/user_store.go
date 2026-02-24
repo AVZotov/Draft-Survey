@@ -16,7 +16,13 @@ type UserStore struct {
 	Path string
 }
 
-func (u UserStore) Save(user *types.User) error {
+func NewUserStore(path string) *UserStore {
+	return &UserStore{
+		Path: path,
+	}
+}
+
+func (u *UserStore) Save(user *types.User) error {
 	path := filepath.Join(u.Path, fileName)
 	file, err := os.OpenFile(path, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0644)
 	if err != nil {
@@ -36,7 +42,7 @@ func (u UserStore) Save(user *types.User) error {
 	return nil
 }
 
-func (u UserStore) Get() (*types.User, error) {
+func (u *UserStore) Get() (*types.User, error) {
 	path := filepath.Join(u.Path, fileName)
 	file, err := os.Open(path)
 	if err != nil {
@@ -58,7 +64,7 @@ func (u UserStore) Get() (*types.User, error) {
 	return user, nil
 }
 
-func (u UserStore) Delete() error {
+func (u *UserStore) Delete() error {
 	err := os.Remove(filepath.Join(u.Path, fileName))
 	if err != nil {
 		return err
