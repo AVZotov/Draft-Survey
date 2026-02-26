@@ -1,6 +1,7 @@
 package layouts
 
 import "github.com/AVZotov/draft-survey/web/components"
+import "github.com/AVZotov/draft-survey/web/widgets"
 
 templ Layout(props components.LayoutProps) {
 	<!DOCTYPE html>
@@ -13,11 +14,13 @@ templ Layout(props components.LayoutProps) {
 			<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 			<link rel="stylesheet" href="/static/css/styles.css"/>
 			<link rel="stylesheet" href="/static/css/profile.css"/>
+			<link rel="stylesheet" href="/static/css/banner.css"/>
 			<title>{ props.Title }</title>
 			<meta name="Draft-Survey calculator" content={ props.MetaDescription }/>
 		</head>
 		<body>
 			{ children... }
+			@widgets.Banner()
 		</body>
 	</html>
 }

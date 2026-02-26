@@ -52,4 +52,5 @@ data/backups/
 bin/
 dist/
 .idea/
+.vscode/
 UI design/
