@@ -35,6 +35,10 @@
 !Makefile
 !**/.gitkeep
 
+# Allow templ files
+
+!*.templ
+
 # Always ignore — sensitive and generated
 .env
 configs/local.yaml

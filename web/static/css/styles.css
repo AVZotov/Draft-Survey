@@ -1,0 +1,267 @@
+/* ─── Design Tokens ──────────────────────────────────────────── */
+
+:root {
+  --bg: #F4F5F7;
+  --surface: #FFFFFF;
+  --border: #D1D5DB;
+  --border-focus: #E8630A;
+
+  --text-primary: #1C2B33;
+  --text-secondary: #6B7280;
+  --text-placeholder: #9CA3AF;
+
+  --accent: #E8630A;
+  --accent-dark: #C4520A;
+  --accent-light: #FEF3EB;
+
+  --header-bg: #3D5159;
+  --header-text: #FFFFFF;
+
+  --footer-bg: #2E3D44;
+  --footer-text: rgba(255, 255, 255, 0.45);
+  --footer-border: rgba(255, 255, 255, 0.08);
+
+  --danger: #DC2626;
+  --warning: #D97706;
+  --success: #15803D;
+  --info: #2563EB;
+  --calc-value: #9CA3AF;
+
+  --font-sans: 'IBM Plex Sans', sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
+
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, .10);
+
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 40px;
+  --space-2xl: 56px;
+}
+
+/* ─── Reset ──────────────────────────────────────────────────── */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  background-color: var(--bg);
+  color: var(--text-primary);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* APP HEADER  — reusable component */
+
+.app-header {
+  background: var(--header-bg);
+  padding: 0 var(--space-xl);
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+.app-header-left {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.app-logo-mark {
+  width: 30px;
+  height: 30px;
+  background: var(--accent);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.app-logo-mark svg {
+  width: 17px;
+  height: 17px;
+  stroke: #fff;
+  fill: none;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.app-logo-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+}
+
+.app-logo-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--header-text);
+  letter-spacing: 0.01em;
+}
+
+.app-logo-tagline {
+  font-size: 10px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.4);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.app-header-version {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.35);
+  letter-spacing: 0.04em;
+}
+
+/* FORM CARD  — reusable component */
+
+.form-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+}
+
+.form-section {
+  padding: var(--space-lg) var(--space-xl);
+}
+
+.form-section+.form-section {
+  border-top: 1px solid var(--border);
+}
+
+.form-section-title {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: var(--space-lg);
+}
+
+/* BUTTONS  — reusable component */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 500;
+  padding: 9px var(--space-lg);
+  border-radius: var(--radius-md);
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.15s, transform 0.1s;
+  white-space: nowrap;
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: var(--accent-dark);
+}
+
+.btn svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* INFO BANNER  — reusable component */
+.info-banner {
+  display: flex;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  background: #EFF6FF;
+  border: 1px solid #BFDBFE;
+  border-radius: var(--radius-md);
+  margin-top: var(--space-lg);
+}
+
+.info-banner svg {
+  width: 14px;
+  height: 14px;
+  stroke: var(--info);
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.info-banner-text {
+  font-size: 12px;
+  color: #1D4ED8;
+  line-height: 1.5;
+}
+
+/* APP FOOTER  — reusable component */
+.app-footer {
+  background: var(--footer-bg);
+  border-top: 1px solid var(--footer-border);
+  padding: var(--space-md) var(--space-xl);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+.app-footer-left {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--footer-text);
+}
+
+.app-footer-right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+}
+
+.app-footer-link {
+  font-size: 11px;
+  color: var(--footer-text);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.app-footer-link:hover {
+  color: rgba(255, 255, 255, 0.7);
+}

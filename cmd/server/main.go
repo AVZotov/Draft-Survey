@@ -17,5 +17,5 @@ func main() {
 
 	handler.SetupRoutes(app, h)
 
-	log.Fatal(app.Listen(":3000"))
+	log.Fatal(app.Listen(":3399"))
 }

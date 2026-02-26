@@ -6,4 +6,7 @@ type User struct {
 	Company    string `json:"company"`
 	Position   string `json:"position"`
 	EmployeeID string `json:"employee_id"`
+	Email      string `json:"email"`
+	Country    string `json:"country"`
+	License    string `json:"license"`
 }
