@@ -1,0 +1,12 @@
+package web
+
+import "github.com/AVZotov/draft-survey/web/layouts"
+import "github.com/AVZotov/draft-survey/web/widgets"
+
+templ Dashboard() {
+	@layouts.Layout(DasboardPageProps) {
+		@widgets.HeaderUser()
+		@widgets.DashboardForm()
+		@widgets.Footer()
+	}
+}

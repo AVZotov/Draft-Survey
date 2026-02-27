@@ -8,9 +8,7 @@ package widgets
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
-import "github.com/AVZotov/draft-survey/web/components"
-
-func Header() templ.Component {
+func HeaderUser() templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -31,19 +29,7 @@ func Header() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<header class=\"app-header\"><div class=\"app-header-left\">")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Err = components.Logo().Render(ctx, templ_7745c5c3_Buffer)
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Err = components.LogoText().Render(ctx, templ_7745c5c3_Buffer)
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</div></header>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<!-- APP HEADER --><header class=\"app-header\"><div class=\"app-header-left\"><div class=\"app-logo-mark\"><svg viewBox=\"0 0 24 24\"><path d=\"M3 17l2-7h14l2 7H3z\"></path> <path d=\"M8 10V6h8v4\"></path> <path d=\"M12 6V3\"></path> <path d=\"M1 20c2 1.5 4 1.5 6 0s4-1.5 6 0 4 1.5 6 0\"></path></svg></div><div class=\"app-logo-text\"><span class=\"app-logo-name\">Draft Survey</span> <span class=\"app-logo-tagline\">Cargo Weight Calculator</span></div></div><div class=\"app-header-right\"><!-- User info --><div class=\"header-user\"><div class=\"header-user-avatar\">AZ</div><div class=\"header-user-info\"><span class=\"header-user-name\">Alexey Zotov</span> <span class=\"header-user-role\">Marine Surveyor</span></div></div></div></header>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

@@ -4,6 +4,7 @@ import (
 	"errors"
 	"os"
 
+	"github.com/AVZotov/draft-survey/internal/handler/tadaptor"
 	"github.com/AVZotov/draft-survey/web"
 	"github.com/gofiber/fiber/v2"
 )
@@ -12,8 +13,8 @@ func (h *Handler) home(c *fiber.Ctx) error {
 	_, err := h.userRepository.Get()
 
 	if err == nil {
-		// TODO: Need to make dashboard
-		return c.SendString("TODO: dashboard")
+		component := web.Dashboard()
+		return tadaptor.Render(c, component)
 	}
 
 	if errors.Is(err, os.ErrNotExist) {

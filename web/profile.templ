@@ -6,15 +6,9 @@ import "github.com/AVZotov/draft-survey/web/components"
 
 templ Profile(bannerProps components.BannerProps) {
 	@layouts.Layout(ProfilePageProps) {
-		<header>
-			@widgets.Header()
-		</header>
-		<main>
-			@widgets.ProfileForm()
-		</main>
-		<footer>
-			@widgets.Footer()
-		</footer>
+		@widgets.Header()
+		@widgets.ProfileForm()
+		@widgets.Footer()
 		if bannerProps.Header != "" {
 			@widgets.AutoShowBanner(bannerProps)
 		}
