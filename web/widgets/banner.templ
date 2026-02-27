@@ -1,6 +1,52 @@
 package widgets
 
+import "github.com/AVZotov/draft-survey/web/components"
+
+templ BannerCSS() {
+	<style>
+    :root {
+      --bg: #F4F5F7;
+      --surface: #FFFFFF;
+      --border: #D1D5DB;
+      --text-primary: #1C2B33;
+      --text-secondary: #6B7280;
+      --text-dim: #9CA3AF;
+      --accent: #E8630A;
+      --accent-dark: #C4520A;
+      --header-bg: #3D5159;
+      --font-sans: 'IBM Plex Sans', sans-serif;
+      --font-mono: 'IBM Plex Mono', monospace;
+      --r-sm: 4px;
+      --r-md: 6px;
+      --r-lg: 10px;
+      --r-xl: 14px;
+      --sp-xs: 4px;
+      --sp-sm: 8px;
+      --sp-md: 16px;
+      --sp-lg: 24px;
+      --sp-xl: 40px;
+    }
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: var(--font-sans);
+      font-size: 14px;
+      background: var(--bg);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    </style>
+}
+
 templ Banner() {
+	@BannerCSS()
 	<!-- ── OVERLAY ─────────────────────────────────────────────────── -->
 	<div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="banner-title">
 		<div class="overlay-backdrop" onclick="closeBanner()"></div>
@@ -65,4 +111,8 @@ templ Banner() {
         if (e.key === 'Escape') closeBanner();
     });
 </script>
+}
+
+templ AutoShowBanner(p components.BannerProps) {
+	@templ.JSFuncCall("showBanner", p.Type, p.Header, p.Message, p.Details)
 }

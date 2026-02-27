@@ -2,9 +2,10 @@ package web
 
 import "github.com/AVZotov/draft-survey/web/layouts"
 import "github.com/AVZotov/draft-survey/web/widgets"
+import "github.com/AVZotov/draft-survey/web/components"
 
-templ Profile() {
-	@layouts.Layout(HomePageProps) {
+templ Profile(bannerProps components.BannerProps) {
+	@layouts.Layout(ProfilePageProps) {
 		<header>
 			@widgets.Header()
 		</header>
@@ -14,5 +15,8 @@ templ Profile() {
 		<footer>
 			@widgets.Footer()
 		</footer>
+		if bannerProps.Header != "" {
+			@widgets.AutoShowBanner(bannerProps)
+		}
 	}
 }
