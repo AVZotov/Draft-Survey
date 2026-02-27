@@ -10,7 +10,7 @@ import templruntime "github.com/a-h/templ/runtime"
 
 import "github.com/AVZotov/draft-survey/web/components"
 
-func BannerCSS() templ.Component {
+func Banner() templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -31,40 +31,7 @@ func BannerCSS() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<style>\n    :root {\n      --bg: #F4F5F7;\n      --surface: #FFFFFF;\n      --border: #D1D5DB;\n      --text-primary: #1C2B33;\n      --text-secondary: #6B7280;\n      --text-dim: #9CA3AF;\n      --accent: #E8630A;\n      --accent-dark: #C4520A;\n      --header-bg: #3D5159;\n      --font-sans: 'IBM Plex Sans', sans-serif;\n      --font-mono: 'IBM Plex Mono', monospace;\n      --r-sm: 4px;\n      --r-md: 6px;\n      --r-lg: 10px;\n      --r-xl: 14px;\n      --sp-xs: 4px;\n      --sp-sm: 8px;\n      --sp-md: 16px;\n      --sp-lg: 24px;\n      --sp-xl: 40px;\n    }\n    *,\n    *::before,\n    *::after {\n      box-sizing: border-box;\n      margin: 0;\n      padding: 0;\n    }\n    body {\n      font-family: var(--font-sans);\n      font-size: 14px;\n      background: var(--bg);\n      color: var(--text-primary);\n      min-height: 100vh;\n      display: flex;\n      flex-direction: column;\n    }\n    </style>")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		return nil
-	})
-}
-
-func Banner() templ.Component {
-	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
-		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
-		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
-			return templ_7745c5c3_CtxErr
-		}
-		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
-		if !templ_7745c5c3_IsBuffer {
-			defer func() {
-				templ_7745c5c3_BufErr := templruntime.ReleaseBuffer(templ_7745c5c3_Buffer)
-				if templ_7745c5c3_Err == nil {
-					templ_7745c5c3_Err = templ_7745c5c3_BufErr
-				}
-			}()
-		}
-		ctx = templ.InitializeContext(ctx)
-		templ_7745c5c3_Var2 := templ.GetChildren(ctx)
-		if templ_7745c5c3_Var2 == nil {
-			templ_7745c5c3_Var2 = templ.NopComponent
-		}
-		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = BannerCSS().Render(ctx, templ_7745c5c3_Buffer)
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "<!-- ── OVERLAY ─────────────────────────────────────────────────── --><div class=\"overlay\" id=\"overlay\" role=\"dialog\" aria-modal=\"true\" aria-labelledby=\"banner-title\"><div class=\"overlay-backdrop\" onclick=\"closeBanner()\"></div><div class=\"banner\" id=\"banner\" data-type=\"error\"><div class=\"banner-stripe\"></div><div class=\"banner-head\"><div class=\"banner-icon\" id=\"banner-icon\"><!-- icon injected by JS --></div><div class=\"banner-title-wrap\"><div class=\"banner-type-label\" id=\"banner-type-label\">Error</div><div class=\"banner-title\" id=\"banner-title\">Title</div></div></div><div class=\"banner-message\" id=\"banner-message\"></div><pre class=\"banner-detail\" id=\"banner-detail\"></pre><div class=\"banner-footer\"><button class=\"btn-ok\" id=\"btn-ok\" onclick=\"closeBanner()\">Ok</button></div></div></div><script>\n    /* SVG icons per type */\n    const ICONS = {\n        error: `<svg viewBox=\"0 0 24 24\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><line x1=\"12\" y1=\"8\" x2=\"12\" y2=\"12\"/><line x1=\"12\" y1=\"16\" x2=\"12.01\" y2=\"16\"/></svg>`,\n        warn: `<svg viewBox=\"0 0 24 24\"><path d=\"M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z\"/><line x1=\"12\" y1=\"9\" x2=\"12\" y2=\"13\"/><line x1=\"12\" y1=\"17\" x2=\"12.01\" y2=\"17\"/></svg>`,\n        info: `<svg viewBox=\"0 0 24 24\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><line x1=\"12\" y1=\"8\" x2=\"12\" y2=\"12\"/><line x1=\"12\" y1=\"16\" x2=\"12.01\" y2=\"16\"/></svg>`,\n    };\n\n    const TYPE_LABELS = {error: 'Error', warn: 'Warning', info: 'Information'};\n\n    function showBanner(type, title, message, detail = '') {\n        const overlay = document.getElementById('overlay');\n        const banner = document.getElementById('banner');\n\n        // Populate content\n        banner.dataset.type = type;\n        document.getElementById('banner-icon').innerHTML = ICONS[type];\n        document.getElementById('banner-type-label').textContent = TYPE_LABELS[type];\n        document.getElementById('banner-title').textContent = title;\n        document.getElementById('banner-message').textContent = message;\n        document.getElementById('banner-detail').textContent = detail;\n\n        // Show\n        overlay.classList.remove('hiding');\n        overlay.classList.add('show');\n\n        // Focus the Ok button for keyboard accessibility\n        setTimeout(() => document.getElementById('btn-ok').focus(), 50);\n    }\n\n    function closeBanner() {\n        const overlay = document.getElementById('overlay');\n        overlay.classList.add('hiding');\n        setTimeout(() => {\n            overlay.classList.remove('show', 'hiding');\n        }, 200);\n    }\n\n    // Close on Escape key\n    document.addEventListener('keydown', e => {\n        if (e.key === 'Escape') closeBanner();\n    });\n</script>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<!-- ── OVERLAY ─────────────────────────────────────────────────── --><div class=\"overlay\" id=\"overlay\" role=\"dialog\" aria-modal=\"true\" aria-labelledby=\"banner-title\"><div class=\"overlay-backdrop\" onclick=\"closeBanner()\"></div><div class=\"banner\" id=\"banner\" data-type=\"error\"><div class=\"banner-stripe\"></div><div class=\"banner-head\"><div class=\"banner-icon\" id=\"banner-icon\"><!-- icon injected by JS --></div><div class=\"banner-title-wrap\"><div class=\"banner-type-label\" id=\"banner-type-label\">Error</div><div class=\"banner-title\" id=\"banner-title\">Title</div></div></div><div class=\"banner-message\" id=\"banner-message\"></div><pre class=\"banner-detail\" id=\"banner-detail\"></pre><div class=\"banner-footer\"><button class=\"btn-ok\" id=\"btn-ok\" onclick=\"closeBanner()\">Ok</button></div></div></div><script>\n    /* SVG icons per type */\n    const ICONS = {\n        error: `<svg viewBox=\"0 0 24 24\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><line x1=\"12\" y1=\"8\" x2=\"12\" y2=\"12\"/><line x1=\"12\" y1=\"16\" x2=\"12.01\" y2=\"16\"/></svg>`,\n        warn: `<svg viewBox=\"0 0 24 24\"><path d=\"M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z\"/><line x1=\"12\" y1=\"9\" x2=\"12\" y2=\"13\"/><line x1=\"12\" y1=\"17\" x2=\"12.01\" y2=\"17\"/></svg>`,\n        info: `<svg viewBox=\"0 0 24 24\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><line x1=\"12\" y1=\"8\" x2=\"12\" y2=\"12\"/><line x1=\"12\" y1=\"16\" x2=\"12.01\" y2=\"16\"/></svg>`,\n    };\n\n    const TYPE_LABELS = {error: 'Error', warn: 'Warning', info: 'Information'};\n\n    function showBanner(type, title, message, detail = '') {\n        const overlay = document.getElementById('overlay');\n        const banner = document.getElementById('banner');\n\n        // Populate content\n        banner.dataset.type = type;\n        document.getElementById('banner-icon').innerHTML = ICONS[type];\n        document.getElementById('banner-type-label').textContent = TYPE_LABELS[type];\n        document.getElementById('banner-title').textContent = title;\n        document.getElementById('banner-message').textContent = message;\n        document.getElementById('banner-detail').textContent = detail;\n\n        // Show\n        overlay.classList.remove('hiding');\n        overlay.classList.add('show');\n\n        // Focus the Ok button for keyboard accessibility\n        setTimeout(() => document.getElementById('btn-ok').focus(), 50);\n    }\n\n    function closeBanner() {\n        const overlay = document.getElementById('overlay');\n        overlay.classList.add('hiding');\n        setTimeout(() => {\n            overlay.classList.remove('show', 'hiding');\n        }, 200);\n    }\n\n    // Close on Escape key\n    document.addEventListener('keydown', e => {\n        if (e.key === 'Escape') closeBanner();\n    });\n</script>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -88,9 +55,9 @@ func AutoShowBanner(p components.BannerProps) templ.Component {
 			}()
 		}
 		ctx = templ.InitializeContext(ctx)
-		templ_7745c5c3_Var3 := templ.GetChildren(ctx)
-		if templ_7745c5c3_Var3 == nil {
-			templ_7745c5c3_Var3 = templ.NopComponent
+		templ_7745c5c3_Var2 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var2 == nil {
+			templ_7745c5c3_Var2 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
 		templ_7745c5c3_Err = templ.JSFuncCall("showBanner", p.Type, p.Header, p.Message, p.Details).Render(ctx, templ_7745c5c3_Buffer)

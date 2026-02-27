@@ -27,13 +27,18 @@
   --info: #2563EB;
   --calc-value: #9CA3AF;
 
+  --danger-light: #FEF2F2;
+  --danger-border: #FECACA;
+
   --font-sans: 'IBM Plex Sans', sans-serif;
   --font-mono: 'IBM Plex Mono', monospace;
 
   --radius-sm: 4px;
   --radius-md: 6px;
   --radius-lg: 10px;
+  --radius-xl: 14px;
 
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, .08);
   --shadow-md: 0 4px 16px rgba(0, 0, 0, .10);
 
   --space-xs: 4px;
