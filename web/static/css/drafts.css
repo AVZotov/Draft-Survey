@@ -5,7 +5,7 @@
 ================================================================ */
 
 /* ─── Page layout ─────────────────────────────────────────────── */
-.page-main {
+.page-main__drafts {
   flex: 1;
   padding: var(--space-lg) var(--space-md);
   display: flex;
@@ -17,7 +17,7 @@
   max-width: 980px;
 }
 
-.page-top {
+.page-top__drafts {
   margin-bottom: var(--space-lg);
 }
 

@@ -6,7 +6,7 @@
 ================================================================ */
 
 /* ─── Page layout ─────────────────────────────────────────────── */
-.page-main {
+.page-main__new-survey {
   flex: 1;
   display: flex;
   justify-content: center;
@@ -26,19 +26,6 @@
 .survey-nav {
   position: sticky;
   top: calc(52px + var(--space-lg));
-}
-
-/* Alias sidebar-nav from styles.css */
-.survey-nav-label {
-  /* = .sidebar-nav-label */
-}
-
-.survey-nav-list {
-  /* = .sidebar-nav-list  */
-}
-
-.survey-nav-item {
-  /* = .sidebar-nav-item  */
 }
 
 /* ─── Operation toggle (Loading / Discharging) ────────────────── */

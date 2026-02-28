@@ -1,0 +1,346 @@
+package widgets
+
+templ NewSurveyForm() {
+	<main class="page-main__new-survey">
+		<div class="survey-layout">
+			<!-- Sidebar nav -->
+			<nav class="survey-nav">
+				<p class="sidebar-nav-label">Sections</p>
+				<ul class="sidebar-nav-list">
+					<li class="sidebar-nav-item is-active" id="nav-survey">
+						<a href="#section-survey">
+							<svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"></rect><path d="M16 2v4M8 2v4M3 10h18"></path></svg>
+							Survey Info
+							<span class="nav-step-dot"></span>
+						</a>
+					</li>
+					<li class="sidebar-nav-item" id="nav-vessel">
+						<a href="#section-vessel">
+							<svg viewBox="0 0 24 24"><path d="M3 17l2-7h14l2 7H3z"></path><path d="M8 10V6h8v4"></path><path d="M12 6V3"></path></svg>
+							Vessel Data
+							<span class="nav-step-dot"></span>
+						</a>
+					</li>
+					<li class="sidebar-nav-item" id="nav-marks">
+						<a href="#section-marks">
+							<svg viewBox="0 0 24 24"><path d="M12 2v20M2 12h20"></path><circle cx="12" cy="12" r="4"></circle></svg>
+							Summer Marks
+							<span class="nav-step-dot"></span>
+						</a>
+					</li>
+					<li class="sidebar-nav-item" id="nav-calc">
+						<a href="#section-calc">
+							<svg viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2"></rect><path d="M8 6h8M8 10h8M8 14h4"></path></svg>
+							Calc. Settings
+							<span class="nav-step-dot"></span>
+						</a>
+					</li>
+				</ul>
+			</nav>
+			<!-- Content -->
+			<div class="survey-content">
+				<a href="#" class="back-link">
+					<svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"></path></svg>
+					Back to Dashboard
+				</a>
+				<h1 class="page-title">New Survey</h1>
+				<p class="page-subtitle">Fill in the details below. You can proceed to draft readings at any time and return to complete missing fields.</p>
+				<!-- ══ 1. SURVEY INFORMATION ═══════════════════════════════ -->
+				<div class="form-card" id="section-survey">
+					<div class="form-card-header">
+						<div class="form-card-header-icon">
+							<svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"></rect><path d="M16 2v4M8 2v4M3 10h18"></path></svg>
+						</div>
+						<span class="form-card-title">Survey Information</span>
+						<span class="form-card-subtitle">Survey context & logistics</span>
+					</div>
+					<div class="form-section">
+						<div class="field-row-2">
+							<div class="field">
+								<label for="job-no">Job No. <span class="optional">(optional)</span></label>
+								<input type="text" id="job-no" name="job_no" placeholder="e.g. 345543_002"/>
+							</div>
+							<div class="field">
+								<label for="ds-no">DS No. <span class="optional">(optional)</span></label>
+								<input type="text" id="ds-no" name="ds_no" placeholder="e.g. 1"/>
+							</div>
+						</div>
+						<div class="field">
+							<label>Cargo Operation <span class="required">*</span></label>
+							<div class="operation-toggle">
+								<input type="radio" name="cargo_op" id="op-loading" value="loading" checked/>
+								<label for="op-loading">
+									<svg viewBox="0 0 24 24"><path d="M12 2v14M5 9l7 7 7-7"></path><path d="M5 20h14"></path></svg>
+									Loading
+								</label>
+								<input type="radio" name="cargo_op" id="op-discharge" value="discharge"/>
+								<label for="op-discharge">
+									<svg viewBox="0 0 24 24"><path d="M12 22V8M5 15l7-7 7 7"></path><path d="M5 4h14"></path></svg>
+									Discharging
+								</label>
+							</div>
+						</div>
+						<div class="field-row-2">
+							<div class="field">
+								<label for="port">Port / Berth <span class="optional">(optional)</span></label>
+								<input type="text" id="port" name="port" placeholder="e.g. Vanino, Russia"/>
+							</div>
+							<div class="field">
+								<label for="destination">Destination / Origin <span class="optional">(optional)</span></label>
+								<input type="text" id="destination" name="destination" placeholder="e.g. China"/>
+							</div>
+						</div>
+						<div class="field-row-3">
+							<div class="field">
+								<label for="cargo-type">Cargo <span class="optional">(optional)</span></label>
+								<input type="text" id="cargo-type" name="cargo" placeholder="e.g. Coal"/>
+							</div>
+							<div class="field">
+								<label for="packing">Packing <span class="optional">(optional)</span></label>
+								<div class="select-wrap">
+									<select id="packing" name="packing">
+										<option value="" disabled selected>Select…</option>
+										<option>bulk</option>
+										<option>bags</option>
+										<option>bales</option>
+										<option>bars</option>
+										<option>big bags</option>
+										<option>boxes</option>
+										<option>coils</option>
+										<option>containers</option>
+										<option>pallets</option>
+										<option>plates</option>
+										<option>pieces</option>
+										<option>Other</option>
+									</select>
+								</div>
+							</div>
+							<div class="field">
+								<label for="client">Principal / Client <span class="optional">(optional)</span></label>
+								<input type="text" id="client" name="client" placeholder="e.g. Glencore"/>
+							</div>
+						</div>
+						<div class="field">
+							<label>Sea Condition <span class="optional">(optional)</span></label>
+							<div class="sea-condition-row">
+								<div class="select-wrap">
+									<select id="sea-condition" name="sea_condition" onchange="updateSeaBadge(this)">
+										<option value="" disabled selected>Select wave height…</option>
+										<option value="calm">Calm — &lt; 0.1 m</option>
+										<option value="smooth">Smooth — 0.1–0.5 m</option>
+										<option value="slight" selected>Slight — 0.5–1.25 m</option>
+										<option value="moderate">Moderate — 1.25–2.50 m</option>
+										<option value="rough">Rough — 2.50–4.00 m</option>
+									</select>
+								</div>
+								<div class="sea-badge" id="sea-badge">Slight</div>
+							</div>
+							<p class="field-hint">Ice conditions can be added optionally.</p>
+						</div>
+						<div class="field">
+							<label for="remarks">Remarks <span class="optional">(optional)</span></label>
+							<textarea id="remarks" name="remarks" placeholder="Any observations, notes or disclaimers for the report…"></textarea>
+						</div>
+					</div>
+				</div>
+				<!-- ══ 2. VESSEL DATA ══════════════════════════════════════ -->
+				<div class="form-card" id="section-vessel">
+					<div class="form-card-header">
+						<div class="form-card-header-icon">
+							<svg viewBox="0 0 24 24"><path d="M3 17l2-7h14l2 7H3z"></path><path d="M8 10V6h8v4"></path><path d="M12 6V3"></path></svg>
+						</div>
+						<span class="form-card-title">Vessel Data</span>
+						<span class="form-card-subtitle">From vessel's certificates</span>
+					</div>
+					<div class="form-section">
+						<div class="field-row-2">
+							<div class="field">
+								<label for="vessel-name">Vessel Name <span class="required">*</span></label>
+								<input type="text" id="vessel-name" name="vessel_name" placeholder="e.g. OCEAN CHEERS"/>
+							</div>
+							<div class="field">
+								<label for="imo">IMO No. <span class="optional">(optional)</span></label>
+								<input type="text" id="imo" name="imo" placeholder="e.g. 9233387"/>
+							</div>
+						</div>
+						<div class="field-row-3">
+							<div class="field">
+								<label for="flag">Home Flag <span class="optional">(optional)</span></label>
+								<div class="select-wrap">
+									<select id="flag" name="flag">
+										<option value="" disabled selected>Select flag…</option>
+										<option>Antigua and Barbuda</option>
+										<option>Australia</option>
+										<option>Bahamas</option>
+										<option>Belize</option>
+										<option>Cambodia</option>
+										<option>China</option>
+										<option>Cyprus</option>
+										<option>Denmark</option>
+										<option>Germany</option>
+										<option>Greece</option>
+										<option>Hong Kong</option>
+										<option>Indonesia</option>
+										<option>Japan</option>
+										<option>Liberia</option>
+										<option>Malta</option>
+										<option>Marshall Islands</option>
+										<option>Netherlands</option>
+										<option>Norway</option>
+										<option selected>Panama</option>
+										<option>Russia</option>
+										<option>Singapore</option>
+										<option>St. Vincent and the Grenadines</option>
+										<option>United Kingdom</option>
+										<option>Other</option>
+									</select>
+								</div>
+							</div>
+							<div class="field">
+								<label for="built">Built Country/Year <span class="optional">(optional)</span></label>
+								<input type="text" id="built" name="built" placeholder="e.g. China / 2002"/>
+							</div>
+							<div class="field">
+								<label for="lightship">Lightship, MT <span class="required">*</span></label>
+								<input type="number" id="lightship" name="lightship" placeholder="0.000" step="0.001"/>
+							</div>
+						</div>
+					</div>
+					<div class="form-section">
+						<div class="field-row-4">
+							<div class="field">
+								<label for="lbp">LBP, m <span class="required">*</span></label>
+								<input type="number" id="lbp" name="lbp" placeholder="0.00" step="0.01" oninput="updateCalcHints()"/>
+							</div>
+							<div class="field">
+								<label for="breadth">Breadth, m <span class="required">*</span></label>
+								<input type="number" id="breadth" name="breadth" placeholder="0.00" step="0.01"/>
+							</div>
+							<div class="field">
+								<label for="depth">Depth, m <span class="optional">(optional)</span></label>
+								<input type="number" id="depth" name="depth" placeholder="0.00" step="0.01" oninput="checkDepth()"/>
+							</div>
+							<div class="field">
+								<label>LBP / 2, m</label>
+								<div class="calc-value" id="lbp-half">—</div>
+							</div>
+						</div>
+						<!-- Depth warning: shown when Depth ≠ Summer Draft + Summer Freeboard -->
+						<div class="field-warning" id="depth-warning" style="display:none">
+							<svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><path d="M12 9v4M12 17h.01"></path></svg>
+							<p class="field-warning-text">Depth should equal Summer Draft + Summer Freeboard. Please verify.</p>
+						</div>
+					</div>
+				</div>
+				<!-- ══ 3. SUMMER MARKS ════════════════════════════════════ -->
+				<div class="form-card" id="section-marks">
+					<div class="form-card-header">
+						<div class="form-card-header-icon">
+							<svg viewBox="0 0 24 24"><path d="M12 2v20M2 12h20"></path><circle cx="12" cy="12" r="4"></circle></svg>
+						</div>
+						<span class="form-card-title">Summer Marks</span>
+						<span class="form-card-subtitle">From vessel's load line certificate</span>
+					</div>
+					<div class="form-section">
+						<div class="field-row-4">
+							<div class="field">
+								<label for="summer-draft">Summer Draft, m <span class="required">*</span></label>
+								<input type="number" id="summer-draft" name="summer_draft" placeholder="0.000" step="0.001" oninput="checkDepth(); updateFWA()"/>
+							</div>
+							<div class="field">
+								<label for="summer-dwt">Summer DWT, MT <span class="required">*</span></label>
+								<input type="number" id="summer-dwt" name="summer_dwt" placeholder="0.000" step="0.001" oninput="updateFWA()"/>
+							</div>
+							<div class="field">
+								<label for="summer-tpc">Summer TPC, MT/cm <span class="required">*</span></label>
+								<input type="number" id="summer-tpc" name="summer_tpc" placeholder="0.000" step="0.001" oninput="updateFWA()"/>
+							</div>
+							<div class="field">
+								<label for="summer-freeboard">Summer Freeboard, m <span class="optional">(optional)</span></label>
+								<input type="number" id="summer-freeboard" name="summer_freeboard" placeholder="0.000" step="0.001" oninput="checkDepth()"/>
+							</div>
+						</div>
+						<!-- Derived values row -->
+						<div class="field-row-3" style="margin-top: var(--space-md)">
+							<div class="field">
+								<label>0.5% DWT, MT</label>
+								<div class="calc-value" id="half-pct-dwt">—</div>
+							</div>
+							<div class="field">
+								<label>FWA, mm</label>
+								<div class="calc-value" id="fwa">—</div>
+								<p class="field-hint">FWA = DWT / (4 × TPC)</p>
+							</div>
+							<div class="field">
+								<label>Depth check (Draft + FB)</label>
+								<div class="calc-value" id="depth-check">—</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- ══ 4. CALCULATION SETTINGS ════════════════════════════ -->
+				<div class="form-card" id="section-calc">
+					<div class="form-card-header">
+						<div class="form-card-header-icon">
+							<svg viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2"></rect><path d="M8 6h8M8 10h8M8 14h4"></path></svg>
+						</div>
+						<span class="form-card-title">Calculation Settings</span>
+						<span class="form-card-subtitle">UNECE 1992 method parameters</span>
+					</div>
+					<div class="form-section">
+						<div class="field">
+							<label>MMC Calculation Method <span class="required">*</span></label>
+							<div class="method-options">
+								<div class="method-option">
+									<input type="radio" name="mmc_method" id="mmc-standard" value="standard" checked/>
+									<label for="mmc-standard">
+										<span class="method-label-title">Standard</span>
+										<span class="method-label-formula">(f + 6m + a) / 8</span>
+										<span class="method-label-desc">Sea vessel</span>
+									</label>
+								</div>
+								<div class="method-option">
+									<input type="radio" name="mmc_method" id="mmc-river" value="river"/>
+									<label for="mmc-river">
+										<span class="method-label-title">River</span>
+										<span class="method-label-formula">(f + 4m + a) / 6</span>
+										<span class="method-label-desc">River vessel</span>
+									</label>
+								</div>
+								<div class="method-option">
+									<input type="radio" name="mmc_method" id="mmc-barge" value="barge"/>
+									<label for="mmc-barge">
+										<span class="method-label-title">Barge</span>
+										<span class="method-label-formula">(3f + 14m + 3a) / 20</span>
+										<span class="method-label-desc">Barge</span>
+									</label>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="form-section">
+						<div class="field">
+							<label>Correction Method <span class="required">*</span></label>
+							<div class="correction-options">
+								<div class="method-option">
+									<input type="radio" name="corr_method" id="corr-full" value="full_lbp" checked/>
+									<label for="corr-full">
+										<span class="method-label-title">Full LBP</span>
+										<span class="method-label-desc">Standard — sea vessels</span>
+									</label>
+								</div>
+								<div class="method-option">
+									<input type="radio" name="corr_method" id="corr-half" value="half_lbp"/>
+									<label for="corr-half">
+										<span class="method-label-title">Half LBP</span>
+										<span class="method-label-desc">River vessels only</span>
+									</label>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div><!-- /survey-content -->
+		</div><!-- /survey-layout -->
+	</main>
+}

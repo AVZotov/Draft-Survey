@@ -1,0 +1,82 @@
+package widgets
+
+templ NewSurveyActionBar() {
+	<div class="action-bar">
+		<div class="action-bar-info">
+			<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4M12 8h.01"></path></svg>
+			Required fields: Vessel Name, Lightship, LBP, Breadth, Summer Draft / DWT / TPC
+		</div>
+		<div class="action-bar-btns">
+			<button class="btn btn-ghost" type="button">
+				<svg viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v14a2 2 0 0 1-2 2z"></path><path d="M17 21v-8H7v8M7 3v5h8"></path></svg>
+				Save Draft
+			</button>
+			<button class="btn btn-primary" type="button">
+				Proceed to Draft Readings
+				<svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"></path></svg>
+			</button>
+		</div>
+	</div>
+	<script>
+    // ── Sidebar active on scroll ──────────────────────────────────
+    const sections = ['section-survey','section-vessel','section-marks','section-calc'];
+    const navMap   = {'section-survey':'nav-survey','section-vessel':'nav-vessel','section-marks':'nav-marks','section-calc':'nav-calc'};
+
+    window.addEventListener('scroll', () => {
+      let current = sections[0];
+      sections.forEach(id => {
+        const el = document.getElementById(id);
+        if (el && el.getBoundingClientRect().top < 80) current = id;
+      });
+      document.querySelectorAll('.sidebar-nav-item').forEach(i => i.classList.remove('is-active'));
+      document.getElementById(navMap[current]).classList.add('is-active');
+    });
+
+    // ── Sea condition badge ───────────────────────────────────────
+    function updateSeaBadge(sel) {
+      const map = { calm:'Calm', smooth:'Smooth', slight:'Slight', moderate:'Moderate', rough:'Rough' };
+      document.getElementById('sea-badge').textContent = map[sel.value] || '—';
+    }
+
+    // ── LBP / 2 calc hint ─────────────────────────────────────────
+    function updateCalcHints() {
+      const lbp = parseFloat(document.getElementById('lbp').value);
+      document.getElementById('lbp-half').textContent = isNaN(lbp) ? '—' : (lbp / 2).toFixed(2) + ' m';
+    }
+
+    // ── FWA & 0.5% DWT ───────────────────────────────────────────
+    function updateFWA() {
+      const dwt = parseFloat(document.getElementById('summer-dwt').value);
+      const tpc = parseFloat(document.getElementById('summer-tpc').value);
+      document.getElementById('half-pct-dwt').textContent = isNaN(dwt) ? '—' : (dwt * 0.005).toFixed(3) + ' MT';
+      if (!isNaN(dwt) && !isNaN(tpc) && tpc > 0) {
+        document.getElementById('fwa').textContent = (dwt / (4 * tpc)).toFixed(1) + ' mm';
+      } else {
+        document.getElementById('fwa').textContent = '—';
+      }
+    }
+
+    // ── Depth check ───────────────────────────────────────────────
+    function checkDepth() {
+      const depth = parseFloat(document.getElementById('depth').value);
+      const draft = parseFloat(document.getElementById('summer-draft').value);
+      const fb    = parseFloat(document.getElementById('summer-freeboard').value);
+      const warn  = document.getElementById('depth-warning');
+      const check = document.getElementById('depth-check');
+
+      if (!isNaN(draft) && !isNaN(fb)) {
+        const expected = (draft + fb).toFixed(3);
+        check.textContent = expected + ' m';
+        if (!isNaN(depth) && Math.abs(depth - parseFloat(expected)) > 0.001) {
+          warn.style.display = 'flex';
+          check.style.color = 'var(--danger)';
+        } else {
+          warn.style.display = 'none';
+          check.style.color = 'var(--text-calc)';
+        }
+      } else {
+        check.textContent = '—';
+      }
+    }
+  </script>
+}
