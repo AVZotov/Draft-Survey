@@ -1,0 +1,173 @@
+/* ================================================================
+   settings.css — страница /settings
+   Depends on: styles.css (tokens, reset, header с user-area,
+                footer, form-card, form fields, signature-upload,
+                sidebar-nav, back-link, page-title, buttons)
+================================================================ */
+
+/* ─── Page layout ─────────────────────────────────────────────── */
+.page-main {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  padding: var(--space-2xl) var(--space-md);
+}
+
+.settings-layout {
+  width: 100%;
+  max-width: 780px;
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: var(--space-xl);
+  align-items: start;
+}
+
+/* ─── Settings sidebar ────────────────────────────────────────── */
+/* use sidebar-nav из styles.css, aliase: */
+.settings-nav {
+  position: sticky;
+  top: var(--space-lg);
+}
+
+.settings-nav-label {
+  /* = .sidebar-nav-label */
+}
+
+.settings-nav-list {
+  /* = .sidebar-nav-list  */
+}
+
+.settings-nav-item {
+  /* = .sidebar-nav-item  */
+}
+
+/* ─── Language toggle ─────────────────────────────────────────── */
+.lang-options {
+  display: flex;
+  gap: var(--space-sm);
+}
+
+.lang-option {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  background: var(--surface);
+}
+
+.lang-option:hover,
+.lang-option.is-active {
+  border-color: var(--accent);
+  background: var(--accent-light);
+}
+
+.lang-option input[type="radio"] {
+  display: none;
+}
+
+.lang-flag {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.lang-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.lang-option.is-active .lang-label {
+  color: var(--accent);
+}
+
+/* ─── About section ───────────────────────────────────────────── */
+.about-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-md) 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.about-row:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.about-row:first-child {
+  padding-top: 0;
+}
+
+.about-row-label {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.about-row-value {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-primary);
+}
+
+.about-row-link {
+  font-size: 13px;
+  color: var(--accent);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  transition: color 0.15s;
+}
+
+.about-row-link:hover {
+  color: var(--accent-dark);
+}
+
+.about-row-link svg {
+  width: 12px;
+  height: 12px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ─── Save toast ──────────────────────────────────────────────── */
+.toast {
+  position: fixed;
+  bottom: var(--space-xl);
+  left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  background: var(--success);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 500;
+  padding: var(--space-sm) var(--space-lg);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  transition: transform 0.3s ease;
+  z-index: 200;
+  white-space: nowrap;
+}
+
+.toast.is-visible {
+  transform: translateX(-50%) translateY(0);
+}
+
+.toast svg {
+  width: 15px;
+  height: 15px;
+  stroke: #fff;
+  fill: none;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}

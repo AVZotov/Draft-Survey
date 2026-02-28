@@ -1,0 +1,176 @@
+/* ================================================================
+   new-survey.css — page /survey/new (create new survey)
+   Depends on: styles.css (tokens, reset, header with user-area,
+                footer, form-card, form fields, sidebar-nav,
+                back-link, page-title, action-bar, buttons)
+================================================================ */
+
+/* ─── Page layout ─────────────────────────────────────────────── */
+.page-main {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  padding: var(--space-xl) var(--space-md);
+}
+
+.survey-layout {
+  width: 100%;
+  max-width: 900px;
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: var(--space-xl);
+  align-items: start;
+}
+
+/* ─── Sticky sidebar ──────────────────────────────────────────── */
+.survey-nav {
+  position: sticky;
+  top: calc(52px + var(--space-lg));
+}
+
+/* Alias sidebar-nav from styles.css */
+.survey-nav-label {
+  /* = .sidebar-nav-label */
+}
+
+.survey-nav-list {
+  /* = .sidebar-nav-list  */
+}
+
+.survey-nav-item {
+  /* = .sidebar-nav-item  */
+}
+
+/* ─── Operation toggle (Loading / Discharging) ────────────────── */
+.operation-toggle {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.operation-toggle input[type="radio"] {
+  display: none;
+}
+
+.operation-toggle label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: 9px;
+  font-size: 13px;
+  font-weight: 500;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--text-secondary);
+  background: var(--surface);
+  cursor: pointer;
+  margin-bottom: 0;
+  transition: background 0.15s, color 0.15s;
+  border: none;
+}
+
+.operation-toggle label svg {
+  width: 14px;
+  height: 14px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.operation-toggle label:first-of-type {
+  border-right: 1px solid var(--border);
+}
+
+.operation-toggle input[type="radio"]:checked+label {
+  background: var(--accent);
+  color: #fff;
+}
+
+/* ─── Method selector cards ───────────────────────────────────── */
+.method-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: var(--space-sm);
+}
+
+.correction-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-sm);
+}
+
+.method-option {
+  position: relative;
+}
+
+.method-option input[type="radio"] {
+  display: none;
+}
+
+.method-option label {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: var(--space-sm) var(--space-md);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  margin-bottom: 0;
+  text-transform: none;
+  letter-spacing: 0;
+  transition: border-color 0.15s, background 0.15s;
+  background: var(--surface);
+}
+
+.method-option input:checked+label {
+  border-color: var(--accent);
+  background: var(--accent-light);
+}
+
+.method-label-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.method-option input:checked+label .method-label-title {
+  color: var(--accent);
+}
+
+.method-label-formula {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-secondary);
+}
+
+.method-label-desc {
+  font-size: 10px;
+  color: var(--text-placeholder);
+  margin-top: 1px;
+}
+
+/* ─── Sea condition badge (inline indicator) ──────────────────── */
+.sea-condition-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: var(--space-sm);
+  align-items: end;
+}
+
+.sea-badge {
+  padding: 9px var(--space-md);
+  border-radius: var(--radius-md);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  white-space: nowrap;
+  min-width: 110px;
+  text-align: center;
+}

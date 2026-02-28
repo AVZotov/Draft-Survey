@@ -1,0 +1,525 @@
+/* ================================================================
+   tanks.css — page /survey/:id/tanks (BW / FW tanks)
+   Depends on: styles.css (tokens, reset, header with survey-pill,
+                footer, back-link, page-title, action-bar, buttons)
+================================================================ */
+
+/* ─── Page layout ─────────────────────────────────────────────── */
+.page-main {
+  flex: 1;
+  padding: var(--space-lg) var(--space-md);
+  display: flex;
+  justify-content: center;
+}
+
+.tanks-wrap {
+  width: 100%;
+  max-width: 1020px;
+}
+
+.page-top {
+  margin-bottom: var(--space-lg);
+}
+
+/* ─── Density bar ─────────────────────────────────────────────── */
+.density-bar {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-md) var(--space-lg);
+  margin-bottom: var(--space-lg);
+  display: flex;
+  align-items: center;
+  gap: var(--space-xl);
+}
+
+.density-bar-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  white-space: nowrap;
+}
+
+.density-groups {
+  display: flex;
+  gap: var(--space-xl);
+  flex: 1;
+}
+
+.dg {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.dg-lbl {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px var(--space-sm);
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+}
+
+.dg--ini .dg-lbl {
+  background: var(--ini-light);
+  color: var(--ini-accent);
+}
+
+.dg--fin .dg-lbl {
+  background: var(--fin-light);
+  color: var(--fin-accent);
+}
+
+input.den-in {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-primary);
+  text-align: right;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 6px var(--space-sm);
+  outline: none;
+  width: 88px;
+  appearance: none;
+  -moz-appearance: textfield;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+input.den-in::-webkit-inner-spin-button,
+input.den-in::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}
+
+input.den-in:focus {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 3px rgba(232, 99, 10, 0.12);
+}
+
+.den-hint {
+  font-size: 11px;
+  color: var(--text-dim);
+}
+
+.density-bar-note {
+  font-size: 11px;
+  color: var(--text-dim);
+}
+
+/* ─── Tank block (BW / FW) ────────────────────────────────────── */
+.tank-block {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  margin-bottom: var(--space-lg);
+}
+
+.tank-block-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-md) var(--space-lg);
+  border-bottom: 1px solid var(--border);
+}
+
+.tank-block--bw .tank-block-header {
+  background: var(--bw-light, #EFF6FF);
+  border-bottom-color: var(--bw-border, #BFDBFE);
+}
+
+.tank-block--fw .tank-block-header {
+  background: var(--fw-light, #ECFEFF);
+  border-bottom-color: var(--fw-border, #A5F3FC);
+}
+
+/* BW/FW tokens (локальные для этой страницы) */
+.tank-block {
+  --bw-accent: #2563EB;
+  --bw-light: #EFF6FF;
+  --bw-border: #BFDBFE;
+  --fw-accent: #0891B2;
+  --fw-light: #ECFEFF;
+  --fw-border: #A5F3FC;
+}
+
+.blk-label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.blk-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.tank-block--bw .blk-label {
+  color: #2563EB;
+}
+
+.tank-block--bw .blk-dot {
+  background: #2563EB;
+}
+
+.tank-block--fw .blk-label {
+  color: #0891B2;
+}
+
+.tank-block--fw .blk-dot {
+  background: #0891B2;
+}
+
+.blk-totals {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xl);
+}
+
+.total-chip {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1px;
+}
+
+.total-chip-lbl {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.total-chip-val {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.tc--ini .total-chip-lbl {
+  color: var(--ini-accent);
+}
+
+.tc--fin .total-chip-lbl {
+  color: var(--fin-accent);
+}
+
+/* Correction banner */
+.corr-banner {
+  margin: var(--space-sm) var(--space-lg);
+  padding: var(--space-sm) var(--space-md);
+  background: var(--accent-light);
+  border: 1px solid #FED7AA;
+  border-radius: var(--radius-md);
+  font-size: 11px;
+  color: #92400E;
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.corr-banner svg {
+  width: 13px;
+  height: 13px;
+  stroke: var(--accent);
+  fill: none;
+  stroke-width: 2;
+  flex-shrink: 0;
+}
+
+/* ─── Tank table ──────────────────────────────────────────────── */
+.ttbl-wrap {
+  overflow-x: auto;
+}
+
+table.ttbl {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 13px;
+}
+
+.ttbl thead th {
+  padding: 5px var(--space-sm);
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+.ttbl thead tr.tr-grp th {
+  font-size: 11px;
+  font-weight: 700;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+}
+
+.ttbl thead tr.tr-grp .th-ini {
+  background: var(--ini-light);
+  color: var(--ini-accent);
+}
+
+.ttbl thead tr.tr-grp .th-fin {
+  background: var(--fin-light);
+  color: var(--fin-accent);
+}
+
+.ttbl thead tr.tr-grp .th-ph {
+  background: var(--bg);
+}
+
+.ttbl thead tr.tr-sub .ts-ini {
+  background: color-mix(in srgb, var(--ini-light) 35%, var(--bg));
+}
+
+.ttbl thead tr.tr-sub .ts-fin {
+  background: color-mix(in srgb, var(--fin-light) 35%, var(--bg));
+}
+
+.th-name {
+  text-align: left;
+  min-width: 140px;
+  padding-left: var(--space-lg) !important;
+}
+
+.th-num {
+  text-align: right;
+  min-width: 84px;
+}
+
+.th-act {
+  width: 52px;
+  text-align: center;
+}
+
+.th-div {
+  width: 1px;
+  padding: 0 !important;
+  background: var(--border);
+}
+
+tbody.t-row tr td {
+  padding: 5px var(--space-sm);
+  border-top: 4px solid var(--bg);
+  background: var(--surface);
+  vertical-align: middle;
+}
+
+tbody.t-row tr td:first-child {
+  padding-left: var(--space-lg);
+}
+
+select.t-sel {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-primary);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 5px var(--space-sm);
+  outline: none;
+  cursor: pointer;
+  width: 100%;
+  appearance: none;
+  transition: border-color 0.15s;
+}
+
+select.t-sel:focus {
+  border-color: var(--border-focus);
+}
+
+input.ti {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-primary);
+  text-align: right;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 5px var(--space-sm);
+  outline: none;
+  width: 100%;
+  appearance: none;
+  -moz-appearance: textfield;
+  transition: border-color 0.15s;
+}
+
+input.ti::-webkit-inner-spin-button,
+input.ti::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}
+
+input.ti:focus {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 2px rgba(232, 99, 10, 0.1);
+}
+
+input.ti::placeholder {
+  color: var(--text-dim);
+}
+
+.td-mt {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-dim);
+  text-align: right;
+  white-space: nowrap;
+  padding-right: var(--space-sm) !important;
+}
+
+.td-mt.v {
+  color: var(--text-primary);
+}
+
+.td-div {
+  width: 1px;
+  padding: 0 !important;
+  background: var(--border) !important;
+  border-top: 4px solid var(--bg) !important;
+}
+
+.td-act {
+  text-align: center;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+/* Row +/- buttons */
+.rbtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--bg);
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--text-secondary);
+  transition: background 0.12s, color 0.12s, border-color 0.12s;
+  user-select: none;
+}
+
+.rbtn.add {
+  color: var(--ini-accent);
+  border-color: var(--ini-border);
+  background: var(--ini-light);
+}
+
+.rbtn.add:hover {
+  background: #DBEAFE;
+  border-color: var(--ini-accent);
+}
+
+.rbtn.remove {
+  color: var(--danger);
+  border-color: #FECACA;
+  background: #FEF2F2;
+}
+
+.rbtn.remove:hover {
+  background: #FEE2E2;
+  border-color: var(--danger);
+}
+
+/* Table footer total row */
+tfoot.ttbl-foot tr td {
+  border-top: 2px solid var(--border) !important;
+  background: var(--bg) !important;
+  padding: var(--space-sm) var(--space-sm);
+}
+
+.td-tot-lbl {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding-left: var(--space-lg) !important;
+}
+
+.td-tot-mt {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-primary);
+  text-align: right;
+  padding-right: var(--space-sm) !important;
+}
+
+/* Add tank row */
+
+.add-row {
+  display: flex;
+  align-items: center;
+  padding: var(--space-sm) var(--space-lg) var(--space-md);
+}
+
+.add-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ini-accent);
+  background: var(--ini-light);
+  border: 1px dashed var(--ini-border);
+  border-radius: var(--radius-md);
+  padding: 6px var(--space-md);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.add-btn:hover {
+  background: #DBEAFE;
+}
+
+.add-btn svg {
+  width: 13px;
+  height: 13px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2.5;
+}
+
+/* Domestic water separator */
+
+.domestic-sep {
+  border-top: 1px solid var(--border);
+  padding: var(--space-md) var(--space-lg) var(--space-sm);
+}
+
+.domestic-title {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.domestic-title::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}

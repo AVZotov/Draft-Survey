@@ -1,45 +1,91 @@
-/* ─── Design Tokens ──────────────────────────────────────────── */
+/* ================================================================
+   DRAFT SURVEY — styles.css
+   Global design tokens + shared components
+   
 
+   Page styles — in separate styles:
+     profile.css      — /profile
+     dashboard.css    — /dashboard
+     settings.css     — /settings
+     new-survey.css   — /survey/new
+     drafts.css       — /survey/:id/drafts
+     tanks.css        — /survey/:id/tanks
+     results.css      — /survey/:id/results
+     survey-list.css  — /surveys
+     banner.css       — error banner (added in layout)
+================================================================ */
+
+/* ════════════════════════════════════════════════════════════════
+   1. DESIGN TOKENS
+════════════════════════════════════════════════════════════════ */
 :root {
+  /* Surface */
   --bg: #F4F5F7;
   --surface: #FFFFFF;
+
+  /* Borders */
   --border: #D1D5DB;
   --border-focus: #E8630A;
 
+  /* Text */
   --text-primary: #1C2B33;
   --text-secondary: #6B7280;
   --text-placeholder: #9CA3AF;
+  --text-dim: #9CA3AF;
 
+  /* Brand / Accent */
   --accent: #E8630A;
   --accent-dark: #C4520A;
   --accent-light: #FEF3EB;
 
+  /* Header / Footer */
   --header-bg: #3D5159;
   --header-text: #FFFFFF;
-
   --footer-bg: #2E3D44;
   --footer-text: rgba(255, 255, 255, 0.45);
   --footer-border: rgba(255, 255, 255, 0.08);
 
+  /* Semantic colours */
   --danger: #DC2626;
   --danger-light: #FEF2F2;
   --danger-border: #FECACA;
-  --warning: #D97706;
-  --success: #15803D;
-  --info: #2563EB;
-  --calc-value: #9CA3AF;
 
+  --warning: #D97706;
+  --warning-light: #FFFBEB;
+  --warning-border: #FDE68A;
+
+  --success: #15803D;
+  --success-light: #F0FDF4;
+  --success-border: #BBF7D0;
+
+  --info: #2563EB;
+  --info-light: #EFF6FF;
+  --info-border: #BFDBFE;
+
+  /* Survey phase colours */
+  --ini-accent: #2563EB;
+  --ini-light: #EFF6FF;
+  --ini-border: #BFDBFE;
+
+  --fin-accent: #15803D;
+  --fin-light: #F0FDF4;
+  --fin-border: #BBF7D0;
+
+  /* Typography */
   --font-sans: 'IBM Plex Sans', sans-serif;
   --font-mono: 'IBM Plex Mono', monospace;
 
+  /* Border radius */
   --radius-sm: 4px;
   --radius-md: 6px;
   --radius-lg: 10px;
   --radius-xl: 14px;
 
+  /* Shadows */
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, .08);
   --shadow-md: 0 4px 16px rgba(0, 0, 0, .10);
 
+  /* Spacing */
   --space-xs: 4px;
   --space-sm: 8px;
   --space-md: 16px;
@@ -48,8 +94,9 @@
   --space-2xl: 56px;
 }
 
-/* ─── Reset ──────────────────────────────────────────────────── */
-
+/* ════════════════════════════════════════════════════════════════
+   2. RESET
+════════════════════════════════════════════════════════════════ */
 *,
 *::before,
 *::after {
@@ -66,15 +113,17 @@ body {
 body {
   font-family: var(--font-sans);
   font-size: 14px;
-  background-color: var(--bg);
+  background: var(--bg);
   color: var(--text-primary);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
 }
 
-/* APP HEADER  — reusable component */
-
+/* ════════════════════════════════════════════════════════════════
+   3. APP HEADER
+   With and without user profile
+════════════════════════════════════════════════════════════════ */
 .app-header {
   background: var(--header-bg);
   padding: 0 var(--space-xl);
@@ -83,6 +132,9 @@ body {
   align-items: center;
   justify-content: space-between;
   flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  z-index: 50;
 }
 
 .app-header-left {
@@ -91,6 +143,13 @@ body {
   gap: var(--space-md);
 }
 
+.app-header-right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+}
+
+/* Logo mark */
 .app-logo-mark {
   width: 30px;
   height: 30px;
@@ -112,6 +171,7 @@ body {
   stroke-linejoin: round;
 }
 
+/* Logo text — name + tagline */
 .app-logo-text {
   display: flex;
   flex-direction: column;
@@ -133,13 +193,22 @@ body {
   text-transform: uppercase;
 }
 
-/* Header right — user area */
-.app-header-right {
-  display: flex;
-  align-items: center;
-  gap: var(--space-lg);
+/* Version label */
+.app-header-version {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.25);
+  letter-spacing: 0.04em;
 }
 
+/* Header divider */
+.header-divider {
+  width: 1px;
+  height: 20px;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* User area in header */
 .header-user {
   display: flex;
   align-items: center;
@@ -179,103 +248,41 @@ body {
   letter-spacing: 0.03em;
 }
 
-/* FORM CARD  — reusable component */
-
-.form-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-md);
-  overflow: hidden;
-}
-
-.form-section {
-  padding: var(--space-lg) var(--space-xl);
-}
-
-.form-section+.form-section {
-  border-top: 1px solid var(--border);
-}
-
-.form-section-title {
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--text-secondary);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  margin-bottom: var(--space-lg);
-}
-
-/* BUTTONS  — reusable component */
-.btn {
-  display: inline-flex;
+/* Survey pill — show active survey in header*/
+.survey-pill {
+  display: flex;
   align-items: center;
   gap: var(--space-sm);
-  font-family: var(--font-sans);
-  font-size: 13px;
-  font-weight: 500;
-  padding: 9px var(--space-lg);
+  padding: 4px var(--space-sm);
+  background: rgba(255, 255, 255, 0.08);
   border-radius: var(--radius-md);
-  border: none;
-  cursor: pointer;
-  text-decoration: none;
-  transition: background 0.15s, transform 0.1s;
-  white-space: nowrap;
 }
 
-.btn:active {
-  transform: translateY(1px);
-}
-
-.btn-primary {
-  background: var(--accent);
+.pill-vessel {
+  font-size: 13px;
+  font-weight: 600;
   color: #fff;
 }
 
-.btn-primary:hover {
-  background: var(--accent-dark);
+.pill-port {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.4);
 }
 
-.btn svg {
-  width: 14px;
-  height: 14px;
-  flex-shrink: 0;
-  stroke: currentColor;
-  fill: none;
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
+.op-badge {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: rgba(37, 99, 235, 0.3);
+  color: #93C5FD;
 }
 
-/* INFO BANNER  — reusable component */
-.info-banner {
-  display: flex;
-  gap: var(--space-sm);
-  padding: var(--space-sm) var(--space-md);
-  background: #EFF6FF;
-  border: 1px solid #BFDBFE;
-  border-radius: var(--radius-md);
-  margin-top: var(--space-lg);
-}
-
-.info-banner svg {
-  width: 14px;
-  height: 14px;
-  stroke: var(--info);
-  fill: none;
-  stroke-width: 2;
-  stroke-linecap: round;
-  flex-shrink: 0;
-  margin-top: 1px;
-}
-
-.info-banner-text {
-  font-size: 12px;
-  color: #1D4ED8;
-  line-height: 1.5;
-}
-
-/* APP FOOTER  — reusable component */
+/* ════════════════════════════════════════════════════════════════
+   4. APP FOOTER
+════════════════════════════════════════════════════════════════ */
 .app-footer {
   background: var(--footer-bg);
   border-top: 1px solid var(--footer-border);
@@ -307,4 +314,781 @@ body {
 
 .app-footer-link:hover {
   color: rgba(255, 255, 255, 0.7);
+}
+
+/* ════════════════════════════════════════════════════════════════
+   5. BUTTONS
+════════════════════════════════════════════════════════════════ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 500;
+  padding: 9px var(--space-lg);
+  border-radius: var(--radius-md);
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.15s, transform 0.1s;
+  white-space: nowrap;
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn svg {
+  width: 14px;
+  height: 14px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  flex-shrink: 0;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: var(--accent-dark);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+}
+
+.btn-ghost:hover {
+  background: var(--bg);
+  color: var(--text-primary);
+}
+
+.btn-danger {
+  background: var(--danger);
+  color: #fff;
+  border: 1px solid transparent;
+}
+
+.btn-danger:hover {
+  background: #B91C1C;
+}
+
+/* PDF export button */
+.btn-pdf {
+  background: var(--info);
+  color: #fff;
+}
+
+.btn-pdf:hover {
+  background: #1D4ED8;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   6. FORM CARD
+   White card with fields
+   used in: profile, new-survey, settings
+════════════════════════════════════════════════════════════════ */
+.form-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  margin-bottom: var(--space-lg);
+  scroll-margin-top: calc(52px + var(--space-lg));
+}
+
+.form-card:last-child {
+  margin-bottom: 0;
+}
+
+.form-card-header {
+  padding: var(--space-md) var(--space-xl);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  background: var(--bg);
+}
+
+.form-card-header-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-md);
+  background: var(--accent-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.form-card-header-icon svg {
+  width: 14px;
+  height: 14px;
+  stroke: var(--accent);
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.form-card-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.form-card-subtitle {
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-left: auto;
+}
+
+/* Card section */
+.form-section {
+  padding: var(--space-lg) var(--space-xl);
+}
+
+.form-section+.form-section {
+  border-top: 1px solid var(--border);
+}
+
+.form-section-title {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: var(--space-lg);
+}
+
+/* Low bar in settings form */
+.form-footer {
+  padding: var(--space-md) var(--space-xl);
+  background: var(--bg);
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+}
+
+.form-footer-hint {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+/* ════════════════════════════════════════════════════════════════
+   7. FORM FIELDS
+   Used in: profile, new-survey, settings
+════════════════════════════════════════════════════════════════ */
+.field {
+  margin-bottom: var(--space-md);
+}
+
+.field:last-child {
+  margin-bottom: 0;
+}
+
+.field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-md);
+}
+
+.field-row-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-md);
+}
+
+.field-row-3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: var(--space-md);
+}
+
+.field-row-4 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: var(--space-md);
+}
+
+/* Labels */
+label {
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-bottom: var(--space-xs);
+  letter-spacing: 0.02em;
+}
+
+label .required {
+  color: var(--accent);
+  margin-left: 2px;
+}
+
+label .optional {
+  color: var(--text-placeholder);
+  font-weight: 400;
+  margin-left: 4px;
+  font-size: 11px;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+/* Inputs */
+input[type="text"],
+input[type="email"],
+input[type="number"],
+input[type="date"],
+select,
+textarea {
+  width: 100%;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  color: var(--text-primary);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 9px var(--space-md);
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+input[type="number"] {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  text-align: right;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--text-placeholder);
+  font-weight: 300;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 3px rgba(232, 99, 10, 0.12);
+}
+
+/* Убираем стрелки у number */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 72px;
+  line-height: 1.5;
+}
+
+/* Select custom arrow */
+.select-wrap {
+  position: relative;
+}
+
+.select-wrap::after {
+  content: '';
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 5px solid var(--text-secondary);
+  pointer-events: none;
+}
+
+/* Field hint */
+.field-hint {
+  font-size: 11px;
+  color: var(--text-placeholder);
+  margin-top: var(--space-xs);
+  line-height: 1.4;
+}
+
+/* Inline calc value (read-only) */
+.calc-value {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-dim);
+  padding: 9px var(--space-md);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg);
+  min-height: 38px;
+}
+
+/* Field with auto-calculated hint inside */
+.field-with-calc {
+  position: relative;
+}
+
+.field-calc-hint {
+  position: absolute;
+  right: var(--space-md);
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.field-with-calc input {
+  padding-right: 90px;
+}
+
+/* Inline warning under field */
+.field-warning {
+  display: flex;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  background: var(--warning-light);
+  border: 1px solid var(--warning-border);
+  border-radius: var(--radius-md);
+  margin-top: var(--space-sm);
+}
+
+.field-warning svg {
+  width: 14px;
+  height: 14px;
+  stroke: var(--warning);
+  fill: none;
+  stroke-width: 2;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.field-warning-text {
+  font-size: 12px;
+  color: #92400E;
+  line-height: 1.5;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   8. SIGNATURE UPLOAD
+   used in: profile, settings
+════════════════════════════════════════════════════════════════ */
+.signature-upload {
+  border: 1.5px dashed var(--border);
+  border-radius: var(--radius-md);
+  padding: var(--space-lg);
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  background: var(--bg);
+  display: block;
+}
+
+.signature-upload:hover {
+  border-color: var(--accent);
+  background: var(--accent-light);
+}
+
+.signature-upload input[type="file"] {
+  display: none;
+}
+
+.signature-upload-icon {
+  width: 28px;
+  height: 28px;
+  margin: 0 auto var(--space-sm);
+  stroke: var(--text-secondary);
+  fill: none;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.signature-upload-text {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.signature-upload-hint {
+  font-size: 11px;
+  color: var(--text-placeholder);
+  margin-top: var(--space-xs);
+}
+
+/* ════════════════════════════════════════════════════════════════
+   9. STICKY ACTION BAR (low bar with buttons)
+   drafts, tanks, new-survey, results
+════════════════════════════════════════════════════════════════ */
+.action-bar {
+  position: sticky;
+  bottom: 0;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  padding: var(--space-md) var(--space-xl);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  z-index: 40;
+  box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.06);
+}
+
+.action-bar-info {
+  font-size: 12px;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.action-bar-info svg {
+  width: 14px;
+  height: 14px;
+  stroke: var(--text-secondary);
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.action-bar-btns {
+  display: flex;
+  gap: var(--space-sm);
+}
+
+/* option for pages with vessel info on left side */
+.ab-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ab-vessel {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.ab-meta {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.ab-btns {
+  display: flex;
+  gap: var(--space-sm);
+}
+
+/* ════════════════════════════════════════════════════════════════
+   10. SIDEBAR NAV
+   Used in: new-survey, settings
+════════════════════════════════════════════════════════════════ */
+.sidebar-nav-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-placeholder);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: var(--space-sm);
+  padding-left: var(--space-sm);
+}
+
+.sidebar-nav-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.sidebar-nav-item a {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: 7px var(--space-sm);
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--text-secondary);
+  transition: background 0.15s, color 0.15s;
+}
+
+.sidebar-nav-item a:hover {
+  background: var(--surface);
+  color: var(--text-primary);
+}
+
+.sidebar-nav-item.is-active a {
+  background: var(--accent-light);
+  color: var(--accent);
+  font-weight: 500;
+}
+
+.sidebar-nav-item a svg {
+  width: 14px;
+  height: 14px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  flex-shrink: 0;
+}
+
+/* Progress dots (new-survey nav) */
+.nav-step-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--border);
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-nav-item.is-filled .nav-step-dot {
+  background: var(--success);
+}
+
+.sidebar-nav-item.is-active .nav-step-dot {
+  background: var(--accent);
+}
+
+/* ════════════════════════════════════════════════════════════════
+   11. BACK LINK + PAGE TITLE
+   drafts, tanks, results, new-survey, settings
+════════════════════════════════════════════════════════════════ */
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: 12px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  margin-bottom: var(--space-sm);
+  transition: color 0.15s;
+}
+
+.back-link:hover {
+  color: var(--text-primary);
+}
+
+.back-link svg {
+  width: 13px;
+  height: 13px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.page-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.page-subtitle {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-top: var(--space-xs);
+  margin-bottom: var(--space-xl);
+}
+
+.page-meta {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+
+/* Section label — uppercase label above the group */
+.section-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: var(--space-md);
+}
+
+/* ════════════════════════════════════════════════════════════════
+   12. INFO BANNER
+   Blue info line (не error-banner)
+   Used in: profile
+════════════════════════════════════════════════════════════════ */
+.info-banner {
+  display: flex;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  background: var(--info-light);
+  border: 1px solid var(--info-border);
+  border-radius: var(--radius-md);
+  margin-top: var(--space-lg);
+}
+
+.info-banner svg {
+  width: 14px;
+  height: 14px;
+  stroke: var(--info);
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.info-banner-text {
+  font-size: 12px;
+  color: #1D4ED8;
+  line-height: 1.5;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   13. CONFIRMATION MODAL
+   Используется: dashboard (delete survey), survey-list
+════════════════════════════════════════════════════════════════ */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 100;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-overlay.is-open {
+  display: flex;
+}
+
+.modal {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+  padding: var(--space-xl);
+  width: 100%;
+  max-width: 400px;
+  margin: var(--space-md);
+}
+
+.modal-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--danger-light);
+  border: 1px solid var(--danger-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--space-lg);
+}
+
+.modal-icon svg {
+  width: 20px;
+  height: 20px;
+  stroke: var(--danger);
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.modal-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: var(--space-sm);
+}
+
+.modal-body {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: var(--space-xl);
+}
+
+.modal-body strong {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.modal-actions {
+  display: flex;
+  gap: var(--space-sm);
+  justify-content: flex-end;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   14. BADGES — status survey
+   used in: survey-list, results
+════════════════════════════════════════════════════════════════ */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+.badge--load {
+  background: #ECFEFF;
+  color: #0891B2;
+  border: 1px solid #A5F3FC;
+}
+
+.badge--disch {
+  background: #F5F3FF;
+  color: #7C3AED;
+  border: 1px solid #DDD6FE;
+}
+
+.badge--complete {
+  background: var(--success-light);
+  color: var(--success);
+  border: 1px solid var(--success-border);
+}
+
+.badge--progress {
+  background: var(--info-light);
+  color: var(--info);
+  border: 1px solid var(--info-border);
+}
+
+.badge--draft {
+  background: #F9FAFB;
+  color: #6B7280;
+  border: 1px solid #E5E7EB;
+}
+
+.badge--ini {
+  background: var(--ini-light);
+  color: var(--ini-accent);
+  border: 1px solid var(--ini-border);
+}
+
+.badge--fin {
+  background: var(--fin-light);
+  color: var(--fin-accent);
+  border: 1px solid var(--fin-border);
 }

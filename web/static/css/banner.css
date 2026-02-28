@@ -1,4 +1,10 @@
-/* ── OVERLAY ───────────────────────────────────────────────── */
+/* ================================================================
+   banner.css — error / warning / info modal banner
+   Injected in layout.templ (Available on all pages)
+   Depends on: styles.css (tokens)
+================================================================ */
+
+/* ─── Overlay ─────────────────────────────────────────────────── */
 .overlay {
   position: fixed;
   inset: 0;
@@ -7,11 +13,10 @@
   align-items: center;
   justify-content: center;
   padding: var(--space-lg);
-  /* hidden state */
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
-  transition: opacity .22s ease, visibility .22s ease;
+  transition: opacity 0.22s ease, visibility 0.22s ease;
 }
 
 .overlay.show {
@@ -20,14 +25,13 @@
   pointer-events: all;
 }
 
-/* Backdrop blur */
 .overlay-backdrop {
   position: absolute;
   inset: 0;
   background: rgba(28, 43, 51, 0.35);
   backdrop-filter: blur(0px);
   -webkit-backdrop-filter: blur(0px);
-  transition: backdrop-filter .25s ease, -webkit-backdrop-filter .25s ease, background .25s ease;
+  transition: backdrop-filter 0.25s ease, -webkit-backdrop-filter 0.25s ease, background 0.25s ease;
 }
 
 .overlay.show .overlay-backdrop {
@@ -35,20 +39,18 @@
   -webkit-backdrop-filter: blur(6px);
 }
 
-/* ── BANNER CARD ───────────────────────────────────────────── */
+/* ─── Banner card ─────────────────────────────────────────────── */
 .banner {
   position: relative;
   z-index: 1;
   background: var(--surface);
   border-radius: var(--radius-xl);
-  box-shadow: 0 24px 64px rgba(0, 0, 0, .22), 0 4px 16px rgba(0, 0, 0, .10);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.22), 0 4px 16px rgba(0, 0, 0, 0.10);
   width: 100%;
   max-width: 420px;
   overflow: hidden;
-
-  /* hidden state — slide up + scale down slightly */
-  transform: translateY(16px) scale(.97);
-  transition: transform .25s cubic-bezier(.34, 1.28, .64, 1), opacity .22s ease;
+  transform: translateY(16px) scale(0.97);
+  transition: transform 0.25s cubic-bezier(0.34, 1.28, 0.64, 1), opacity 0.22s ease;
   opacity: 0;
 }
 
@@ -57,10 +59,10 @@
   opacity: 1;
 }
 
-/* Coloured top stripe */
+/* Top colour stripe */
 .banner-stripe {
   height: 4px;
-  transition: background .15s;
+  transition: background 0.15s;
 }
 
 .banner[data-type="error"] .banner-stripe {
@@ -75,7 +77,7 @@
   background: #2563EB;
 }
 
-/* Icon + heading row */
+/* Header row (icon + title) */
 .banner-head {
   display: flex;
   align-items: flex-start;
@@ -135,7 +137,7 @@
   font-size: 10px;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: .07em;
+  letter-spacing: 0.07em;
 }
 
 .banner[data-type="error"] .banner-type-label {
@@ -159,7 +161,7 @@
   line-height: 1.55;
 }
 
-/* Detail code block (optional) */
+/* Detail code block */
 .banner-detail {
   margin: 0 var(--space-lg) var(--space-md);
   margin-left: calc(var(--space-lg) + 38px + var(--space-md));
@@ -171,13 +173,14 @@
   font-size: 11px;
   color: var(--text-secondary);
   line-height: 1.6;
+  white-space: pre-wrap;
 }
 
 .banner-detail:empty {
   display: none;
 }
 
-/* Footer with Ok button */
+/* Footer */
 .banner-footer {
   padding: var(--space-sm) var(--space-lg) var(--space-lg);
   display: flex;
@@ -195,7 +198,7 @@
   border-radius: var(--radius-md);
   border: none;
   cursor: pointer;
-  transition: background .15s, transform .1s, box-shadow .15s;
+  transition: background 0.15s, transform 0.1s, box-shadow 0.15s;
   outline: none;
 }
 
@@ -204,7 +207,7 @@
 }
 
 .btn-ok:focus-visible {
-  box-shadow: 0 0 0 3px rgba(232, 99, 10, .3);
+  box-shadow: 0 0 0 3px rgba(232, 99, 10, 0.3);
 }
 
 .banner[data-type="error"] .btn-ok {
@@ -234,14 +237,14 @@
   background: #1D4ED8;
 }
 
-/* ── CLOSE animation (slide down + fade) ───────────────────── */
+/* ─── Close animation ─────────────────────────────────────────── */
 .overlay.hiding {
   opacity: 0;
-  transition: opacity .18s ease, visibility .18s ease;
+  transition: opacity 0.18s ease, visibility 0.18s ease;
 }
 
 .overlay.hiding .banner {
-  transform: translateY(10px) scale(.98);
+  transform: translateY(10px) scale(0.98);
   opacity: 0;
-  transition: transform .18s ease, opacity .18s ease;
+  transition: transform 0.18s ease, opacity 0.18s ease;
 }

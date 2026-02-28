@@ -1,6 +1,11 @@
-/* ─── Page Layout ────────────────────────────────────────────── */
+/* ================================================================
+   dashboard.css — page /dashboard
+   Depends on: styles.css (tokens, reset, header с user-area,
+                footer, buttons, modal, section-label)
+================================================================ */
 
-.page-main {
+/* ─── Page layout ─────────────────────────────────────────────── */
+.page-main__dashboard {
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -13,8 +18,7 @@
   max-width: 720px;
 }
 
-/* ─── Welcome Block ──────────────────────────────────────────── */
-
+/* ─── Welcome block ───────────────────────────────────────────── */
 .dashboard-welcome {
   margin-bottom: var(--space-2xl);
 }
@@ -37,19 +41,7 @@
   letter-spacing: 0.03em;
 }
 
-/* ─── Section Label ──────────────────────────────────────────── */
-
-.section-label {
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--text-secondary);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  margin-bottom: var(--space-md);
-}
-
-/* ─── Action Cards ───────────────────────────────────────────── */
-
+/* ─── Action cards grid ───────────────────────────────────────── */
 .action-grid {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
@@ -164,101 +156,4 @@
 
 .action-card:hover .action-card-arrow svg {
   transform: translateX(3px);
-}
-
-/* ─── Confirmation Modal ─────────────────────────────────────── */
-
-.modal-overlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.45);
-  z-index: 100;
-  align-items: center;
-  justify-content: center;
-}
-
-.modal-overlay.is-open {
-  display: flex;
-}
-
-.modal {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-xl);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
-  padding: var(--space-xl);
-  width: 100%;
-  max-width: 400px;
-  margin: var(--space-md);
-}
-
-.modal-icon {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: var(--danger-light);
-  border: 1px solid var(--danger-border);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: var(--space-lg);
-}
-
-.modal-icon svg {
-  width: 20px;
-  height: 20px;
-  stroke: var(--danger);
-  fill: none;
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-.modal-title {
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--text-primary);
-  margin-bottom: var(--space-sm);
-}
-
-.modal-body {
-  font-size: 13px;
-  color: var(--text-secondary);
-  line-height: 1.6;
-  margin-bottom: var(--space-xl);
-}
-
-.modal-body strong {
-  color: var(--text-primary);
-  font-weight: 500;
-}
-
-.modal-actions {
-  display: flex;
-  gap: var(--space-sm);
-  justify-content: flex-end;
-}
-
-/* ─── Buttons (dashboard-specific) ──────────────────────────── */
-
-.btn-ghost {
-  background: transparent;
-  color: var(--text-secondary);
-  border: 1px solid var(--border);
-}
-
-.btn-ghost:hover {
-  background: var(--bg);
-  color: var(--text-primary);
-}
-
-.btn-danger {
-  background: var(--danger);
-  color: #fff;
-  border: 1px solid transparent;
-}
-
-.btn-danger:hover {
-  background: #B91C1C;
 }

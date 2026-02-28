@@ -1,6 +1,11 @@
-/* PAGE MAIN */
+/* ================================================================
+   profile.css — page /profile (first run + edit profile)
+   Depends on: styles.css (tokens, reset, header, footer, form-card,
+                form fields, signature-upload, buttons, info-banner)
+================================================================ */
 
-.page-main {
+/* ─── Page layout ─────────────────────────────────────────────── */
+.page-main__profile {
   flex: 1;
   display: flex;
   align-items: flex-start;
@@ -13,6 +18,7 @@
   max-width: 560px;
 }
 
+/* ─── Intro block ─────────────────────────────────────────────── */
 .setup-intro {
   margin-bottom: var(--space-xl);
 }
@@ -37,165 +43,4 @@
   font-size: 13px;
   color: var(--text-secondary);
   line-height: 1.6;
-}
-
-/* ─── Fields ─────────────────────────────────────────────────── */
-.field {
-  margin-bottom: var(--space-md);
-}
-
-.field:last-child {
-  margin-bottom: 0;
-}
-
-.field-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--space-md);
-}
-
-/* ─── Labels ─────────────────────────────────────────────────── */
-
-label {
-  display: block;
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--text-secondary);
-  margin-bottom: var(--space-xs);
-  letter-spacing: 0.02em;
-}
-
-label .required {
-  color: var(--accent);
-  margin-left: 2px;
-}
-
-label .optional {
-  color: var(--text-placeholder);
-  font-weight: 400;
-  margin-left: 4px;
-  font-size: 11px;
-  text-transform: none;
-  letter-spacing: 0;
-}
-
-/* ─── Inputs ─────────────────────────────────────────────────── */
-
-input[type="text"],
-input[type="email"],
-select,
-textarea {
-  width: 100%;
-  font-family: var(--font-sans);
-  font-size: 14px;
-  color: var(--text-primary);
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  padding: 9px var(--space-md);
-  outline: none;
-  transition: border-color 0.15s, box-shadow 0.15s;
-  appearance: none;
-  -webkit-appearance: none;
-}
-
-input::placeholder,
-textarea::placeholder {
-  color: var(--text-placeholder);
-  font-weight: 300;
-}
-
-input:focus,
-select:focus,
-textarea:focus {
-  border-color: var(--border-focus);
-  box-shadow: 0 0 0 3px rgba(232, 99, 10, 0.12);
-}
-
-.field-hint {
-  font-size: 11px;
-  color: var(--text-placeholder);
-  margin-top: var(--space-xs);
-  line-height: 1.4;
-}
-
-/* ─── Select ─────────────────────────────────────────────────── */
-
-.select-wrap {
-  position: relative;
-}
-
-.select-wrap::after {
-  content: '';
-  position: absolute;
-  right: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 0;
-  height: 0;
-  border-left: 4px solid transparent;
-  border-right: 4px solid transparent;
-  border-top: 5px solid var(--text-secondary);
-  pointer-events: none;
-}
-
-/* ─── Signature Upload ───────────────────────────────────────── */
-
-.signature-upload {
-  border: 1.5px dashed var(--border);
-  border-radius: var(--radius-md);
-  padding: var(--space-lg);
-  text-align: center;
-  cursor: pointer;
-  transition: border-color 0.15s, background 0.15s;
-  background: var(--bg);
-  display: block;
-}
-
-.signature-upload:hover {
-  border-color: var(--accent);
-  background: var(--accent-light);
-}
-
-.signature-upload input[type="file"] {
-  display: none;
-}
-
-.signature-upload-icon {
-  width: 28px;
-  height: 28px;
-  margin: 0 auto var(--space-sm);
-  stroke: var(--text-secondary);
-  fill: none;
-  stroke-width: 1.5;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-.signature-upload-text {
-  font-size: 13px;
-  color: var(--text-secondary);
-}
-
-.signature-upload-hint {
-  font-size: 11px;
-  color: var(--text-placeholder);
-  margin-top: var(--space-xs);
-}
-
-/* ─── Form Footer ────────────────────────────────────────────── */
-
-.form-footer {
-  padding: var(--space-md) var(--space-xl);
-  background: var(--bg);
-  border-top: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-md);
-}
-
-.form-footer-hint {
-  font-size: 12px;
-  color: var(--text-secondary);
 }

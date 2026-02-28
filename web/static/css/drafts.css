@@ -1,0 +1,847 @@
+/* ================================================================
+   drafts.css — page /survey/:id/drafts (drafts input form)
+   depends on: styles.css (tokens, reset, header with survey-pill,
+                footer, back-link, page-title, action-bar, buttons)
+================================================================ */
+
+/* ─── Page layout ─────────────────────────────────────────────── */
+.page-main {
+  flex: 1;
+  padding: var(--space-lg) var(--space-md);
+  display: flex;
+  justify-content: center;
+}
+
+.drafts-wrap {
+  width: 100%;
+  max-width: 980px;
+}
+
+.page-top {
+  margin-bottom: var(--space-lg);
+}
+
+/* ─── Draft block (Initial / Final) ──────────────────────────── */
+.draft-block {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  margin-bottom: var(--space-lg);
+}
+
+.block-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-md) var(--space-lg);
+  border-bottom: 1px solid var(--border);
+}
+
+.draft-block--ini .block-header {
+  background: var(--ini-light);
+  border-bottom-color: var(--ini-border);
+}
+
+.draft-block--fin .block-header {
+  background: var(--fin-light);
+  border-bottom-color: var(--fin-border);
+}
+
+.block-label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.block-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.draft-block--ini .block-label {
+  color: var(--ini-accent);
+}
+
+.draft-block--ini .block-dot {
+  background: var(--ini-accent);
+}
+
+.draft-block--fin .block-label {
+  color: var(--fin-accent);
+}
+
+.draft-block--fin .block-dot {
+  background: var(--fin-accent);
+}
+
+.block-ts {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+/* ─── Sea condition bar ───────────────────────────────────────── */
+.sea-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+  padding: var(--space-sm) var(--space-lg);
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+}
+
+.sea-bar-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  white-space: nowrap;
+}
+
+.sea-group {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.sea-group-label {
+  font-size: 10px;
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+
+.sea-select-wrap {
+  position: relative;
+}
+
+.sea-select-wrap::after {
+  content: '';
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 5px solid var(--text-secondary);
+  pointer-events: none;
+}
+
+select.sea-sel {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 500;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 5px 28px 5px var(--space-sm);
+  outline: none;
+  appearance: none;
+  cursor: pointer;
+  color: var(--text-primary);
+  transition: border-color 0.15s;
+}
+
+select.sea-sel:focus {
+  border-color: var(--border-focus);
+}
+
+/* Sea condition badge (colorized) */
+.sea-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 3px var(--space-sm);
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  white-space: nowrap;
+}
+
+.sea-badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.sea-badge.calm {
+  color: #6B7280;
+  border-color: #D1D5DB;
+}
+
+.sea-badge.calm .sea-badge-dot {
+  background: #6B7280;
+}
+
+.sea-badge.smooth {
+  color: #2563EB;
+  border-color: #BFDBFE;
+  background: #EFF6FF;
+}
+
+.sea-badge.smooth .sea-badge-dot {
+  background: #2563EB;
+}
+
+.sea-badge.slight {
+  color: #15803D;
+  border-color: #BBF7D0;
+  background: #F0FDF4;
+}
+
+.sea-badge.slight .sea-badge-dot {
+  background: #15803D;
+}
+
+.sea-badge.moderate {
+  color: #D97706;
+  border-color: #FDE68A;
+  background: #FFFBEB;
+}
+
+.sea-badge.moderate .sea-badge-dot {
+  background: #D97706;
+}
+
+.sea-badge.rough {
+  color: #DC2626;
+  border-color: #FECACA;
+  background: #FEF2F2;
+}
+
+.sea-badge.rough .sea-badge-dot {
+  background: #DC2626;
+}
+
+.sea-arrow {
+  font-size: 14px;
+  color: var(--text-dim);
+  padding: 0 var(--space-xs);
+}
+
+/* ─── Readings area (Port | Vessel | Starboard) ───────────────── */
+.readings-area {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+}
+
+.col-port,
+.col-stbd {
+  padding: var(--space-lg);
+}
+
+.col-port {
+  border-right: 1px solid var(--border);
+}
+
+.col-stbd {
+  border-left: 1px solid var(--border);
+}
+
+.col-vessel {
+  padding: var(--space-md) var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 260px;
+}
+
+.side-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: var(--space-md);
+}
+
+.side-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.port-dot {
+  background: #6366F1;
+}
+
+.stbd-dot {
+  background: #10B981;
+}
+
+/* Draft input row */
+.dr-row {
+  display: grid;
+  grid-template-columns: 44px 1fr 34px;
+  gap: var(--space-xs);
+  align-items: center;
+  margin-bottom: var(--space-lg);
+}
+
+.dr-lbl {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+input.di {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+  text-align: right;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 7px var(--space-sm);
+  outline: none;
+  width: 100%;
+  appearance: none;
+  -moz-appearance: textfield;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+input.di::-webkit-inner-spin-button,
+input.di::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}
+
+input.di:focus {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 3px rgba(232, 99, 10, 0.12);
+}
+
+input.di.over-summer {
+  color: var(--danger);
+  border-color: var(--danger);
+}
+
+input.di::placeholder {
+  color: var(--text-dim);
+  font-weight: 300;
+}
+
+.di-badge {
+  font-size: 9px;
+  font-weight: 600;
+  padding: 2px 4px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-dim);
+  background: var(--bg);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  text-align: center;
+}
+
+/* ─── SVG vessel diagram ──────────────────────────────────────── */
+
+.vessel-svg {
+  width: 100%;
+  max-width: 260px;
+}
+
+.hull-val {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  fill: var(--text-primary);
+  text-anchor: middle;
+}
+
+.defl-warn {
+  margin-top: var(--space-xs);
+  padding: 4px var(--space-md);
+  border-radius: var(--radius-md);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  text-align: center;
+  display: none;
+  background: var(--warning-light);
+  border: 1px solid var(--warning-border);
+  color: #92400E;
+}
+
+.defl-warn.show {
+  display: block;
+}
+
+.defl-warn.critical {
+  background: #FEF08A;
+  border-color: #EAB308;
+  color: #713F12;
+}
+
+.vessel-status {
+  margin-top: var(--space-xs);
+  text-align: center;
+}
+
+.vs-line {
+  font-size: 10px;
+  color: var(--text-dim);
+}
+
+.vs-line.warn {
+  color: var(--danger);
+  font-weight: 600;
+}
+
+.vs-line.lop {
+  color: var(--danger);
+  font-weight: 700;
+  font-size: 11px;
+}
+
+/* ─── PP + Keel row ───────────────────────────────────────────── */
+.pp-keel-bar {
+  border-top: 1px solid var(--border);
+  background: var(--bg);
+  padding: var(--space-sm) var(--space-lg);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-md);
+}
+
+.pp-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.pp-group-title {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+}
+
+.pp-fields {
+  display: grid;
+  grid-template-columns: 1fr 36px 34px;
+  gap: var(--space-xs);
+  align-items: center;
+}
+
+.keel-fields {
+  display: grid;
+  grid-template-columns: 1fr 54px;
+  gap: var(--space-xs);
+  align-items: center;
+}
+
+.pp-unit {
+  font-size: 10px;
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+
+input.ppi {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-secondary);
+  text-align: right;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 5px var(--space-sm);
+  outline: none;
+  width: 100%;
+  appearance: none;
+  -moz-appearance: textfield;
+  transition: border-color 0.15s;
+}
+
+input.ppi::-webkit-inner-spin-button,
+input.ppi::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}
+
+input.ppi:focus {
+  border-color: var(--border-focus);
+}
+
+select.dir-sel {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-secondary);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 5px 2px;
+  outline: none;
+  cursor: pointer;
+  width: 100%;
+  appearance: none;
+  text-align: center;
+}
+
+/* ─── Calculated panel ────────────────────────────────────────── */
+.calc-panel {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  border-top: 2px solid var(--border);
+  background: var(--bg);
+}
+
+.cp-cell {
+  padding: var(--space-sm) var(--space-md);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.cp-cell:last-child {
+  border-right: none;
+}
+
+.cp-lbl {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.cp-val {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-dim);
+}
+
+.cp-val.v {
+  color: var(--text-primary);
+}
+
+.cp-val.w {
+  color: var(--danger);
+}
+
+.cp-cell--mmc {
+  background: var(--surface);
+  border-left: 2px solid var(--accent);
+}
+
+.cp-cell--mmc .cp-lbl {
+  color: var(--accent);
+}
+
+.cp-cell--mmc .cp-val {
+  font-size: 15px;
+}
+
+.cp-formula {
+  font-size: 10px;
+  color: var(--text-dim);
+}
+
+/* ─── Hydrostatic section ─────────────────────────────────────── */
+.hydro-section {
+  border-top: 1px solid var(--border);
+  padding: var(--space-lg);
+}
+
+.sec-title {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  margin-bottom: var(--space-md);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sec-title-mmc {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-primary);
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.sec-title-method {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  margin-left: 4px;
+}
+
+.hydro-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.hydro-table th {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: var(--space-xs) var(--space-sm);
+  border-bottom: 1px solid var(--border);
+  text-align: right;
+}
+
+.hydro-table th:first-child {
+  text-align: left;
+}
+
+.hydro-table td {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  text-align: right;
+  padding: 6px var(--space-sm);
+  border-bottom: 1px solid var(--bg);
+}
+
+.hydro-table td:first-child {
+  text-align: left;
+  font-size: 11px;
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+}
+
+.hydro-table tr.mmc-row td {
+  color: var(--text-dim);
+  font-size: 12px;
+  background: var(--bg);
+}
+
+.hydro-table td input {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--text-primary);
+  text-align: right;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 4px var(--space-sm);
+  outline: none;
+  width: 100%;
+  appearance: none;
+  -moz-appearance: textfield;
+  transition: border-color 0.15s;
+}
+
+.hydro-table td input::-webkit-inner-spin-button,
+.hydro-table td input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}
+
+.hydro-table td input:focus {
+  border-color: var(--border-focus);
+}
+
+/* MTC grid */
+.mtc-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-md);
+  margin-top: var(--space-md);
+}
+
+.mtc-card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.mtc-hdr {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 5px var(--space-md);
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+}
+
+.mtc-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.mtc-cell {
+  padding: var(--space-sm) var(--space-md);
+  border-right: 1px solid var(--border);
+}
+
+.mtc-cell:last-child {
+  border-right: none;
+}
+
+.mtc-cell label {
+  font-size: 10px;
+  color: var(--text-secondary);
+  display: block;
+  margin-bottom: 3px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.mtc-cell input {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--text-primary);
+  text-align: right;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 4px var(--space-sm);
+  outline: none;
+  width: 100%;
+  appearance: none;
+  -moz-appearance: textfield;
+}
+
+.mtc-cell input::-webkit-inner-spin-button,
+.mtc-cell input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}
+
+.mtc-cell input:focus {
+  border-color: var(--border-focus);
+}
+
+.mtc-delta {
+  padding: 5px var(--space-md);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-primary);
+  border-top: 1px solid var(--border);
+  background: var(--bg);
+}
+
+/* ─── Deductibles section ─────────────────────────────────────── */
+.deduct-section {
+  border-top: 1px solid var(--border);
+  padding: var(--space-lg);
+}
+
+.density-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-md);
+  margin-bottom: var(--space-md);
+}
+
+.deduct-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-md);
+}
+
+.df label {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  display: block;
+  margin-bottom: var(--space-xs);
+}
+
+.df input {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--text-primary);
+  text-align: right;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 7px var(--space-sm);
+  outline: none;
+  width: 100%;
+  appearance: none;
+  -moz-appearance: textfield;
+  transition: border-color 0.15s;
+}
+
+.df input::-webkit-inner-spin-button,
+.df input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}
+
+.df input:focus {
+  border-color: var(--border-focus);
+}
+
+/* Link to tanks page */
+.tanks-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-top: var(--space-md);
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ini-accent);
+  background: var(--ini-light);
+  border: 1px solid var(--ini-border);
+  border-radius: var(--radius-md);
+  padding: 7px var(--space-md);
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.15s;
+}
+
+.tanks-btn:hover {
+  background: #DBEAFE;
+}
+
+.tanks-btn svg {
+  width: 13px;
+  height: 13px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+/* ─── Divider between Initial / Final blocks ──────────────────── */
+.draft-divider {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  margin: 4px 0 var(--space-lg);
+}
+
+.dd-line {
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.dd-label {
+  font-size: 11px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  padding: 4px var(--space-md);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+}
