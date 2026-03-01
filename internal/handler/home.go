@@ -10,7 +10,6 @@ import (
 )
 
 func (h *Handler) home(c *fiber.Ctx) error {
-	//return tadaptor.Render(c, web.SurveyList())
 	_, err := h.userRepository.Get()
 
 	if err == nil {
