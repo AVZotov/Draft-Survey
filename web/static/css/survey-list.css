@@ -5,18 +5,18 @@
 ================================================================ */
 
 /* ─── Page layout ─────────────────────────────────────────────── */
-.page-main {
+.page-main__survey-list {
   flex: 1;
   padding: var(--space-lg) var(--space-xl);
 }
 
-.page-content {
+.page-content__survey-list {
   max-width: 1080px;
   margin: 0 auto;
 }
 
 /* ─── Page top (title + new button) ──────────────────────────── */
-.page-top {
+.page-top__survey-list {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
