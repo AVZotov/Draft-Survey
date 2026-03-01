@@ -1,0 +1,13 @@
+package web
+
+import "github.com/AVZotov/draft-survey/web/layouts"
+import "github.com/AVZotov/draft-survey/web/widgets"
+
+templ Results() {
+	@layouts.Layout(ProfilePageProps) {
+		@widgets.HeaderUser()
+		@widgets.ResultsForm()
+		@widgets.ResultsActionBar()
+		@widgets.Footer()
+	}
+}
