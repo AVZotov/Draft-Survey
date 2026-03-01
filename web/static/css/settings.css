@@ -6,7 +6,7 @@
 ================================================================ */
 
 /* ─── Page layout ─────────────────────────────────────────────── */
-.page-main {
+.page-main__settings {
   flex: 1;
   display: flex;
   justify-content: center;
@@ -23,22 +23,9 @@
 }
 
 /* ─── Settings sidebar ────────────────────────────────────────── */
-/* use sidebar-nav из styles.css, aliase: */
 .settings-nav {
   position: sticky;
   top: var(--space-lg);
-}
-
-.settings-nav-label {
-  /* = .sidebar-nav-label */
-}
-
-.settings-nav-list {
-  /* = .sidebar-nav-list  */
-}
-
-.settings-nav-item {
-  /* = .sidebar-nav-item  */
 }
 
 /* ─── Language toggle ─────────────────────────────────────────── */
