@@ -16,10 +16,14 @@ type UserStore struct {
 	Path string
 }
 
-func NewUserStore(path string) *UserStore {
+func NewUserStore(path string) (*UserStore, error) {
+	err := os.MkdirAll(path, 0755)
+	if err != nil {
+		return nil, err
+	}
 	return &UserStore{
 		Path: path,
-	}
+	}, nil
 }
 
 func (u *UserStore) Save(user *types.User) error {

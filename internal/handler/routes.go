@@ -8,8 +8,7 @@ func SetupRoutes(app *fiber.App, h *Handler) {
 	app.Get("/", h.home)
 	app.Get("/profile", h.profile)
 
-	// HTMX формы
-	// api := app.Group("/api/v1")
-	// api.Post("/profile", h.CreateProfile)   // создание (первый запуск)
+	api := app.Group("/api/v1")
+	api.Post("/profile", h.createProfile)
 	// api.Put("/profile", h.UpdateProfile)
 }
