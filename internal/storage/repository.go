@@ -13,6 +13,7 @@ type SurveyRepository interface {
 
 type UserRepository interface {
 	Save(user *types.User) error
+	SaveSignature(data []byte, ext string) error
 	Get() (*types.User, error)
 	Delete() error
 }

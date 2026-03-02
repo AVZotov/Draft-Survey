@@ -11,6 +11,7 @@ import (
 var _ UserRepository = (*UserStore)(nil)
 
 const fileName = "user.json"
+const signatureFileName = "signature"
 
 type UserStore struct {
 	Path string
@@ -44,6 +45,11 @@ func (u *UserStore) Save(user *types.User) error {
 	}
 
 	return nil
+}
+
+func (u *UserStore) SaveSignature(data []byte, ext string) error {
+	fullPath := filepath.Join(u.Path, signatureFileName+ext)
+	return os.WriteFile(fullPath, data, 0644)
 }
 
 func (u *UserStore) Get() (*types.User, error) {
