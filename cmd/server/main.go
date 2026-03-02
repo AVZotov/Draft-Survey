@@ -11,7 +11,7 @@ import (
 func main() {
 	app := fiber.New()
 
-	userStore, err := storage.NewUserStore("./users")
+	userStore, err := storage.NewUserStore("./data/users")
 	if err != nil {
 		log.Fatal(err)
 	}
