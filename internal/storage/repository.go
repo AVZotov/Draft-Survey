@@ -5,7 +5,7 @@ import (
 )
 
 type SurveyRepository interface {
-	Save(id string, survey *types.Survey) error
+	Save(survey *types.Survey) error
 	Get(id string) (*types.Survey, error)
 	GetAll() ([]*types.Survey, error)
 	Delete(id string) error

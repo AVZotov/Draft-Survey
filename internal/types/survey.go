@@ -72,8 +72,17 @@ type CargoOperation struct {
 	Port              string
 }
 
+type SurveyStatus string
+
+const (
+	SurveyStatusDraft      SurveyStatus = "draft"
+	SurveyStatusInProgress SurveyStatus = "in_progress"
+	SurveyStatusComplete   SurveyStatus = "complete"
+)
+
 type Survey struct {
-	Surveyor       *User
+	Surveyor       User
+	Status         SurveyStatus
 	ID             string
 	InitialDraft   InitialDraft
 	FinalDraft     FinalDraft

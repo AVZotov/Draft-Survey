@@ -9,15 +9,31 @@ import (
 	"github.com/AVZotov/draft-survey/internal/types"
 )
 
-var _ SurveyRepository = (*JSONStore)(nil)
+var _ SurveyRepository = (*SurveyStore)(nil)
 
-type JSONStore struct {
+const extension = ".json"
+
+type SurveyStore struct {
 	Path     string
 	TempPath string
 }
 
-func (j JSONStore) Save(id string, survey *types.Survey) error {
-	filename := id + ".json"
+func NewSurveyStore(path, tempPath string) (*SurveyStore, error) {
+	if err := os.MkdirAll(path, 0755); err != nil {
+		return nil, err
+	}
+	if err := os.MkdirAll(tempPath, 0755); err != nil {
+		return nil, err
+	}
+
+	return &SurveyStore{
+		Path:     path,
+		TempPath: tempPath,
+	}, nil
+}
+
+func (j *SurveyStore) Save(survey *types.Survey) error {
+	filename := survey.ID + extension
 	path := filepath.Join(j.Path, filename)
 	file, err := os.OpenFile(path, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0644)
 	if err != nil {
@@ -36,8 +52,8 @@ func (j JSONStore) Save(id string, survey *types.Survey) error {
 	return nil
 }
 
-func (j JSONStore) Get(id string) (*types.Survey, error) {
-	filename := id + ".json"
+func (j *SurveyStore) Get(id string) (*types.Survey, error) {
+	filename := id + extension
 	path := filepath.Join(j.Path, filename)
 	file, err := os.Open(path)
 	if err != nil {
@@ -58,17 +74,17 @@ func (j JSONStore) Get(id string) (*types.Survey, error) {
 	return survey, nil
 }
 
-func (j JSONStore) GetAll() ([]*types.Survey, error) {
+func (j *SurveyStore) GetAll() ([]*types.Survey, error) {
 	var surveys []*types.Survey
 	files, err := os.ReadDir(j.Path)
 	if err != nil {
 		return nil, err
 	}
 	for _, file := range files {
-		if file.IsDir() {
+		if file.IsDir() || filepath.Ext(file.Name()) != extension {
 			continue
 		}
-		id := strings.TrimSuffix(file.Name(), ".json")
+		id := strings.TrimSuffix(file.Name(), extension)
 		survey, err := j.Get(id)
 		if err != nil {
 			return nil, err
@@ -78,6 +94,6 @@ func (j JSONStore) GetAll() ([]*types.Survey, error) {
 	return surveys, nil
 }
 
-func (j JSONStore) Delete(id string) error {
-	return os.Remove(filepath.Join(j.Path, id+".json"))
+func (j *SurveyStore) Delete(id string) error {
+	return os.Remove(filepath.Join(j.Path, id+extension))
 }

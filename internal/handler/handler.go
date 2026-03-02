@@ -3,11 +3,13 @@ package handler
 import "github.com/AVZotov/draft-survey/internal/storage"
 
 type Handler struct {
-	userRepository storage.UserRepository
+	userRepository   storage.UserRepository
+	surveyRepository storage.SurveyRepository
 }
 
-func New(userRepository storage.UserRepository) *Handler {
+func New(userRepository storage.UserRepository, surveyRepository storage.SurveyRepository) *Handler {
 	return &Handler{
-		userRepository: userRepository,
+		userRepository:   userRepository,
+		surveyRepository: surveyRepository,
 	}
 }

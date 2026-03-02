@@ -55,7 +55,7 @@ func getUser() *types.User {
 func TestJSONStore_SaveAndGet(t *testing.T) {
 	dir := t.TempDir()
 	surveyExpected := getSurvey()
-	store := JSONStore{Path: dir, TempPath: dir}
+	store := SurveyStore{Path: dir, TempPath: dir}
 	if err := store.Save(id, surveyExpected); err != nil {
 		t.Fatal(err)
 	}
@@ -71,7 +71,7 @@ func TestJSONStore_SaveAndGet(t *testing.T) {
 func TestJSONStore_Delete(t *testing.T) {
 	dir := t.TempDir()
 	surveyExpected := getSurvey()
-	store := JSONStore{Path: dir, TempPath: dir}
+	store := SurveyStore{Path: dir, TempPath: dir}
 	if err := store.Save(id, surveyExpected); err != nil {
 		t.Fatal(err)
 	}
@@ -89,7 +89,7 @@ func TestJSONStore_Delete(t *testing.T) {
 func TestJSONStore_GetAll(t *testing.T) {
 	dir := t.TempDir()
 	surveysExpected := getSurveys()
-	store := JSONStore{Path: dir, TempPath: dir}
+	store := SurveyStore{Path: dir, TempPath: dir}
 
 	for i, survey := range surveysExpected {
 		if err := store.Save(id+strconv.Itoa(i), survey); err != nil {

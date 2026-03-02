@@ -16,7 +16,12 @@ func main() {
 		log.Fatal(err)
 	}
 
-	h := handler.New(userStore)
+	surveyStore, err := storage.NewSurveyStore("./data/surveys", "./data/temp")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	h := handler.New(userStore, surveyStore)
 
 	handler.SetupRoutes(app, h)
 
