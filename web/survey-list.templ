@@ -5,7 +5,7 @@ import "github.com/AVZotov/draft-survey/web/widgets"
 
 templ SurveyList() {
 	@layouts.Layout(ProfilePageProps) {
-		@widgets.HeaderUser()
+		@widgets.HeaderUser(ProfilePageProps.User)
 		@widgets.SurveyListForm()
 		@widgets.Footer()
 	}

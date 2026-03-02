@@ -14,14 +14,9 @@ templ Layout(props components.LayoutProps) {
 			<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 			<link rel="stylesheet" href="/static/css/styles.css"/>
 			<link rel="stylesheet" href="/static/css/banner.css"/>
-			<link rel="stylesheet" href="/static/css/dashboard.css"/>
-			<link rel="stylesheet" href="/static/css/drafts.css"/>
-			<link rel="stylesheet" href="/static/css/new-survey.css"/>
-			<link rel="stylesheet" href="/static/css/profile.css"/>
-			<link rel="stylesheet" href="/static/css/results.css"/>
-			<link rel="stylesheet" href="/static/css/settings.css"/>
-			<link rel="stylesheet" href="/static/css/survey-list.css"/>
-			<link rel="stylesheet" href="/static/css/tanks.css"/>
+			for _, css := range props.ExtraCSS {
+				<link rel="stylesheet" href={ css }/>
+			}
 			<script src="/static/js/htmx.min.js"></script>
 			<title>{ props.Title }</title>
 			<meta name="Draft-Survey calculator" content={ props.MetaDescription }/>

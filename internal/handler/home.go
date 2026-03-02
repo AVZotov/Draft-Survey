@@ -10,10 +10,10 @@ import (
 )
 
 func (h *Handler) home(c *fiber.Ctx) error {
-	_, err := h.userRepository.Get()
-
+	user, err := h.userRepository.Get()
 	if err == nil {
-		component := web.Dashboard()
+		web.DashboardPageProps.User = user
+		component := web.Dashboard(web.DashboardPageProps)
 		return tadaptor.Render(c, component)
 	}
 

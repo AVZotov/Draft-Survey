@@ -2,11 +2,12 @@ package web
 
 import "github.com/AVZotov/draft-survey/web/layouts"
 import "github.com/AVZotov/draft-survey/web/widgets"
+import "github.com/AVZotov/draft-survey/web/components"
 
-templ Dashboard() {
-	@layouts.Layout(DasboardPageProps) {
-		@widgets.HeaderUser()
-		@widgets.DashboardForm()
+templ Dashboard(props components.LayoutProps) {
+	@layouts.Layout(props) {
+		@widgets.HeaderUser(props.User)
+		@widgets.DashboardForm(props.User)
 		@widgets.Footer()
 	}
 }

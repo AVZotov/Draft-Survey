@@ -12,9 +12,10 @@ var ProfilePageProps = components.LayoutProps{
 	MetaDescription: "Set up your surveyor profile",
 }
 
-var DasboardPageProps = components.LayoutProps{
+var DashboardPageProps = components.LayoutProps{
 	Title:           "Dashboard",
 	MetaDescription: "Main page of Draft Survey application",
+	ExtraCSS:        []string{"/static/css/dashboard.css"},
 }
 
 var BannerFileCorrupted = components.BannerProps{

@@ -5,7 +5,7 @@ import "github.com/AVZotov/draft-survey/web/widgets"
 
 templ Tanks() {
 	@layouts.Layout(ProfilePageProps) {
-		@widgets.HeaderUser()
+		@widgets.HeaderUser(ProfilePageProps.User)
 		@widgets.TanksForm()
 		@widgets.TanksActionBar()
 		@widgets.Footer()

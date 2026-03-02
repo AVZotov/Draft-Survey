@@ -1,8 +1,12 @@
 package components
 
+import "github.com/AVZotov/draft-survey/internal/types"
+
 type LayoutProps struct {
 	Title           string
 	MetaDescription string
+	User            *types.User
+	ExtraCSS        []string
 }
 
 type Version struct {

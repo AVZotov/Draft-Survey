@@ -1,6 +1,9 @@
 package widgets
 
-templ HeaderUser() {
+import "github.com/AVZotov/draft-survey/internal/types"
+import "strings"
+
+templ HeaderUser(user *types.User) {
 	<!-- APP HEADER -->
 	<header class="app-header">
 		<div class="app-header-left">
@@ -20,12 +23,19 @@ templ HeaderUser() {
 		<div class="app-header-right">
 			<!-- User info -->
 			<div class="header-user">
-				<div class="header-user-avatar">AZ</div>
+				<div class="header-user-avatar">{ firstLetter(user.FirstName) }{ firstLetter(user.LastName) }</div>
 				<div class="header-user-info">
-					<span class="header-user-name">Alexey Zotov</span>
-					<span class="header-user-role">Marine Surveyor</span>
+					<span class="header-user-name">{ user.FirstName } { user.LastName }</span>
+					<span class="header-user-role">{ user.Position }</span>
 				</div>
 			</div>
 		</div>
 	</header>
+}
+
+func firstLetter(s string) string {
+	if s == "" {
+		return "?"
+	}
+	return strings.ToUpper(string([]rune(s)[0]))
 }
