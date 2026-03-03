@@ -24,6 +24,9 @@ templ Layout(props components.LayoutProps) {
 		<body>
 			@widgets.Banner()
 			{ children... }
+			for _, js := range props.ExtraJS {
+                <script src={ js }></script>
+            }
 		</body>
 	</html>
 }

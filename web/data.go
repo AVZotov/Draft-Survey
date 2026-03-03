@@ -20,6 +20,7 @@ func NewSurveyProps(user *types.User, survey *types.Survey) components.LayoutPro
 		Title:           "New Survey",
 		MetaDescription: "Calculate vessel cargo",
 		ExtraCSS:        []string{"/static/css/new-survey.css"},
+		ExtraJS:         []string{"/static/js/new-survey.js"},
 		User:            user,
 		Survey:          survey,
 	}

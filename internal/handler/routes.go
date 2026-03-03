@@ -8,8 +8,10 @@ func SetupRoutes(app *fiber.App, h *Handler) {
 	app.Get("/", h.home)
 	app.Get("/profile", h.profile)
 	app.Get("/survey/new", h.newSurvey)
+	app.Get("/survey/:id", h.getSurvey)
 
 	api := app.Group("/api/v1")
 	api.Post("/profile", h.createProfile)
 	api.Post("/survey", h.createSurvey)
+	
 }

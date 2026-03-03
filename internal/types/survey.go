@@ -88,4 +88,6 @@ type Survey struct {
 	Job            Job               `json:"job"`
 	CargoOperation CargoOperation    `json:"cargo_operation"`
 	VesselData     vessel.VesselData `json:"vessel_data"`
+	SeaCondition   SeaCondition      `json:"sea_condition"`
+	Remarks        string            `json:"remarks"`
 }

@@ -26,12 +26,29 @@ func (h *Handler) newSurvey(c *fiber.Ctx) error {
 
 func (h *Handler) createSurvey(c *fiber.Ctx) error {
 	survey, err := h.getNewSurvey(c)
+	if err != nil {
+		return err
+	}
 	if err = h.surveyRepository.Save(survey); err != nil {
 		return err
 	}
 
-	c.Set("HX-Redirect", "/")
+	switch c.FormValue("next") {
+	case "dashboard":
+		c.Set("HX-Redirect", "/")
+	case "draft":
+		c.Set("HX-Redirect", "/survey/"+survey.ID+"/draft")
+	case "stay":
+		c.Set("HX-Redirect", "/survey/"+survey.ID)
+	default:
+		c.Set("HX-Redirect", "/")
+	}
 	return c.SendStatus(http.StatusOK)
+}
+
+func (h *Handler) getSurvey(c *fiber.Ctx) error {
+	// TODO: показать форму с заполненными данными
+	return c.SendString("TODO: Survey " + c.Params("id"))
 }
 
 func (h *Handler) getNewSurvey(c *fiber.Ctx) (*types.Survey, error) {
@@ -64,17 +81,14 @@ func (h *Handler) getNewSurvey(c *fiber.Ctx) (*types.Survey, error) {
 		SummerDWT:        parseFloat(c, "summer_dwt"),
 		SummerTPC:        parseFloat(c, "summer_tpc"),
 		SummerFreeboard:  parseFloat(c, "summer_freeboard"),
-		DistancePPFwd:    0,
-		PPFwdDirection:   "",
-		DistancePPMid:    0,
-		PPMidDirection:   "",
-		DistancePPAft:    0,
-		PPAftDirection:   "",
-		KeelFwd:          0,
-		KeelMid:          0,
-		KeelAft:          0,
 		VesselType:       vessel.VesselType(c.FormValue("mmc_method")),
 		CorrectionMethod: vessel.CorrectionMethod(c.FormValue("corr_method")),
+	}
+
+	seaCondition := types.SeaCondition{
+		Type: types.SeaConditionType(c.FormValue("sea_type")),
+		Wave: types.WaveCondition(c.FormValue("sea_condition")),
+		Ice:  types.IceCondition(c.FormValue("ice_condition")),
 	}
 	survey := &types.Survey{
 		Surveyor:       *user,
@@ -84,6 +98,8 @@ func (h *Handler) getNewSurvey(c *fiber.Ctx) (*types.Survey, error) {
 		Job:            job,
 		CargoOperation: cargoOperation,
 		VesselData:     vesselData,
+		SeaCondition:   seaCondition,
+		Remarks:        c.FormValue("remarks"),
 	}
 
 	//TODO: Validation of fields

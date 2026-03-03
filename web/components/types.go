@@ -8,6 +8,7 @@ type LayoutProps struct {
 	User            *types.User
 	Survey          *types.Survey
 	ExtraCSS        []string
+	ExtraJS         []string
 }
 
 type Version struct {
