@@ -57,7 +57,7 @@ type FinalDraft struct {
 }
 
 type Job struct {
-	JobNumber int    `json:"job_number"`
+	JobNumber string `json:"job_number"`
 	DSNumber  int    `json:"ds_number"`
 	Principal string `json:"principal"`
 }

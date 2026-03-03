@@ -47,8 +47,18 @@ func (h *Handler) createSurvey(c *fiber.Ctx) error {
 }
 
 func (h *Handler) getSurvey(c *fiber.Ctx) error {
-	// TODO: показать форму с заполненными данными
-	return c.SendString("TODO: Survey " + c.Params("id"))
+	id := c.Params("id")
+	survey, err := h.surveyRepository.Get(id)
+	if err != nil {
+		// TODO: Show error page
+		return err
+	}
+	user, err := h.userRepository.Get()
+	if err != nil {
+		return err
+	}
+	props := web.NewSurveyProps(user, survey)
+	return tadaptor.Render(c, web.NewSurvey(props))
 }
 
 func (h *Handler) getNewSurvey(c *fiber.Ctx) (*types.Survey, error) {
@@ -56,8 +66,16 @@ func (h *Handler) getNewSurvey(c *fiber.Ctx) (*types.Survey, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	createdAt := time.Now()
+	if v := c.FormValue("created_at"); v != "" {
+		if t, err := time.Parse(time.RFC3339, v); err == nil {
+			createdAt = t
+		}
+	}
+
 	job := types.Job{
-		JobNumber: parseInt(c, "job_no"),
+		JobNumber: c.FormValue("job_no"),
 		DSNumber:  parseInt(c, "ds_no"),
 		Principal: c.FormValue("client"),
 	}
@@ -94,7 +112,7 @@ func (h *Handler) getNewSurvey(c *fiber.Ctx) (*types.Survey, error) {
 		Surveyor:       *user,
 		Status:         types.SurveyStatusDraft,
 		ID:             c.FormValue("survey_id"),
-		CreatedAt:      time.Now(),
+		CreatedAt:      createdAt,
 		Job:            job,
 		CargoOperation: cargoOperation,
 		VesselData:     vesselData,

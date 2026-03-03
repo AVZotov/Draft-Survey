@@ -9,6 +9,7 @@ import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
 import "github.com/AVZotov/draft-survey/internal/types"
+import "time"
 
 func NewSurveyForm(survey *types.Survey) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
@@ -38,13 +39,914 @@ func NewSurveyForm(survey *types.Survey) templ.Component {
 		var templ_7745c5c3_Var2 string
 		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(survey.ID)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/newsurvey-form.templ`, Line: 12, Col: 58}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/newsurvey-form.templ`, Line: 13, Col: 58}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "\"><div class=\"survey-layout\"><a href=\"/\" hx-post=\"/api/v1/survey\" hx-include=\"closest form\" hx-vals='{\"next\": \"dashboard\"}' class=\"back-link\"><svg viewBox=\"0 0 24 24\"><path d=\"M19 12H5M12 19l-7-7 7-7\"></path></svg> Back to Dashboard</a><h1 class=\"page-title\">New Survey</h1><p class=\"page-subtitle\">Fill in the details below. You can proceed to draft readings at any time and return to complete missing fields.</p><!-- ══ 1. SURVEY INFORMATION ═══════════════════════════════ --><div class=\"form-card\" id=\"section-survey\"><div class=\"form-card-header\"><div class=\"form-card-header-icon\"><svg viewBox=\"0 0 24 24\"><rect x=\"3\" y=\"4\" width=\"18\" height=\"18\" rx=\"2\"></rect><path d=\"M16 2v4M8 2v4M3 10h18\"></path></svg></div><span class=\"form-card-title\">Survey Information</span> <span class=\"form-card-subtitle\">Survey context & logistics</span></div><div class=\"form-section\"><div class=\"field-row-2\"><div class=\"field\"><label for=\"job-no\">Job No. <span class=\"optional\">(optional)</span></label> <input type=\"text\" id=\"job-no\" name=\"job_no\" placeholder=\"e.g. 345543_002\"></div><div class=\"field\"><label for=\"ds-no\">DS No. <span class=\"optional\">(optional)</span></label> <input type=\"text\" id=\"ds-no\" name=\"ds_no\" placeholder=\"e.g. 1\"></div></div><div class=\"field\"><label>Cargo Operation <span class=\"required\">*</span></label><div class=\"operation-toggle\"><input type=\"radio\" name=\"cargo_op\" id=\"op-loading\" value=\"loading\" checked> <label for=\"op-loading\"><svg viewBox=\"0 0 24 24\"><path d=\"M12 2v14M5 9l7 7 7-7\"></path><path d=\"M5 20h14\"></path></svg> Loading</label> <input type=\"radio\" name=\"cargo_op\" id=\"op-discharge\" value=\"discharge\"> <label for=\"op-discharge\"><svg viewBox=\"0 0 24 24\"><path d=\"M12 22V8M5 15l7-7 7 7\"></path><path d=\"M5 4h14\"></path></svg> Discharging</label></div></div><div class=\"field-row-2\"><div class=\"field\"><label for=\"port\">Port / Berth <span class=\"optional\">(optional)</span></label> <input type=\"text\" id=\"port\" name=\"port\" placeholder=\"e.g. Vanino, Russia\"></div><div class=\"field\"><label for=\"destination\">Destination / Origin <span class=\"optional\">(optional)</span></label> <input type=\"text\" id=\"destination\" name=\"destination\" placeholder=\"e.g. China\"></div></div><div class=\"field-row-3\"><div class=\"field\"><label for=\"cargo-type\">Cargo <span class=\"optional\">(optional)</span></label> <input type=\"text\" id=\"cargo-type\" name=\"cargo\" placeholder=\"e.g. Coal\"></div><div class=\"field\"><label for=\"packing\">Packing <span class=\"optional\">(optional)</span></label><div class=\"select-wrap\"><select id=\"packing\" name=\"packing\"><option value=\"\" disabled selected>Select…</option> <option>bulk</option> <option>bags</option> <option>bales</option> <option>bars</option> <option>big bags</option> <option>boxes</option> <option>coils</option> <option>containers</option> <option>pallets</option> <option>plates</option> <option>pieces</option> <option>Other</option></select></div></div><div class=\"field\"><label for=\"client\">Principal / Client <span class=\"optional\">(optional)</span></label> <input type=\"text\" id=\"client\" name=\"client\" placeholder=\"e.g. Company\"></div></div><div class=\"field\"><label>Sea Condition <span class=\"required\">*</span></label><!-- Wave toggle --><div class=\"sea-toggle-row\"><div class=\"sea-toggle-group\"><label class=\"sea-toggle-label\"><input type=\"radio\" name=\"sea_type\" id=\"wave-enabled\" value=\"wave\" checked onchange=\"toggleSeaGroup('wave')\"> <span class=\"sea-toggle-pill\"><span class=\"sea-toggle-dot\"></span></span> Wave</label><div class=\"sea-selects\" id=\"wave-group\"><div class=\"select-wrap\"><select id=\"sea-condition\" name=\"sea_condition\" onchange=\"updateSeaBadge()\"><option value=\"&lt; 0.1m\">Calm — &lt; 0.1m</option> <option value=\"0.1-0.5m\">Smooth — 0.1–0.5m</option> <option value=\"0.5-1.25m\" selected>Slight — 0.5–1.25m</option> <option value=\"1.25-2.5m\">Moderate — 1.25–2.5m</option> <option value=\"2.5-4.0m\">Rough — 2.5–4.0m</option></select></div><div class=\"sea-badge slight\" id=\"sea-badge\"><span class=\"sea-badge-dot\"></span>Slight</div></div></div><!-- Ice toggle --><div class=\"sea-toggle-group\"><label class=\"sea-toggle-label\"><input type=\"radio\" name=\"sea_type\" id=\"ice-enabled\" value=\"ice\" onchange=\"toggleSeaGroup('ice')\"> <span class=\"sea-toggle-pill\"><span class=\"sea-toggle-dot\"></span></span> Ice</label><div class=\"sea-selects sea-selects--disabled\" id=\"ice-group\"><div class=\"select-wrap\"><select id=\"ice-condition\" name=\"ice_condition\" disabled onchange=\"updateIceBadge()\"><option value=\"&lt;0.05m around\">&lt; 0.05m around</option> <option value=\"0.05-0.1m around\">0.05–0.1m around</option> <option value=\"0.1-0.15m around\">0.1–0.15m around</option> <option value=\"0.15-0.2m around\">0.15–0.2m around</option> <option value=\"0.2-0.3m around\">0.2–0.3m around</option> <option value=\"0.3-0.4m around\">0.3–0.4m around</option> <option value=\"0.4-0.6m around\">0.4–0.6m around</option> <option value=\"&gt;0.6m around\">&gt; 0.6m around</option></select></div><div class=\"sea-badge\" id=\"ice-badge\"><span class=\"sea-badge-dot\"></span>—</div></div></div></div><p class=\"field-hint\">Select sea condition and choose appropriate value</p></div><div class=\"field\"><label for=\"remarks\">Remarks <span class=\"optional\">(optional)</span></label> <textarea id=\"remarks\" name=\"remarks\" placeholder=\"Any observations, notes or disclaimers for the report…\"></textarea></div></div></div><!-- ══ 2. VESSEL DATA ══════════════════════════════════════ --><div class=\"form-card\" id=\"section-vessel\"><div class=\"form-card-header\"><div class=\"form-card-header-icon\"><svg viewBox=\"0 0 24 24\"><path d=\"M3 17l2-7h14l2 7H3z\"></path><path d=\"M8 10V6h8v4\"></path><path d=\"M12 6V3\"></path></svg></div><span class=\"form-card-title\">Vessel Data</span> <span class=\"form-card-subtitle\">From vessel's certificates</span></div><div class=\"form-section\"><div class=\"field-row-2\"><div class=\"field\"><label for=\"vessel-name\">Vessel Name <span class=\"required\">*</span></label> <input type=\"text\" id=\"vessel-name\" name=\"vessel_name\" placeholder=\"e.g. OCEAN CHEERS\"></div><div class=\"field\"><label for=\"imo\">IMO No. <span class=\"optional\">(optional)</span></label> <input type=\"text\" id=\"imo\" name=\"imo\" placeholder=\"e.g. 9233387\"></div></div><div class=\"field-row-3\"><div class=\"field\"><label for=\"flag\">Home Flag <span class=\"optional\">(optional)</span></label><div class=\"select-wrap\"><select id=\"flag\" name=\"flag\"><option value=\"\" disabled selected>Select flag…</option> <option>Antigua and Barbuda</option> <option>Australia</option> <option>Bahamas</option> <option>Belize</option> <option>Cambodia</option> <option>China</option> <option>Cyprus</option> <option>Denmark</option> <option>Germany</option> <option>Greece</option> <option>Hong Kong</option> <option>Indonesia</option> <option>Japan</option> <option>Liberia</option> <option>Malta</option> <option>Marshall Islands</option> <option>Netherlands</option> <option>Norway</option> <option selected>Panama</option> <option>Russia</option> <option>Singapore</option> <option>St. Vincent and the Grenadines</option> <option>United Kingdom</option> <option>Other</option></select></div></div><div class=\"field\"><label for=\"built\">Built Year <span class=\"optional\">(optional)</span></label> <input type=\"number\" id=\"built\" name=\"built\" placeholder=\"e.g. 2002\" step=\"any\"></div><div class=\"field\"><label for=\"lightship\">Lightship, MT <span class=\"required\">*</span></label> <input type=\"number\" id=\"lightship\" name=\"lightship\" placeholder=\"0.000\" step=\"any\"></div></div></div><div class=\"form-section\"><div class=\"field-row-4\"><div class=\"field\"><label for=\"lbp\">LBP, m <span class=\"required\">*</span></label> <input type=\"number\" id=\"lbp\" name=\"lbp\" placeholder=\"0.00\" step=\"any\" oninput=\"updateCalcHints()\"></div><div class=\"field\"><label for=\"breadth\">Breadth, m <span class=\"required\">*</span></label> <input type=\"number\" id=\"breadth\" name=\"breadth\" placeholder=\"0.00\" step=\"any\"></div><div class=\"field\"><label for=\"depth\">Depth, m <span class=\"optional\">(optional)</span></label> <input type=\"number\" id=\"depth\" name=\"depth\" placeholder=\"0.00\" step=\"any\" oninput=\"checkDepth()\"></div><div class=\"field\"><label>LBP / 2, m</label><div class=\"calc-value\" id=\"lbp-half\">—</div></div></div><!-- Depth warning: shown when Depth ≠ Summer Draft + Summer Freeboard --><div class=\"field-warning\" id=\"depth-warning\" style=\"display:none\"><svg viewBox=\"0 0 24 24\"><path d=\"M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z\"></path><path d=\"M12 9v4M12 17h.01\"></path></svg><p class=\"field-warning-text\">Depth should equal Summer Draft + Summer Freeboard. Please verify.</p></div></div></div><!-- ══ 3. SUMMER MARKS ════════════════════════════════════ --><div class=\"form-card\" id=\"section-marks\"><div class=\"form-card-header\"><div class=\"form-card-header-icon\"><svg viewBox=\"0 0 24 24\"><path d=\"M12 2v20M2 12h20\"></path><circle cx=\"12\" cy=\"12\" r=\"4\"></circle></svg></div><span class=\"form-card-title\">Summer Marks</span> <span class=\"form-card-subtitle\">From vessel's load line certificate</span></div><div class=\"form-section\"><div class=\"field-row-4\"><div class=\"field\"><label for=\"summer-draft\">Summer Draft, m <span class=\"required\">*</span></label> <input type=\"number\" id=\"summer-draft\" name=\"summer_draft\" placeholder=\"0.000\" step=\"any\" oninput=\"checkDepth(); updateFWA()\"></div><div class=\"field\"><label for=\"summer-dwt\">Summer DWT, MT <span class=\"required\">*</span></label> <input type=\"number\" id=\"summer-dwt\" name=\"summer_dwt\" placeholder=\"0.000\" step=\"any\" oninput=\"updateFWA()\"></div><div class=\"field\"><label for=\"summer-tpc\">Summer TPC, MT/cm <span class=\"required\">*</span></label> <input type=\"number\" id=\"summer-tpc\" name=\"summer_tpc\" placeholder=\"0.000\" step=\"any\" oninput=\"updateFWA()\"></div><div class=\"field\"><label for=\"summer-freeboard\">Summer Freeboard, m <span class=\"optional\">(optional)</span></label> <input type=\"number\" id=\"summer-freeboard\" name=\"summer_freeboard\" placeholder=\"0.000\" step=\"any\" oninput=\"checkDepth()\"></div></div><!-- Derived values row --><div class=\"field-row-3\" style=\"margin-top: var(--space-md)\"><div class=\"field\"><label>0.5% DWT, MT</label><div class=\"calc-value\" id=\"half-pct-dwt\">—</div></div><div class=\"field\"><label>FWA, mm</label><div class=\"calc-value\" id=\"fwa\">—</div><p class=\"field-hint\">FWA = DWT / (4 × TPC)</p></div><div class=\"field\"><label>Depth check (Draft + FB)</label><div class=\"calc-value\" id=\"depth-check\">—</div></div></div></div></div><!-- ══ 4. CALCULATION SETTINGS ════════════════════════════ --><div class=\"form-card\" id=\"section-calc\"><div class=\"form-card-header\"><div class=\"form-card-header-icon\"><svg viewBox=\"0 0 24 24\"><rect x=\"4\" y=\"2\" width=\"16\" height=\"20\" rx=\"2\"></rect><path d=\"M8 6h8M8 10h8M8 14h4\"></path></svg></div><span class=\"form-card-title\">Calculation Settings</span> <span class=\"form-card-subtitle\">UNECE 1992 method parameters</span></div><div class=\"form-section\"><div class=\"field\"><label>MMC Calculation Method <span class=\"required\">*</span></label><div class=\"method-options\"><div class=\"method-option\"><input type=\"radio\" name=\"mmc_method\" id=\"mmc-standard\" value=\"marine\" checked> <label for=\"mmc-standard\"><span class=\"method-label-title\">Standard</span> <span class=\"method-label-formula\">(f + 6m + a) / 8</span> <span class=\"method-label-desc\">Sea vessel</span></label></div><div class=\"method-option\"><input type=\"radio\" name=\"mmc_method\" id=\"mmc-river\" value=\"river\"> <label for=\"mmc-river\"><span class=\"method-label-title\">River</span> <span class=\"method-label-formula\">(f + 4m + a) / 6</span> <span class=\"method-label-desc\">River vessel</span></label></div><div class=\"method-option\"><input type=\"radio\" name=\"mmc_method\" id=\"mmc-barge\" value=\"barge\"> <label for=\"mmc-barge\"><span class=\"method-label-title\">Barge</span> <span class=\"method-label-formula\">(3f + 14m + 3a) / 20</span> <span class=\"method-label-desc\">Barge</span></label></div></div></div></div><div class=\"form-section\"><div class=\"field\"><label>Correction Method <span class=\"required\">*</span></label><div class=\"correction-options\"><div class=\"method-option\"><input type=\"radio\" name=\"corr_method\" id=\"corr-full\" value=\"Full LBP\" checked> <label for=\"corr-full\"><span class=\"method-label-title\">Full LBP</span> <span class=\"method-label-desc\">Standard — sea vessels</span></label></div><div class=\"method-option\"><input type=\"radio\" name=\"corr_method\" id=\"corr-half\" value=\"Half LBP\"> <label for=\"corr-half\"><span class=\"method-label-title\">Half LBP</span> <span class=\"method-label-desc\">River vessels only</span></label></div></div></div></div></div></div><!-- /survey-layout --></form></main>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "\"> <input type=\"hidden\" name=\"created_at\" value=\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var3 string
+		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(survey.CreatedAt.Format(time.RFC3339))
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/newsurvey-form.templ`, Line: 14, Col: 87}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "\"><div class=\"survey-layout\"><a href=\"/\" hx-post=\"/api/v1/survey\" hx-include=\"closest form\" hx-vals='{\"next\": \"dashboard\"}' class=\"back-link\"><svg viewBox=\"0 0 24 24\"><path d=\"M19 12H5M12 19l-7-7 7-7\"></path></svg> Back to Dashboard</a><h1 class=\"page-title\">New Survey</h1><p class=\"page-subtitle\">Fill in the details below. You can proceed to draft readings at any time and return to complete missing fields.</p><!-- ══ 1. SURVEY INFORMATION ═══════════════════════════════ --><div class=\"form-card\" id=\"section-survey\"><div class=\"form-card-header\"><div class=\"form-card-header-icon\"><svg viewBox=\"0 0 24 24\"><rect x=\"3\" y=\"4\" width=\"18\" height=\"18\" rx=\"2\"></rect><path d=\"M16 2v4M8 2v4M3 10h18\"></path></svg></div><span class=\"form-card-title\">Survey Information</span> <span class=\"form-card-subtitle\">Survey context & logistics</span></div><div class=\"form-section\"><div class=\"field-row-2\"><div class=\"field\"><label for=\"job-no\">Job No. <span class=\"optional\">(optional)</span></label> <input type=\"text\" id=\"job-no\" name=\"job_no\" placeholder=\"e.g. 345543_002\" value=\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var4 string
+		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(survey.Job.JobNumber)
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/newsurvey-form.templ`, Line: 41, Col: 111}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "\"></div><div class=\"field\"><label for=\"ds-no\">DS No. <span class=\"optional\">(optional)</span></label> <input type=\"number\" id=\"ds-no\" name=\"ds_no\" placeholder=\"e.g. 1\" step=\"any\" value=\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var5 string
+		templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(formatInt(survey.Job.DSNumber))
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/newsurvey-form.templ`, Line: 45, Col: 123}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "\"></div></div><div class=\"field\"><label>Cargo Operation <span class=\"required\">*</span></label><div class=\"operation-toggle\"><input type=\"radio\" name=\"cargo_op\" id=\"op-loading\" value=\"loading\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if survey.CargoOperation.Operation != "discharge" {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, " checked")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "> <label for=\"op-loading\"><svg viewBox=\"0 0 24 24\"><path d=\"M12 2v14M5 9l7 7 7-7\"></path><path d=\"M5 20h14\"></path></svg> Loading</label> <input type=\"radio\" name=\"cargo_op\" id=\"op-discharge\" value=\"discharge\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if survey.CargoOperation.Operation == "discharge" {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, " checked")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "> <label for=\"op-discharge\"><svg viewBox=\"0 0 24 24\"><path d=\"M12 22V8M5 15l7-7 7 7\"></path><path d=\"M5 4h14\"></path></svg> Discharging</label></div></div><div class=\"field-row-2\"><div class=\"field\"><label for=\"port\">Port / Berth <span class=\"optional\">(optional)</span></label> <input type=\"text\" id=\"port\" name=\"port\" placeholder=\"e.g. Vanino, Russia\" value=\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var6 string
+		templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(survey.CargoOperation.PlaceOfInspection)
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/newsurvey-form.templ`, Line: 78, Col: 130}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 10, "\"></div><div class=\"field\"><label for=\"destination\">Destination / Origin <span class=\"optional\">(optional)</span></label> <input type=\"text\" id=\"destination\" name=\"destination\" placeholder=\"e.g. China\" value=\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var7 string
+		templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(survey.CargoOperation.Destination)
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/newsurvey-form.templ`, Line: 82, Col: 129}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 11, "\"></div></div><div class=\"field-row-3\"><div class=\"field\"><label for=\"cargo-type\">Cargo <span class=\"optional\">(optional)</span></label> <input type=\"text\" id=\"cargo-type\" name=\"cargo\" placeholder=\"e.g. Coal\" value=\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var8 string
+		templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(survey.CargoOperation.Cargo)
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/newsurvey-form.templ`, Line: 88, Col: 115}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 12, "\"></div><div class=\"field\"><label for=\"packing\">Packing <span class=\"optional\">(optional)</span></label><div class=\"select-wrap\"><select id=\"packing\" name=\"packing\"><option value=\"\" disabled")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if survey.CargoOperation.Packing == "" {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 13, " selected")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 14, ">Select…</option> <option")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if survey.CargoOperation.Packing == "bulk" {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 15, " selected")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 16, ">bulk</option> <option")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if survey.CargoOperation.Packing == "bags" {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 17, " selected")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 18, ">bags</option> <option")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if survey.CargoOperation.Packing == "bales" {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 19, " selected")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 20, ">bales</option> <option")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if survey.CargoOperation.Packing == "bars" {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 21, " selected")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 22, ">bars</option> <option")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if survey.CargoOperation.Packing == "big bags" {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 23, " selected")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 24, ">big bags</option> <option")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if survey.CargoOperation.Packing == "boxes" {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 25, " selected")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 26, ">boxes</option> <option")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if survey.CargoOperation.Packing == "coils" {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 27, " selected")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 28, ">coils</option> <option")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if survey.CargoOperation.Packing == "containers" {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 29, " selected")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 30, ">containers</option> <option")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if survey.CargoOperation.Packing == "pallets" {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 31, " selected")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 32, ">pallets</option> <option")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if survey.CargoOperation.Packing == "plates" {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 33, " selected")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 34, ">plates</option> <option")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if survey.CargoOperation.Packing == "pieces" {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 35, " selected")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 36, ">pieces</option> <option")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if survey.CargoOperation.Packing == "Other" {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 37, " selected")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 38, ">Other</option></select></div></div><div class=\"field\"><label for=\"client\">Principal / Client <span class=\"optional\">(optional)</span></label> <input type=\"text\" id=\"client\" name=\"client\" placeholder=\"e.g. Company\" value=\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var9 string
+		templ_7745c5c3_Var9, templ_7745c5c3_Err = templ.JoinStringErrs(survey.Job.Principal)
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/newsurvey-form.templ`, Line: 112, Col: 108}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var9))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 39, "\"></div></div><div class=\"field\"><label>Sea Condition <span class=\"required\">*</span></label><!-- Wave toggle --><div class=\"sea-toggle-row\"><div class=\"sea-toggle-group\"><label class=\"sea-toggle-label\"><input type=\"radio\" name=\"sea_type\" id=\"wave-enabled\" value=\"wave\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if survey.SeaCondition.Type != "ice" {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 40, " checked")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 41, " onchange=\"toggleSeaGroup('wave')\"> <span class=\"sea-toggle-pill\"><span class=\"sea-toggle-dot\"></span></span> Wave</label>")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var10 = []any{templ.Classes("sea-selects", templ.KV("sea-selects--disabled", survey.SeaCondition.Type == types.SeaConditionTypeIce))}
+		templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var10...)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 42, "<div class=\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var11 string
+		templ_7745c5c3_Var11, templ_7745c5c3_Err = templ.JoinStringErrs(templ.CSSClasses(templ_7745c5c3_Var10).String())
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/newsurvey-form.templ`, Line: 1, Col: 0}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var11))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 43, "\" id=\"wave-group\"><div class=\"select-wrap\"><select id=\"sea-condition\" name=\"sea_condition\" onchange=\"updateSeaBadge()\"><option value=\"&lt; 0.1m\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if survey.SeaCondition.Wave == "< 0.1m" {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 44, " selected")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 45, ">Calm — &lt; 0.1m</option> <option value=\"0.1-0.5m\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if survey.SeaCondition.Wave == "0.1-0.5m" {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 46, " selected")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 47, ">Smooth — 0.1–0.5m</option> <option value=\"0.5-1.25m\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if survey.SeaCondition.Wave == "0.5-1.25m" {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 48, " selected")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 49, ">Slight — 0.5–1.25m</option> <option value=\"1.25-2.5m\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if survey.SeaCondition.Wave == "1.25-2.5m" {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 50, " selected")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 51, ">Moderate — 1.25–2.5m</option> <option value=\"2.5-4.0m\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if survey.SeaCondition.Wave == "2.5-4.0m" {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 52, " selected")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 53, ">Rough — 2.5–4.0m</option></select></div><div class=\"sea-badge slight\" id=\"sea-badge\"><span class=\"sea-badge-dot\"></span>Slight</div></div></div><!-- Ice toggle --><div class=\"sea-toggle-group\"><label class=\"sea-toggle-label\"><input type=\"radio\" name=\"sea_type\" id=\"ice-enabled\" value=\"ice\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if survey.SeaCondition.Type == "ice" {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 54, " checked")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 55, " onchange=\"toggleSeaGroup('ice')\"> <span class=\"sea-toggle-pill\"><span class=\"sea-toggle-dot\"></span></span> Ice</label>")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var12 = []any{templ.Classes("sea-selects", templ.KV("sea-selects--disabled", survey.SeaCondition.Type != types.SeaConditionTypeIce))}
+		templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var12...)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 56, "<div class=\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var13 string
+		templ_7745c5c3_Var13, templ_7745c5c3_Err = templ.JoinStringErrs(templ.CSSClasses(templ_7745c5c3_Var12).String())
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/newsurvey-form.templ`, Line: 1, Col: 0}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var13))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 57, "\" id=\"ice-group\"><div class=\"select-wrap\"><select id=\"ice-condition\" name=\"ice_condition\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if survey.SeaCondition.Type != types.SeaConditionTypeIce {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 58, " disabled")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 59, " onchange=\"updateIceBadge()\"><option value=\"&lt;0.05m around\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if survey.SeaCondition.Ice == "<0.05m around" {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 60, " selected")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 61, ">&lt; 0.05m around</option> <option value=\"0.05-0.1m around\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if survey.SeaCondition.Ice == "0.05-0.1m around" {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 62, " selected")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 63, ">0.05–0.1m around</option> <option value=\"0.1-0.15m around\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if survey.SeaCondition.Ice == "0.1-0.15m around" {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 64, " selected")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 65, ">0.1–0.15m around</option> <option value=\"0.15-0.2m around\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if survey.SeaCondition.Ice == "0.15-0.2m around" {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 66, " selected")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 67, ">0.15–0.2m around</option> <option value=\"0.2-0.3m around\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if survey.SeaCondition.Ice == "0.2-0.3m around" {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 68, " selected")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 69, ">0.2–0.3m around</option> <option value=\"0.3-0.4m around\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if survey.SeaCondition.Ice == "0.3-0.4m around" {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 70, " selected")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 71, ">0.3–0.4m around</option> <option value=\"0.4-0.6m around\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if survey.SeaCondition.Ice == "0.4-0.6m around" {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 72, " selected")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 73, ">0.4–0.6m around</option> <option value=\"&gt;0.6m around\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if survey.SeaCondition.Ice == "&gt;0.6m around" {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 74, " selected")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 75, ">&gt; 0.6m around</option></select></div><div class=\"sea-badge\" id=\"ice-badge\"><span class=\"sea-badge-dot\"></span>—</div></div></div></div><p class=\"field-hint\">Select sea condition and choose appropriate value</p></div><div class=\"field\"><label for=\"remarks\">Remarks <span class=\"optional\">(optional)</span></label> <textarea id=\"remarks\" name=\"remarks\" placeholder=\"Any observations, notes or disclaimers for the report…\">")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var14 string
+		templ_7745c5c3_Var14, templ_7745c5c3_Err = templ.JoinStringErrs(survey.Remarks)
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/newsurvey-form.templ`, Line: 198, Col: 24}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var14))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 76, "</textarea></div></div></div><!-- ══ 2. VESSEL DATA ══════════════════════════════════════ --><div class=\"form-card\" id=\"section-vessel\"><div class=\"form-card-header\"><div class=\"form-card-header-icon\"><svg viewBox=\"0 0 24 24\"><path d=\"M3 17l2-7h14l2 7H3z\"></path><path d=\"M8 10V6h8v4\"></path><path d=\"M12 6V3\"></path></svg></div><span class=\"form-card-title\">Vessel Data</span> <span class=\"form-card-subtitle\">From vessel's certificates</span></div><div class=\"form-section\"><div class=\"field-row-2\"><div class=\"field\"><label for=\"vessel-name\">Vessel Name <span class=\"required\">*</span></label> <input type=\"text\" id=\"vessel-name\" name=\"vessel_name\" placeholder=\"e.g. OCEAN CHEERS\" value=\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var15 string
+		templ_7745c5c3_Var15, templ_7745c5c3_Err = templ.JoinStringErrs(survey.VesselData.Name)
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/newsurvey-form.templ`, Line: 216, Col: 125}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var15))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 77, "\"></div><div class=\"field\"><label for=\"imo\">IMO No. <span class=\"optional\">(optional)</span></label> <input type=\"text\" id=\"imo\" name=\"imo\" placeholder=\"e.g. 9233387\" value=\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var16 string
+		templ_7745c5c3_Var16, templ_7745c5c3_Err = templ.JoinStringErrs(survey.VesselData.IMO)
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/newsurvey-form.templ`, Line: 220, Col: 103}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var16))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 78, "\"></div></div><div class=\"field-row-3\"><div class=\"field\"><label for=\"flag\">Home Flag <span class=\"optional\">(optional)</span></label><div class=\"select-wrap\"><select id=\"flag\" name=\"flag\"><option value=\"\" disabled")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if survey.VesselData.Flag == "" {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 79, " selected")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 80, ">Select flag…</option> <option")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if survey.VesselData.Flag == "Antigua and Barbuda" {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 81, " selected")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 82, ">Antigua and Barbuda</option> <option")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if survey.VesselData.Flag == "Australia" {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 83, " selected")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 84, ">Australia</option> <option")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if survey.VesselData.Flag == "Bahamas" {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 85, " selected")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 86, ">Bahamas</option> <option")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if survey.VesselData.Flag == "Belize" {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 87, " selected")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 88, ">Belize</option> <option")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if survey.VesselData.Flag == "Cambodia" {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 89, " selected")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 90, ">Cambodia</option> <option")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if survey.VesselData.Flag == "China" {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 91, " selected")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 92, ">China</option> <option")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if survey.VesselData.Flag == "Cyprus" {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 93, " selected")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 94, ">Cyprus</option> <option")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if survey.VesselData.Flag == "Denmark" {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 95, " selected")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 96, ">Denmark</option> <option")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if survey.VesselData.Flag == "Germany" {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 97, " selected")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 98, ">Germany</option> <option")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if survey.VesselData.Flag == "Greece" {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 99, " selected")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 100, ">Greece</option> <option")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if survey.VesselData.Flag == "Hong Kong" {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 101, " selected")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 102, ">Hong Kong</option> <option")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if survey.VesselData.Flag == "Indonesia" {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 103, " selected")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 104, ">Indonesia</option> <option")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if survey.VesselData.Flag == "Japan" {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 105, " selected")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 106, ">Japan</option> <option")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if survey.VesselData.Flag == "Liberia" {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 107, " selected")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 108, ">Liberia</option> <option")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if survey.VesselData.Flag == "Malta" {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 109, " selected")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 110, ">Malta</option> <option")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if survey.VesselData.Flag == "Marshall Islands" {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 111, " selected")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 112, ">Marshall Islands</option> <option")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if survey.VesselData.Flag == "Netherlands" {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 113, " selected")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 114, ">Netherlands</option> <option")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if survey.VesselData.Flag == "Norway" {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 115, " selected")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 116, ">Norway</option> <option")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if survey.VesselData.Flag == "Panama" {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 117, " selected")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 118, ">Panama</option> <option")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if survey.VesselData.Flag == "Russia" {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 119, " selected")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 120, ">Russia</option> <option")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if survey.VesselData.Flag == "Singapore" {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 121, " selected")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 122, ">Singapore</option> <option")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if survey.VesselData.Flag == "St. Vincent and the Grenadines" {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 123, " selected")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 124, ">St. Vincent and the Grenadines</option> <option")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if survey.VesselData.Flag == "United Kingdom" {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 125, " selected")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 126, ">United Kingdom</option> <option")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if survey.VesselData.Flag == "Other" {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 127, " selected")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 128, ">Other</option></select></div></div><div class=\"field\"><label for=\"built\">Built Year <span class=\"optional\">(optional)</span></label> <input type=\"number\" id=\"built\" name=\"built\" placeholder=\"e.g. 2002\" step=\"any\" value=\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var17 string
+		templ_7745c5c3_Var17, templ_7745c5c3_Err = templ.JoinStringErrs(formatInt(survey.VesselData.BuiltYear))
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/newsurvey-form.templ`, Line: 258, Col: 134}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var17))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 129, "\"></div><div class=\"field\"><label for=\"lightship\">Lightship, MT <span class=\"required\">*</span></label> <input type=\"number\" id=\"lightship\" name=\"lightship\" placeholder=\"0.000\" step=\"any\" value=\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var18 string
+		templ_7745c5c3_Var18, templ_7745c5c3_Err = templ.JoinStringErrs(formatFloat(survey.VesselData.Lightship))
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/newsurvey-form.templ`, Line: 262, Col: 140}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var18))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 130, "\"></div></div></div><div class=\"form-section\"><div class=\"field-row-4\"><div class=\"field\"><label for=\"lbp\">LBP, m <span class=\"required\">*</span></label> <input type=\"number\" id=\"lbp\" name=\"lbp\" placeholder=\"0.00\" step=\"any\" oninput=\"updateCalcHints()\" value=\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var19 string
+		templ_7745c5c3_Var19, templ_7745c5c3_Err = templ.JoinStringErrs(formatFloat(survey.VesselData.LBP))
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/newsurvey-form.templ`, Line: 270, Col: 149}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var19))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 131, "\"></div><div class=\"field\"><label for=\"breadth\">Breadth, m <span class=\"required\">*</span></label> <input type=\"number\" id=\"breadth\" name=\"breadth\" placeholder=\"0.00\" step=\"any\" value=\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var20 string
+		templ_7745c5c3_Var20, templ_7745c5c3_Err = templ.JoinStringErrs(formatFloat(survey.VesselData.Breadth))
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/newsurvey-form.templ`, Line: 274, Col: 133}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var20))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 132, "\"></div><div class=\"field\"><label for=\"depth\">Depth, m <span class=\"optional\">(optional)</span></label> <input type=\"number\" id=\"depth\" name=\"depth\" placeholder=\"0.00\" step=\"any\" oninput=\"checkDepth()\" value=\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var21 string
+		templ_7745c5c3_Var21, templ_7745c5c3_Err = templ.JoinStringErrs(formatFloat(survey.VesselData.Depth))
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/newsurvey-form.templ`, Line: 278, Col: 150}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var21))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 133, "\"></div><div class=\"field\"><label>LBP / 2, m</label><div class=\"calc-value\" id=\"lbp-half\">—</div></div></div><!-- Depth warning: shown when Depth ≠ Summer Draft + Summer Freeboard --><div class=\"field-warning\" id=\"depth-warning\" style=\"display:none\"><svg viewBox=\"0 0 24 24\"><path d=\"M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z\"></path><path d=\"M12 9v4M12 17h.01\"></path></svg><p class=\"field-warning-text\">Depth should equal Summer Draft + Summer Freeboard. Please verify.</p></div></div></div><!-- ══ 3. SUMMER MARKS ════════════════════════════════════ --><div class=\"form-card\" id=\"section-marks\"><div class=\"form-card-header\"><div class=\"form-card-header-icon\"><svg viewBox=\"0 0 24 24\"><path d=\"M12 2v20M2 12h20\"></path><circle cx=\"12\" cy=\"12\" r=\"4\"></circle></svg></div><span class=\"form-card-title\">Summer Marks</span> <span class=\"form-card-subtitle\">From vessel's load line certificate</span></div><div class=\"form-section\"><div class=\"field-row-4\"><div class=\"field\"><label for=\"summer-draft\">Summer Draft, m <span class=\"required\">*</span></label> <input type=\"number\" id=\"summer-draft\" name=\"summer_draft\" placeholder=\"0.000\" step=\"any\" oninput=\"checkDepth(); updateFWA()\" value=\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var22 string
+		templ_7745c5c3_Var22, templ_7745c5c3_Err = templ.JoinStringErrs(formatFloat(survey.VesselData.SummerDraft))
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/newsurvey-form.templ`, Line: 305, Col: 184}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var22))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 134, "\"></div><div class=\"field\"><label for=\"summer-dwt\">Summer DWT, MT <span class=\"required\">*</span></label> <input type=\"number\" id=\"summer-dwt\" name=\"summer_dwt\" placeholder=\"0.000\" step=\"any\" oninput=\"updateFWA()\" value=\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var23 string
+		templ_7745c5c3_Var23, templ_7745c5c3_Err = templ.JoinStringErrs(formatFloat(survey.VesselData.SummerDWT))
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/newsurvey-form.templ`, Line: 309, Col: 164}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var23))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 135, "\"></div><div class=\"field\"><label for=\"summer-tpc\">Summer TPC, MT/cm <span class=\"required\">*</span></label> <input type=\"number\" id=\"summer-tpc\" name=\"summer_tpc\" placeholder=\"0.000\" step=\"any\" oninput=\"updateFWA()\" value=\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var24 string
+		templ_7745c5c3_Var24, templ_7745c5c3_Err = templ.JoinStringErrs(formatFloat(survey.VesselData.SummerTPC))
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/newsurvey-form.templ`, Line: 313, Col: 164}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var24))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 136, "\"></div><div class=\"field\"><label for=\"summer-freeboard\">Summer Freeboard, m <span class=\"optional\">(optional)</span></label> <input type=\"number\" id=\"summer-freeboard\" name=\"summer_freeboard\" placeholder=\"0.000\" step=\"any\" oninput=\"checkDepth()\" value=\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var25 string
+		templ_7745c5c3_Var25, templ_7745c5c3_Err = templ.JoinStringErrs(formatFloat(survey.VesselData.SummerFreeboard))
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/newsurvey-form.templ`, Line: 317, Col: 183}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var25))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 137, "\"></div></div><!-- Derived values row --><div class=\"field-row-3\" style=\"margin-top: var(--space-md)\"><div class=\"field\"><label>0.5% DWT, MT</label><div class=\"calc-value\" id=\"half-pct-dwt\">—</div></div><div class=\"field\"><label>FWA, mm</label><div class=\"calc-value\" id=\"fwa\">—</div><p class=\"field-hint\">FWA = DWT / (4 × TPC)</p></div><div class=\"field\"><label>Depth check (Draft + FB)</label><div class=\"calc-value\" id=\"depth-check\">—</div></div></div></div></div><!-- ══ 4. CALCULATION SETTINGS ════════════════════════════ --><div class=\"form-card\" id=\"section-calc\"><div class=\"form-card-header\"><div class=\"form-card-header-icon\"><svg viewBox=\"0 0 24 24\"><rect x=\"4\" y=\"2\" width=\"16\" height=\"20\" rx=\"2\"></rect><path d=\"M8 6h8M8 10h8M8 14h4\"></path></svg></div><span class=\"form-card-title\">Calculation Settings</span> <span class=\"form-card-subtitle\">UNECE 1992 method parameters</span></div><div class=\"form-section\"><div class=\"field\"><label>MMC Calculation Method <span class=\"required\">*</span></label><div class=\"method-options\"><div class=\"method-option\"><input type=\"radio\" name=\"mmc_method\" id=\"mmc-standard\" value=\"marine\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if survey.VesselData.VesselType != "river" && survey.VesselData.VesselType != "barge" {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 138, " checked")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 139, "> <label for=\"mmc-standard\"><span class=\"method-label-title\">Standard</span> <span class=\"method-label-formula\">(f + 6m + a) / 8</span> <span class=\"method-label-desc\">Sea vessel</span></label></div><div class=\"method-option\"><input type=\"radio\" name=\"mmc_method\" id=\"mmc-river\" value=\"river\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if survey.VesselData.VesselType == "river" {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 140, " checked")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 141, "> <label for=\"mmc-river\"><span class=\"method-label-title\">River</span> <span class=\"method-label-formula\">(f + 4m + a) / 6</span> <span class=\"method-label-desc\">River vessel</span></label></div><div class=\"method-option\"><input type=\"radio\" name=\"mmc_method\" id=\"mmc-barge\" value=\"barge\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if survey.VesselData.VesselType == "barge" {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 142, " checked")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 143, "> <label for=\"mmc-barge\"><span class=\"method-label-title\">Barge</span> <span class=\"method-label-formula\">(3f + 14m + 3a) / 20</span> <span class=\"method-label-desc\">Barge</span></label></div></div></div></div><div class=\"form-section\"><div class=\"field\"><label>Correction Method <span class=\"required\">*</span></label><div class=\"correction-options\"><div class=\"method-option\"><input type=\"radio\" name=\"corr_method\" id=\"corr-full\" value=\"Full LBP\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if survey.VesselData.CorrectionMethod != "Half LBP" {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 144, " checked")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 145, "> <label for=\"corr-full\"><span class=\"method-label-title\">Full LBP</span> <span class=\"method-label-desc\">Standard — sea vessels</span></label></div><div class=\"method-option\"><input type=\"radio\" name=\"corr_method\" id=\"corr-half\" value=\"Half LBP\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if survey.VesselData.CorrectionMethod == "Half LBP" {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 146, " checked")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 147, "> <label for=\"corr-half\"><span class=\"method-label-title\">Half LBP</span> <span class=\"method-label-desc\">River vessels only</span></label></div></div></div></div></div></div><!-- /survey-layout --></form></main>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

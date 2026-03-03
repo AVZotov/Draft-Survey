@@ -13,5 +13,4 @@ func SetupRoutes(app *fiber.App, h *Handler) {
 	api := app.Group("/api/v1")
 	api.Post("/profile", h.createProfile)
 	api.Post("/survey", h.createSurvey)
-	
 }
