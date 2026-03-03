@@ -1,14 +1,14 @@
 package types
 
 type OtherDeductibles struct {
-	Others     float64
-	OthersName string
+	Others     float64 `json:"others"`
+	OthersName string  `json:"others_name"`
 }
 
 type FreshWaterTank struct {
-	Name     string
-	Sounding float64
-	Volume   float64
+	Name     string  `json:"name"`
+	Sounding float64 `json:"sounding"`
+	Volume   float64 `json:"volume"`
 }
 
 func (fwt FreshWaterTank) GetWeight() float64 {
@@ -17,10 +17,10 @@ func (fwt FreshWaterTank) GetWeight() float64 {
 }
 
 type BallastWaterTank struct {
-	Name     string
-	Sounding float64
-	Volume   float64
-	Density  float64
+	Name     string  `json:"name"`
+	Sounding float64 `json:"sounding"`
+	Volume   float64 `json:"volume"`
+	Density  float64 `json:"density"`
 }
 
 func (bwt BallastWaterTank) GetWeight() float64 {
@@ -28,10 +28,10 @@ func (bwt BallastWaterTank) GetWeight() float64 {
 }
 
 type Deductibles struct {
-	HFO         float64
-	MDO         float64
-	LubOil      float64
-	BilgeWater  float64
-	SewageWater float64
+	HFO         float64 `json:"hfo"`
+	MDO         float64 `json:"mdo"`
+	LubOil      float64 `json:"lub_oil"`
+	BilgeWater  float64 `json:"bilge_water"`
+	SewageWater float64 `json:"sewage_water"`
 	OtherDeductibles
 }

@@ -23,30 +23,27 @@ const (
 )
 
 type VesselData struct {
-	Name                 string
-	Flag                 string
-	HomePort             string
-	IMO                  string
-	BuiltCountry         string
-	BuiltYear            int
-	HydrostaticDocsPhoto string
-	Lightship            float64 // вес порожнем, MT
-	Breadth              float64 // ширина корпуса, м
-	Depth                float64 // высота корпуса, м
-	LBP                  float64 // длина между перпендикулярами, м
-	SummerDraft          float64
-	SummerDWT            float64
-	SummerTPC            float64
-	SummerFreeboard      float64
-	DistancePPFwd        float64
-	PPFwdDirection       PPDirection
-	DistancePPMid        float64
-	PPMidDirection       PPDirection
-	DistancePPAft        float64
-	PPAftDirection       PPDirection
-	KeelFwd              float64
-	KeelMid              float64
-	KeelAft              float64
-	VesselType           VesselType
-	CorrectionMethod     CorrectionMethod
+	Name             string           `json:"name"`
+	Flag             string           `json:"flag"`
+	IMO              string           `json:"imo"`
+	BuiltYear        int              `json:"built_year"`
+	Lightship        float64          `json:"lightship"` // вес порожнем, MT
+	Breadth          float64          `json:"breadth"`   // ширина корпуса, м
+	Depth            float64          `json:"depth"`     // высота корпуса, м
+	LBP              float64          `json:"lbp"`       // длина между перпендикулярами, м
+	SummerDraft      float64          `json:"summer_draft"`
+	SummerDWT        float64          `json:"summer_dwt"`
+	SummerTPC        float64          `json:"summer_tpc"`
+	SummerFreeboard  float64          `json:"summer_freeboard"`
+	DistancePPFwd    float64          `json:"distance_pp_fwd"`
+	PPFwdDirection   PPDirection      `json:"pp_fwd_direction"`
+	DistancePPMid    float64          `json:"distance_pp_mid"`
+	PPMidDirection   PPDirection      `json:"pp_mid_direction"`
+	DistancePPAft    float64          `json:"distance_pp_aft"`
+	PPAftDirection   PPDirection      `json:"pp_aft_direction"`
+	KeelFwd          float64          `json:"keel_fwd"`
+	KeelMid          float64          `json:"keel_mid"`
+	KeelAft          float64          `json:"keel_aft"`
+	VesselType       VesselType       `json:"vessel_type"`
+	CorrectionMethod CorrectionMethod `json:"correction_method"`
 }

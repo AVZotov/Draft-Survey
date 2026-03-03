@@ -1,21 +1,33 @@
 package web
 
-import "github.com/AVZotov/draft-survey/web/components"
+import (
+	"github.com/AVZotov/draft-survey/internal/types"
+	"github.com/AVZotov/draft-survey/web/components"
+)
 
-var HomePageProps = components.LayoutProps{
-	Title:           "Draft Survey calculator",
-	MetaDescription: "Application to measure cargo weight loaded or discharged from a vessel",
+func DashboardProps(user *types.User, survey *types.Survey) components.LayoutProps {
+	return components.LayoutProps{
+		Title:           "Dashboard",
+		MetaDescription: "Main page of Draft Survey application",
+		ExtraCSS:        []string{"/static/css/dashboard.css"},
+		User:            user,
+		Survey:          survey,
+	}
+}
+
+func NewSurveyProps(user *types.User, survey *types.Survey) components.LayoutProps {
+	return components.LayoutProps{
+		Title:           "New Survey",
+		MetaDescription: "Calculate vessel cargo",
+		ExtraCSS:        []string{"/static/css/new-survey.css"},
+		User:            user,
+		Survey:          survey,
+	}
 }
 
 var ProfilePageProps = components.LayoutProps{
 	Title:           "Surveyor Profile",
 	MetaDescription: "Set up your surveyor profile",
-}
-
-var DashboardPageProps = components.LayoutProps{
-	Title:           "Dashboard",
-	MetaDescription: "Main page of Draft Survey application",
-	ExtraCSS:        []string{"/static/css/dashboard.css"},
 }
 
 var BannerFileCorrupted = components.BannerProps{

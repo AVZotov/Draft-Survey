@@ -9,20 +9,20 @@ const (
 )
 
 type HydrostaticRow struct {
-	Draft        float64
-	Displacement float64
-	TPC          float64
-	LCF          float64
-	LCFDirection LCFDirection
+	Draft        float64      `json:"draft"`
+	Displacement float64      `json:"displacement"`
+	TPC          float64      `json:"tpc"`
+	LCF          float64      `json:"lcf"`
+	LCFDirection LCFDirection `json:"lcf_direction"`
 }
 
 type MTCRow struct {
-	Draft float64
-	MTC   float64
+	Draft float64 `json:"draft"`
+	MTC   float64 `json:"mtc"`
 }
 
 type Hydrostatics struct {
-	Displacement float64
-	TPC          float64
-	LCF          float64
+	Displacement float64 `json:"displacement"`
+	TPC          float64 `json:"tpc"`
+	LCF          float64 `json:"lcf"`
 }

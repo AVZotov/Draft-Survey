@@ -2,12 +2,13 @@ package web
 
 import "github.com/AVZotov/draft-survey/web/layouts"
 import "github.com/AVZotov/draft-survey/web/widgets"
+import "github.com/AVZotov/draft-survey/web/components"
 
-templ NewSurvey() {
-	@layouts.Layout(ProfilePageProps) {
-		@widgets.HeaderUser(ProfilePageProps.User)
-		@widgets.NewSurveyForm()
-		@widgets.NewSurveyActionBar()
+templ NewSurvey(props components.LayoutProps) {
+	@layouts.Layout(props) {
+		@widgets.HeaderUser(props.User)
+		@widgets.NewSurveyForm(props.Survey)
+		@widgets.NewSurveyActionBar(props.Survey)
 		@widgets.Footer()
 	}
 }

@@ -31,7 +31,7 @@ const (
 )
 
 type SeaCondition struct {
-	Type SeaConditionType
-	Wave WaveCondition
-	Ice  IceCondition
+	Type SeaConditionType `json:"type"`
+	Wave WaveCondition    `json:"wave"`
+	Ice  IceCondition     `json:"ice"`
 }

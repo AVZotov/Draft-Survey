@@ -6,6 +6,7 @@ type LayoutProps struct {
 	Title           string
 	MetaDescription string
 	User            *types.User
+	Survey          *types.Survey
 	ExtraCSS        []string
 }
 

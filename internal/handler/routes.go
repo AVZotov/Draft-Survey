@@ -7,10 +7,9 @@ func SetupRoutes(app *fiber.App, h *Handler) {
 
 	app.Get("/", h.home)
 	app.Get("/profile", h.profile)
+	app.Get("/survey/new", h.newSurvey)
 
 	api := app.Group("/api/v1")
 	api.Post("/profile", h.createProfile)
-	//api.Post("newdraft", h.newDraft)
-
-	// api.Put("/profile", h.UpdateProfile)
+	api.Post("/survey", h.createSurvey)
 }

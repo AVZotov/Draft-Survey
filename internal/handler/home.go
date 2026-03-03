@@ -11,9 +11,9 @@ import (
 
 func (h *Handler) home(c *fiber.Ctx) error {
 	user, err := h.userRepository.Get()
+	props := web.DashboardProps(user, nil)
 	if err == nil {
-		web.DashboardPageProps.User = user
-		component := web.Dashboard(web.DashboardPageProps)
+		component := web.Dashboard(props)
 		return tadaptor.Render(c, component)
 	}
 
