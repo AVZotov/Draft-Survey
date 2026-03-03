@@ -72,7 +72,7 @@
     border-right: 1px solid var(--border);
 }
 
-.operation-toggle input[type="radio"]:checked + label {
+.operation-toggle input[type="radio"]:checked+label {
     background: var(--accent);
     color: #fff;
 }
@@ -113,7 +113,7 @@
     background: var(--surface);
 }
 
-.method-option input:checked + label {
+.method-option input:checked+label {
     border-color: var(--accent);
     background: var(--accent-light);
 }
@@ -124,7 +124,7 @@
     color: var(--text-primary);
 }
 
-.method-option input:checked + label .method-label-title {
+.method-option input:checked+label .method-label-title {
     color: var(--accent);
 }
 
@@ -216,11 +216,11 @@
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
-.sea-toggle-label input:checked + .sea-toggle-pill {
+.sea-toggle-label input:checked+.sea-toggle-pill {
     background: var(--accent);
 }
 
-.sea-toggle-label input:checked + .sea-toggle-pill .sea-toggle-dot {
+.sea-toggle-label input:checked+.sea-toggle-pill .sea-toggle-dot {
     transform: translateX(12px);
 }
 
@@ -310,4 +310,14 @@
 
 .sea-badge.rough .sea-badge-dot {
     background: #DC2626;
+}
+
+.sea-badge.ice-active {
+    color: #0369A1;
+    border-color: #BAE6FD;
+    background: #F0F9FF;
+}
+
+.sea-badge.ice-active .sea-badge-dot {
+    background: #0369A1;
 }

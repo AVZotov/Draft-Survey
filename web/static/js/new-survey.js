@@ -1,26 +1,33 @@
 function toggleSeaGroup(group) {
-    const checkbox = document.getElementById(group + '-enabled');
-    const selects = document.getElementById(group + '-group');
-    const select = document.getElementById(group === 'wave' ? 'sea-condition' : 'ice-condition');
+    const other = group === 'wave' ? 'ice' : 'wave';
 
-    if (checkbox.checked) {
-        selects.classList.remove('sea-selects--disabled');
-        select.disabled = false;
-        if (group === 'wave') updateSeaBadge();
-        if (group === 'ice') updateIceBadge();
-    } else {
-        selects.classList.add('sea-selects--disabled');
-        select.disabled = true;
-    }
+    // switch on selected
+    document.getElementById(group + '-group').classList.remove('sea-selects--disabled');
+    document.getElementById(group === 'wave' ? 'sea-condition' : 'ice-condition').disabled = false;
+
+    // switch on other
+    document.getElementById(other + '-group').classList.add('sea-selects--disabled');
+    document.getElementById(other === 'wave' ? 'sea-condition' : 'ice-condition').disabled = true;
+
+    // update badge
+    if (group === 'wave') updateSeaBadge();
+    else updateIceBadge();
 }
 
 function updateSeaBadge() {
-    const map = {
+    const labelMap = {
         "< 0.1m": "Calm",
         "0.1-0.5m": "Smooth",
         "0.5-1.25m": "Slight",
         "1.25-2.5m": "Moderate",
         "2.5-4.0m": "Rough"
+    };
+    const classMap = {
+        "< 0.1m": "calm",
+        "0.1-0.5m": "smooth",
+        "0.5-1.25m": "slight",
+        "1.25-2.5m": "moderate",
+        "2.5-4.0m": "rough"
     };
     const sel = document.getElementById('sea-condition');
     const badge = document.getElementById('sea-badge');
@@ -29,8 +36,8 @@ function updateSeaBadge() {
     const dot = document.createElement('span');
     dot.className = 'sea-badge-dot';
     badge.appendChild(dot);
-    badge.appendChild(document.createTextNode(map[val] || '—'));
-    badge.className = 'sea-badge ' + (val || '');
+    badge.appendChild(document.createTextNode(labelMap[val] || '—'));
+    badge.className = 'sea-badge ' + (classMap[val] || '');
 }
 
 function updateIceBadge() {
@@ -42,7 +49,7 @@ function updateIceBadge() {
     dot.className = 'sea-badge-dot';
     badge.appendChild(dot);
     badge.appendChild(document.createTextNode(val || '—'));
-    badge.className = 'sea-badge';
+    badge.className = 'sea-badge ice-active';
 }
 
 // ── Sidebar active on scroll ──────────────────────────────────
