@@ -26,6 +26,17 @@ func NewSurveyProps(user *types.User, survey *types.Survey) components.LayoutPro
 	}
 }
 
+func DraftReadingsProps(user *types.User, survey *types.Survey) components.LayoutProps {
+	return components.LayoutProps{
+		Title:           "Drafts Reading",
+		MetaDescription: "Get vessel's draft marks",
+		ExtraCSS:        []string{"/static/css/draft-readings.css"},
+		ExtraJS:         []string{"/static/js/draft-readings.js"},
+		User:            user,
+		Survey:          survey,
+	}
+}
+
 var ProfilePageProps = components.LayoutProps{
 	Title:           "Surveyor Profile",
 	MetaDescription: "Set up your surveyor profile",
