@@ -53,7 +53,7 @@ func DraftReadings(props components.LayoutProps) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = widgets.DraftsForm(props.Survey).Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = widgets.DraftForm(props.Survey).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -61,7 +61,7 @@ func DraftReadings(props components.LayoutProps) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = widgets.DraftsActionBar(props.Survey).Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = widgets.DraftActionBar(props.Survey).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

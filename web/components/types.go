@@ -15,6 +15,12 @@ type Version struct {
 	Version string
 }
 
+type DraftBlockProps struct {
+	Draft  types.Draft
+	Index  int
+	Prefix string
+}
+
 type BannerType string
 
 const (

@@ -1,0 +1,283 @@
+package widgets
+
+import (
+	"fmt"
+	"github.com/AVZotov/draft-survey/internal/types"
+	"github.com/AVZotov/draft-survey/web/components"
+)
+
+script calcDraft(prefix string) {
+	calc(prefix)
+}
+
+script toggleSeaGroupDraft(seaType string, prefix string) {
+	toggleSeaGroup(seaType, prefix)
+}
+
+templ DraftBlock(props components.DraftBlockProps) {
+	<div
+		class={ templ.Classes(
+        "draft-block",
+        templ.KV("draft-block--ini", props.Draft.Type == types.DraftTypeInitial),
+        templ.KV("draft-block--fin", props.Draft.Type == types.DraftTypeFinal),
+        templ.KV("draft-block--mid", props.Draft.Type == types.DraftTypeIntermediate),
+    ) }
+	>
+		<div class="block-header">
+			<div class="block-label">
+				<span class="block-dot"></span>
+				{ draftTitle(props) }
+			</div>
+		</div>
+		<!-- ══════════════ DRAFT BLOCK══════════════════════════════ -->
+		<!-- Sea Condition bar -->
+		<div class="sea-bar">
+			<!-- Wave toggle -->
+			<div class="sea-toggle-group">
+				<label class="sea-toggle-label">
+					<input
+						type="radio"
+						name={ props.Prefix + "_sea_type" }
+						id={ props.Prefix + "-wave-enabled" }
+						value="wave"
+						checked?={ props.Draft.SeaCondition.Type != "ice" }
+						onchange={ toggleSeaGroupDraft("wave", props.Prefix) }
+					/>
+					<span class="sea-toggle-pill">
+						<span class="sea-toggle-dot"></span>
+					</span>
+					Wave
+				</label>
+				<div class={ templ.Classes("sea-selects", templ.KV("sea-selects--disabled", props.Draft.SeaCondition.Type == types.SeaConditionTypeIce)) } id={ props.Prefix + "-wave-group" }>
+					<div class="sea-select-wrap">
+						<select class="sea-sel" id={ props.Prefix + "-sea-condition" } name="sea_condition" onchange="updateSeaBadge()">
+							<option value="&lt; 0.1m" selected?={ props.Draft.SeaCondition.Wave == "< 0.1m" }>Calm — &lt; 0.1m</option>
+							<option value="0.1-0.5m" selected?={ props.Draft.SeaCondition.Wave == "0.1-0.5m" }>Smooth — 0.1–0.5m</option>
+							<option value="0.5-1.25m" selected?={ props.Draft.SeaCondition.Wave == "0.5-1.25m" }>Slight — 0.5–1.25m</option>
+							<option value="1.25-2.5m" selected?={ props.Draft.SeaCondition.Wave == "1.25-2.5m" }>Moderate — 1.25–2.5m</option>
+							<option value="2.5-4.0m" selected?={ props.Draft.SeaCondition.Wave == "2.5-4.0m" }>Rough — 2.5–4.0m</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<!-- <label class="sea-bar-label">&#8592; Sea Condition &#8594;</label> -->
+			<!-- Ice toggle -->
+			<div class="sea-toggle-group">
+				<label class="sea-toggle-label">
+					<input
+						type="radio"
+						name={ props.Prefix + "_sea_type" }
+						id={ props.Prefix + "-ice-enabled" }
+						value="ice"
+						checked?={ props.Draft.SeaCondition.Type == "ice" }
+						onchange={ toggleSeaGroupDraft("ice", props.Prefix) }
+					/>
+					<span class="sea-toggle-pill">
+						<span class="sea-toggle-dot"></span>
+					</span>
+					Ice
+				</label>
+				<div class={ templ.Classes("sea-selects", templ.KV("sea-selects--disabled", props.Draft.SeaCondition.Type != types.SeaConditionTypeIce)) } id={ props.Prefix + "-ice-group" }>
+					<div class="sea-select-wrap">
+						<select
+							class="sea-sel"
+							id={ props.Prefix + "-ice-condition" }
+							name="ice_condition"
+							disabled?={ props.Draft.SeaCondition.Type != types.SeaConditionTypeIce }
+							onchange="updateIceBadge()"
+						>
+							<option value="&lt;0.05m around" selected?={ props.Draft.SeaCondition.Ice == "<0.05m around" }>&lt; 0.05m around</option>
+							<option value="0.05-0.1m around" selected?={ props.Draft.SeaCondition.Ice == "0.05-0.1m around" }>0.05–0.1m around</option>
+							<option value="0.1-0.15m around" selected?={ props.Draft.SeaCondition.Ice == "0.1-0.15m around" }>0.1–0.15m around</option>
+							<option value="0.15-0.2m around" selected?={ props.Draft.SeaCondition.Ice == "0.15-0.2m around" }>0.15–0.2m around</option>
+							<option value="0.2-0.3m around" selected?={ props.Draft.SeaCondition.Ice == "0.2-0.3m around" }>0.2–0.3m around</option>
+							<option value="0.3-0.4m around" selected?={ props.Draft.SeaCondition.Ice == "0.3-0.4m around" }>0.3–0.4m around</option>
+							<option value="0.4-0.6m around" selected?={ props.Draft.SeaCondition.Ice == "0.4-0.6m around" }>0.4–0.6m around</option>
+							<option value="&gt;0.6m around" selected?={ props.Draft.SeaCondition.Ice == "&gt;0.6m around" }>&gt; 0.6m around</option>
+						</select>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Port | Vessel | Stbd -->
+		<div class="readings-area">
+			<div class="col-port">
+				<div class="side-label"><span class="side-dot port-dot"></span>Port (P)</div>
+				<div class="dr-row">
+					<span class="dr-lbl">Fwd P</span>
+					<input class="di" type="number" id={ props.Prefix + "-fp" } placeholder="0.000" step="any" oninput={ calcDraft(props.Prefix) }/>
+					<span class="di-badge">Dir</span>
+				</div>
+				<div class="dr-row">
+					<span class="dr-lbl">Mid P</span>
+					<input class="di" type="number" id={ props.Prefix + "-mp" } placeholder="0.000" step="any" oninput={ calcDraft(props.Prefix) }/>
+					<span class="di-badge">Dir</span>
+				</div>
+				<div class="dr-row" style="margin-bottom:0">
+					<span class="dr-lbl">Aft P</span>
+					<input class="di" type="number" id={ props.Prefix + "-ap" } placeholder="0.000" step="any" oninput={ calcDraft(props.Prefix) }/>
+					<span class="di-badge">Dir</span>
+				</div>
+			</div>
+			<div class="col-vessel">
+				<svg class="vessel-svg" viewBox="0 0 260 185" xmlns="http://www.w3.org/2000/svg">
+					<path
+						d="M16 142 L16 55 Q16 46 26 46 L196 46 Q242 46 252 73 L252 142 Z"
+						fill="none"
+						stroke="#3D5159"
+						stroke-width="2"
+					></path>
+					<line x1="12" y1="137" x2="256" y2="137" stroke="#2563EB" stroke-width="1" stroke-dasharray="4,3" opacity="0.35"></line>
+					<!-- Perps -->
+					<line x1="26" y1="41" x2="26" y2="147" stroke="#9CA3AF" stroke-width="1" stroke-dasharray="3,2"></line>
+					<line x1="134" y1="41" x2="134" y2="147" stroke="#9CA3AF" stroke-width="1" stroke-dasharray="3,2"></line>
+					<line x1="240" y1="41" x2="240" y2="147" stroke="#9CA3AF" stroke-width="1" stroke-dasharray="3,2"></line>
+					<text x="26" y="156" text-anchor="middle" font-family="IBM Plex Mono" font-size="7" fill="#9CA3AF">AFT PP</text>
+					<text x="134" y="156" text-anchor="middle" font-family="IBM Plex Mono" font-size="7" fill="#9CA3AF">MID</text>
+					<text x="240" y="156" text-anchor="middle" font-family="IBM Plex Mono" font-size="7" fill="#9CA3AF">FWD PP</text>
+					<text x="134" y="170" text-anchor="middle" font-family="IBM Plex Mono" font-size="7" fill="#9CA3AF">LBP 182 m</text>
+					<!-- corrected wKeel inside hull -->
+					<text id={ props.Prefix + "-sv-aft" } x="26" y="96" class="hull-val">—</text>
+					<text id={ props.Prefix + "-sv-mid" } x="134" y="96" class="hull-val">—</text>
+					<text id={ props.Prefix + "-sv-fwd" } x="240" y="96" class="hull-val">—</text>
+					<!-- trim line -->
+					<polyline
+						id={ props.Prefix + "-trl" }
+						points="26,115 134,115 240,115"
+						fill="none"
+						stroke="#2563EB"
+						stroke-width="2"
+						stroke-linecap="round"
+					></polyline>
+				</svg>
+				<div class="defl-warn" id={ props.Prefix + "-defl" }></div>
+				<div class="vessel-status">
+					<div class="vs-line" id={ props.Prefix + "-lst" }>Upright</div>
+					<div class="vs-line" id={ props.Prefix + "-trm" } style="margin-top:1px"></div>
+				</div>
+			</div>
+			<div class="col-stbd">
+				<div class="side-label"><span class="side-dot stbd-dot"></span>Starboard (S)</div>
+				<div class="dr-row">
+					<span class="dr-lbl">Fwd S</span>
+					<input class="di" type="number" id={ props.Prefix + "-fs" } placeholder="0.000" step="any" oninput={ calcDraft(props.Prefix) }/>
+					<span class="di-badge">Dir</span>
+				</div>
+				<div class="dr-row">
+					<span class="dr-lbl">Mid S</span>
+					<input class="di" type="number" id={ props.Prefix + "-ms" } placeholder="0.000" step="any" oninput={ calcDraft(props.Prefix) }/>
+					<span class="di-badge">Dir</span>
+				</div>
+				<div class="dr-row" style="margin-bottom:0">
+					<span class="dr-lbl">Aft S</span>
+					<input class="di" type="number" id={ props.Prefix + "-as" } placeholder="0.000" step="any" oninput={ calcDraft(props.Prefix) }/>
+					<span class="di-badge">Dir</span>
+				</div>
+			</div>
+		</div><!-- /readings-area -->
+		<!-- PP distances + Keel -->
+		<div class="pp-keel-bar">
+			<div class="pp-group">
+				<div class="pp-group-title">Fwd — distances &amp; keel</div>
+				<div class="pp-fields">
+					<input class="ppi" type="number" id={ props.Prefix + "-dfwd" } placeholder="dFwd, m" step="any" oninput={ calcDraft(props.Prefix) }/>
+					<select class="dir-sel" id={ props.Prefix + "-dfwd-dir" } onchange={ calcDraft(props.Prefix) }><option>A</option><option>F</option></select>
+					<span class="pp-unit">A/F</span>
+				</div>
+				<div class="keel-fields">
+					<input class="ppi" type="number" id={ props.Prefix + "-fk" } placeholder="Fk, mm" step="any" oninput={ calcDraft(props.Prefix) }/>
+					<span class="pp-unit">mm keel</span>
+				</div>
+			</div>
+			<div class="pp-group">
+				<div class="pp-group-title">Mid — distances &amp; keel</div>
+				<div class="pp-fields">
+					<input class="ppi" type="number" id={ props.Prefix + "-dmid" } placeholder="dMid, m" step="any" oninput={ calcDraft(props.Prefix) }/>
+					<select class="dir-sel" id={ props.Prefix + "-dmid-dir" } onchange={ calcDraft(props.Prefix) }><option>A</option><option>F</option></select>
+					<span class="pp-unit">A/F</span>
+				</div>
+				<div class="keel-fields">
+					<input class="ppi" type="number" id={ props.Prefix + "-mk" } placeholder="Mk, mm" step="any" oninput={ calcDraft(props.Prefix) }/>
+					<span class="pp-unit">mm keel</span>
+				</div>
+			</div>
+			<div class="pp-group">
+				<div class="pp-group-title">Aft — distances &amp; keel</div>
+				<div class="pp-fields">
+					<input class="ppi" type="number" id={ props.Prefix + "-daft" } placeholder="dAft, m" step="any" oninput={ calcDraft(props.Prefix) }/>
+					<select class="dir-sel" id={ props.Prefix + "-daft-dir" } onchange={ calcDraft(props.Prefix) }><option>F</option><option>A</option></select>
+					<span class="pp-unit">A/F</span>
+				</div>
+				<div class="keel-fields">
+					<input class="ppi" type="number" id={ props.Prefix + "-ak" } placeholder="Ak, mm" step="any" oninput={ calcDraft(props.Prefix) }/>
+					<span class="pp-unit">mm keel</span>
+				</div>
+			</div>
+		</div>
+		<!-- Calculated panel -->
+		<div class="calc-panel">
+			<div class="cp-cell"><span class="cp-lbl">mean F&amp;A</span><span class="cp-val" id={ props.Prefix + "-c-mfa" }>—</span></div>
+			<div class="cp-cell"><span class="cp-lbl">MM</span><span class="cp-val" id={ props.Prefix + "-c-mm" }>—</span></div>
+			<div class="cp-cell"><span class="cp-lbl">Obs. Trim</span><span class="cp-val" id={ props.Prefix + "-c-otr" }>—</span></div>
+			<div class="cp-cell"><span class="cp-lbl">True Trim</span><span class="cp-val" id={ props.Prefix + "-c-ttr" }>—</span></div>
+			<div class="cp-cell"><span class="cp-lbl">List</span><span class="cp-val" id={ props.Prefix + "-c-lst" }>—</span></div>
+			<div class="cp-cell cp-cell--mmc">
+				<span class="cp-lbl">MMC</span>
+				<span class="cp-val" id={ props.Prefix + "-c-mmc" }>—</span>
+				<span class="cp-formula">(6M/8) Full LBP</span>
+			</div>
+		</div>
+		<!-- Hydrostatic data -->
+		<div class="hydro-section">
+			<div class="sec-title">
+				<span>Hydrostatic Data</span>
+				<span><span class="sec-title-mmc" id={ props.Prefix + "-hmmc" }>MMC — m</span><span class="sec-title-method">(6M/8) Full LBP</span></span>
+			</div>
+			<table class="hydro-table">
+				<thead><tr><th></th><th>Draft, m</th><th>Displ. (Extreme), MT</th><th>TPC, MT/cm</th><th>LCF / LCA, m</th></tr></thead>
+				<tbody>
+					<tr><td>Upper</td><td><input type="number" placeholder="0.000" step="any"/></td><td><input type="number" placeholder="0.000" step="any"/></td><td><input type="number" placeholder="0.000" step="any"/></td><td><input type="number" placeholder="0.000" step="any"/></td></tr>
+					<tr class="mmc-row"><td>MMC (interp.)</td><td id={ props.Prefix + "-ht-d" }>—</td><td id={ props.Prefix + "-ht-dp" }>—</td><td id={ props.Prefix + "-ht-t" }>—</td><td id={ props.Prefix + "-ht-l" }>—</td></tr>
+					<tr><td>Lower</td><td><input type="number" placeholder="0.000" step="any"/></td><td><input type="number" placeholder="0.000" step="any"/></td><td><input type="number" placeholder="0.000" step="any"/></td><td><input type="number" placeholder="0.000" step="any"/></td></tr>
+				</tbody>
+			</table>
+			<div class="mtc-grid">
+				<div class="mtc-card"><div class="mtc-hdr">MTC +0.5 m</div><div class="mtc-body"><div class="mtc-cell"><label>Draft, m</label><input type="number" placeholder="0.000" step="any"/></div><div class="mtc-cell"><label>MTC, MT/m</label><input type="number" placeholder="0.000" step="any"/></div></div></div>
+				<div class="mtc-card"><div class="mtc-hdr">MTC −0.5 m</div><div class="mtc-body"><div class="mtc-cell"><label>Draft, m</label><input type="number" placeholder="0.000" step="any"/></div><div class="mtc-cell"><label>MTC, MT/m</label><input type="number" placeholder="0.000" step="any"/></div></div><div class="mtc-delta">ΔMTC: —</div></div>
+			</div>
+		</div>
+		<!-- Deductibles -->
+		<div class="deduct-section">
+			<div class="sec-title">Deductibles &amp; Density</div>
+			<div class="density-row">
+				<div class="df"><label>Table Density</label><input type="number" placeholder="1.025" step="any"/></div>
+				<div class="df"><label>Dockwater Density</label><input type="number" placeholder="1.025" step="any"/></div>
+			</div>
+			<div class="deduct-grid">
+				<div class="df"><label>HFO, MT</label><input type="number" placeholder="0.000" step="any"/></div>
+				<div class="df"><label>MDO, MT</label><input type="number" placeholder="0.000" step="any"/></div>
+				<div class="df"><label>Lube Oil, MT</label><input type="number" placeholder="0.000" step="any"/></div>
+				<div class="df"><label>Fresh Water, MT</label><input type="number" placeholder="0.000" step="any"/></div>
+				<div class="df"><label>Ballast Water, MT</label><input type="number" placeholder="0.000" step="any"/></div>
+				<div class="df"><label>Bilge Water, MT</label><input type="number" placeholder="0.000" step="any"/></div>
+				<div class="df"><label>Constant Declared, MT</label><input type="number" placeholder="0.000" step="any"/></div>
+				<div class="df"><label>Others, MT</label><input type="number" placeholder="0.000" step="any"/></div>
+			</div>
+			<a href="#" class="tanks-btn">
+				<svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+				BW / FW Tanks →
+			</a>
+		</div>
+	</div>
+}
+
+func draftTitle(props components.DraftBlockProps) string {
+	switch props.Draft.Type {
+	case types.DraftTypeInitial:
+		return "Initial Draft"
+	case types.DraftTypeFinal:
+		return "Final Draft"
+	default:
+		return fmt.Sprintf("Draft %d", props.Index)
+	}
+}
