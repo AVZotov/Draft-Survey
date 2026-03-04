@@ -125,21 +125,53 @@ Last Updated → 2026-02-23
 
 ---
 
-### 1.6 Web Interface (HTMX)
+### 1.6 Web Interface (HTMX) 🚧 IN PROGRESS
 **Location:** `web/templates/`, `web/static/`
+**Last Updated:** 2026-03-04
+
+**Decisions Made:**
+- Fiber server + HTMX + templ (type-safe HTML templates)
+- IBM Plex Sans/Mono fonts, custom CSS design tokens (no Tailwind)
+- CSS split by page: `styles.css` (global) + page-specific files
+- Repository pattern for storage (UserRepository, SurveyRepository)
+- Manual form parsing via `c.FormValue()` (no BodyParser for nested structs)
+- `components.LayoutProps` — shared props pattern for all pages
+- `ExtraCSS/ExtraJS` in LayoutProps for page-specific assets
+- Draft structure: `[]Draft` slice (ordered, guaranteed) replaces InitialDraft/FinalDraft
+- `DraftType`: initial / intermediate / final
+- `DraftStatus`: pending / active / complete
+- One `DraftBlock` templ component for all draft types (prefix-based IDs)
+- Remove draft only when `Status == pending`, sacred after Start
+
+**Action Bar Logic:**
+- `Initial pending`   → [▶ Start Initial DS]
+- `Initial active`    → [⏹ Finish Initial DS]
+- `Initial complete`  → [+ Add Intermediate] [+ Add Final]
+- `Intermediate active`  → [⏹ Finish Intermediate DS]
+- `Intermediate complete` → [+ Add Intermediate] [+ Add Final]
+- `Final active`      → [⏹ Finish Final DS]
+- `Final complete`    → [✓ Calculate & View Results]
 
 **Tasks:**
-- [ ] Fiber server setup (`cmd/server/main.go`)
-- [ ] HTMX templates for:
-  - Survey list / search
-  - New survey form
-  - Draft readings input
-  - Calculation results display
-  - Report generation trigger
-- [ ] CSS framework decision (Tailwind / PicoCSS / none)
+- [x] Fiber server setup (`cmd/server/main.go`)
+- [x] Profile creation page (`/profile`)
+- [x] Dashboard (`/`)
+- [x] New Survey form (`/survey/new`) with full vessel/cargo/job data
+- [x] Sea condition wave/ice toggle with badges
+- [x] Survey persistence and editing (`/survey/:id`)
+- [x] CreatedAt preservation on survey update
+- [x] Draft Readings page (`/survey/:id/draft`)
+- [x] DraftBlock component (unified Initial/Intermediate/Final)
+- [x] Sea condition toggle in DraftBlock (wave/ice, prefix-based)
+- [ ] Action bar with Start/Finish timestamp buttons
+- [ ] Add Intermediate / Add Final buttons
+- [ ] Draft form name attributes + save handler
+- [ ] SVG vessel diagram (dynamic trim/list visualization)
+- [ ] Calculation integration (connect Phase 1.1 math)
 - [ ] Form validation (client + server side)
+- [ ] Survey list / search page
 
-**Deliverable:** Working UI at `localhost:8080`
+**Deliverable:** Working UI at `localhost:3399`
 
 ---
 
