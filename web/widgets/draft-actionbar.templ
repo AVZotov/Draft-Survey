@@ -16,8 +16,23 @@ templ DraftActionBar(survey *types.Survey) {
 			@draftActionButtons(survey)
 		</div>
 		<div class="ab-btns">
-			<button class="btn btn-ghost"><svg viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v14a2 2 0 0 1-2 2z"></path><path d="M17 21v-8H7v8M7 3v5h8"></path></svg>Save</button>
-			<button class="btn btn-primary">Calculate &amp; View Results<svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></button>
+			<button
+				class="btn btn-ghost"
+				hx-post={ "/api/v1/survey/" + survey.ID + "/draft/save" }
+				hx-include="#draft-form"
+				hx-swap="none"
+			>
+				<svg viewBox="0 0 24 24">
+					<path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v14a2 2 0 0 1-2 2z"></path><path d="M17 21v-8H7v8M7 3v5h8"></path>
+				</svg>
+				Save
+			</button>
+			<button
+				class="btn btn-primary"
+			>
+				Calculate &amp; View Results
+				<svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"></path></svg>
+			</button>
 		</div>
 	</div>
 }
@@ -26,6 +41,7 @@ templ buttonStartDraft(surveyID string, index int) {
 	<button
 		class="btn btn-primary"
 		hx-post={ "/api/v1/survey/" + surveyID + "/draft/" + strconv.Itoa(index) + "/start" }
+		hx-include="#draft-form"
 		hx-swap="none"
 	>
 		▶ Start DS
@@ -37,6 +53,7 @@ templ buttonEndDraft(surveyID string, index int) {
 	<button
 		class="btn btn-primary"
 		hx-post={ "/api/v1/survey/" + surveyID + "/draft/" + strconv.Itoa(index) + "/finish" }
+		hx-include="#draft-form"
 		hx-swap="none"
 	>
 		⏹ Finish DS

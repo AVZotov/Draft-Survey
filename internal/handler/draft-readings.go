@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 	"time"
@@ -54,6 +55,8 @@ func (h *Handler) startDraft(c *fiber.Ctx) error {
 		return err
 	}
 
+	h.parseDraftMarks(c, survey)
+
 	survey.Drafts[index].Status = types.DraftStatusActive
 	survey.Drafts[index].StartedAt = time.Now()
 
@@ -76,6 +79,8 @@ func (h *Handler) finishDraft(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
+
+	h.parseDraftMarks(c, survey)
 
 	survey.Drafts[index].Status = types.DraftStatusComplete
 	survey.Drafts[index].FinishedAt = time.Now()
@@ -126,4 +131,31 @@ func (h *Handler) addFinalDraft(c *fiber.Ctx) error {
 
 	c.Set("HX-Redirect", "/survey/"+id+"/draft")
 	return c.SendStatus(http.StatusOK)
+}
+
+func (h *Handler) saveDraft(c *fiber.Ctx) error {
+	id := c.Params("id")
+	survey, err := h.surveyRepository.Get(id)
+	if err != nil {
+		return err
+	}
+
+	h.parseDraftMarks(c, survey)
+
+	if err = h.surveyRepository.Save(survey); err != nil {
+		return err
+	}
+
+	return c.SendStatus(http.StatusOK)
+}
+
+func (h *Handler) parseDraftMarks(c *fiber.Ctx, survey *types.Survey) {
+	for i := range survey.Drafts {
+		survey.Drafts[i].Marks.FwdPort = types.Mark{Value: parseFloat(c, fmt.Sprintf("fwd_port-d%d", i))}
+		survey.Drafts[i].Marks.MidPort = types.Mark{Value: parseFloat(c, fmt.Sprintf("mid_port-d%d", i))}
+		survey.Drafts[i].Marks.AftPort = types.Mark{Value: parseFloat(c, fmt.Sprintf("aft_port-d%d", i))}
+		survey.Drafts[i].Marks.FwdStarboard = types.Mark{Value: parseFloat(c, fmt.Sprintf("fwd_stbd-d%d", i))}
+		survey.Drafts[i].Marks.MidStarboard = types.Mark{Value: parseFloat(c, fmt.Sprintf("mid_stbd-d%d", i))}
+		survey.Drafts[i].Marks.AftStarboard = types.Mark{Value: parseFloat(c, fmt.Sprintf("aft_stbd-d%d", i))}
+	}
 }

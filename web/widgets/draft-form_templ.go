@@ -35,14 +35,14 @@ func DraftForm(survey *types.Survey) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<main class=\"page-main__drafts\"><div class=\"drafts-wrap\"><div class=\"page-top__drafts\"><a href=\"#\" class=\"back-link\"><svg viewBox=\"0 0 24 24\"><path d=\"M19 12H5M12 19l-7-7 7-7\"></path></svg> Back to Survey Data</a><h1 class=\"page-title\">Draft Readings</h1><p class=\"page-meta\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<main class=\"page-main__drafts\"><form id=\"draft-form\"><div class=\"drafts-wrap\"><div class=\"page-top__drafts\"><a href=\"#\" class=\"back-link\"><svg viewBox=\"0 0 24 24\"><path d=\"M19 12H5M12 19l-7-7 7-7\"></path></svg> Back to Survey Data</a><h1 class=\"page-title\">Draft Readings</h1><p class=\"page-meta\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var2 string
 		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(survey.VesselData.Name)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/draft-form.templ`, Line: 18, Col: 49}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/draft-form.templ`, Line: 19, Col: 50}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
@@ -55,7 +55,7 @@ func DraftForm(survey *types.Survey) templ.Component {
 		var templ_7745c5c3_Var3 string
 		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(survey.VesselData.IMO)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/draft-form.templ`, Line: 18, Col: 82}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/draft-form.templ`, Line: 19, Col: 83}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 		if templ_7745c5c3_Err != nil {
@@ -68,7 +68,7 @@ func DraftForm(survey *types.Survey) templ.Component {
 		var templ_7745c5c3_Var4 string
 		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(survey.CargoOperation.Operation)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/draft-form.templ`, Line: 18, Col: 121}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/draft-form.templ`, Line: 19, Col: 122}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 		if templ_7745c5c3_Err != nil {
@@ -81,7 +81,7 @@ func DraftForm(survey *types.Survey) templ.Component {
 		var templ_7745c5c3_Var5 string
 		templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(survey.CargoOperation.PlaceOfInspection)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/draft-form.templ`, Line: 18, Col: 168}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/draft-form.templ`, Line: 19, Col: 169}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 		if templ_7745c5c3_Err != nil {
@@ -100,7 +100,7 @@ func DraftForm(survey *types.Survey) templ.Component {
 				var templ_7745c5c3_Var6 string
 				templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(draftDividerLabel(i, len(survey.Drafts)))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/draft-form.templ`, Line: 24, Col: 75}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/draft-form.templ`, Line: 25, Col: 76}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 				if templ_7745c5c3_Err != nil {
@@ -117,14 +117,14 @@ func DraftForm(survey *types.Survey) templ.Component {
 			}
 			templ_7745c5c3_Err = DraftBlock(components.DraftBlockProps{
 				Draft:  draft,
-				Index:  i + 1,
+				Index:  i,
 				Prefix: draftPrefix(i, len(survey.Drafts)),
 			}).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "</div></main>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "</div></form></main>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

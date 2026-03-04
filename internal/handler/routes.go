@@ -18,4 +18,5 @@ func SetupRoutes(app *fiber.App, h *Handler) {
 	api.Post("/survey/:id/draft/:index/finish", h.finishDraft)
 	api.Post("/survey/:id/draft/add-intermediate", h.addIntermediateDraft)
 	api.Post("/survey/:id/draft/add-final", h.addFinalDraft)
+	api.Post("/survey/:id/draft/save", h.saveDraft)
 }
