@@ -24,38 +24,6 @@ type DraftsWKeel struct {
 	AftDraftWKeel float64 `json:"aft_draft_w_keel"`
 }
 
-type InitialDraft struct {
-	BallastWaterTanks []BallastWaterTank `json:"ballast_water_tanks"`
-	FreshWaterTanks   []FreshWaterTank   `json:"fresh_water_tanks"`
-	Deductibles       Deductibles        `json:"deductibles"`
-	Marks             Marks              `json:"marks"`
-	ConstantDeclared  float64            `json:"constant_declared"`
-	Density           float64            `json:"density"`
-	StartedAt         time.Time          `json:"started_at"`
-	FinishedAt        time.Time          `json:"finished_at"`
-	MTCRows           []MTCRow           `json:"mtc_rows"`
-	HydrostaticRows   []HydrostaticRow   `json:"hydrostatic_rows"`
-	TPCListPort       float64            `json:"tpc_list_port"`
-	TPCListStarboard  float64            `json:"tpc_list_starboard"`
-	SeaCondition      SeaCondition       `json:"sea_condition"`
-}
-
-type FinalDraft struct {
-	BallastWaterTanks []BallastWaterTank `json:"ballast_water_tanks"`
-	FreshWaterTanks   []FreshWaterTank   `json:"fresh_water_tanks"`
-	Deductibles       Deductibles        `json:"deductibles"`
-	Marks             Marks              `json:"marks"`
-	CargoDeclared     float64            `json:"cargo_declared"`
-	Density           float64            `json:"density"`
-	StartedAt         time.Time          `json:"started_at"`
-	FinishedAt        time.Time          `json:"finished_at"`
-	MTCRows           []MTCRow           `json:"mtc_rows"`
-	HydrostaticRows   []HydrostaticRow   `json:"hydrostatic_rows"`
-	TPCListPort       float64            `json:"tpc_list_port"`
-	TPCListStarboard  float64            `json:"tpc_list_starboard"`
-	SeaCondition      SeaCondition       `json:"sea_condition"`
-}
-
 type Job struct {
 	JobNumber string `json:"job_number"`
 	DSNumber  int    `json:"ds_number"`
@@ -78,13 +46,38 @@ const (
 	SurveyStatusComplete   SurveyStatus = "complete"
 )
 
+type DraftType string
+
+const (
+	DraftTypeInitial      DraftType = "initial"
+	DraftTypeIntermediate DraftType = "intermediate"
+	DraftTypeFinal        DraftType = "final"
+)
+
+type Draft struct {
+	Type              DraftType          `json:"type"`
+	SeaCondition      SeaCondition       `json:"sea_condition"`
+	Marks             Marks              `json:"marks"`
+	Deductibles       Deductibles        `json:"deductibles"`
+	BallastWaterTanks []BallastWaterTank `json:"ballast_water_tanks"`
+	FreshWaterTanks   []FreshWaterTank   `json:"fresh_water_tanks"`
+	Density           float64            `json:"density"`
+	ConstantDeclared  float64            `json:"constant_declared"`
+	CargoDeclared     float64            `json:"cargo_declared"`
+	MTCRows           []MTCRow           `json:"mtc_rows"`
+	HydrostaticRows   []HydrostaticRow   `json:"hydrostatic_rows"`
+	TPCListPort       float64            `json:"tpc_list_port"`
+	TPCListStarboard  float64            `json:"tpc_list_starboard"`
+	StartedAt         time.Time          `json:"started_at"`
+	FinishedAt        time.Time          `json:"finished_at"`
+}
+
 type Survey struct {
 	Surveyor       User              `json:"surveyor"`
 	Status         SurveyStatus      `json:"status"`
 	ID             string            `json:"id"`
 	CreatedAt      time.Time         `json:"created_at"`
-	InitialDraft   InitialDraft      `json:"initial_draft"`
-	FinalDraft     FinalDraft        `json:"final_draft"`
+	Drafts         []Draft           `json:"drafts"`
 	Job            Job               `json:"job"`
 	CargoOperation CargoOperation    `json:"cargo_operation"`
 	VesselData     vessel.VesselData `json:"vessel_data"`
