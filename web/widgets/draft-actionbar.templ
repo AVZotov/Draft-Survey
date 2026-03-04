@@ -12,20 +12,70 @@ templ DraftActionBar(survey *types.Survey) {
 			<span class="ab-meta">IMO { survey.VesselData.IMO } · Loading · { survey.CargoOperation.PlaceOfInspection } · { time.Now().Format("Mon, 02 Jan 2006") } </span>
 		</div>
 		<div class="ab-btns">
+			@draftActionButtons(survey)
+		</div>
+		<div class="ab-btns">
 			<button class="btn btn-ghost"><svg viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v14a2 2 0 0 1-2 2z"></path><path d="M17 21v-8H7v8M7 3v5h8"></path></svg>Save</button>
 			<button class="btn btn-primary">Calculate &amp; View Results<svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></button>
 		</div>
 	</div>
 }
 
+templ buttonStartDraft() {
+	<button
+		class="btn btn-primary"
+	>
+		▶ Start DS
+		<svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"></path></svg>
+	</button>
+}
+
+templ buttonEndDraft() {
+	<button
+		class="btn btn-primary"
+	>
+		⏹ Finish DS
+		<svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"></path></svg>
+	</button>
+}
+
+templ buttonAddIntermediate() {
+	<button
+		class="btn btn-primary"
+	>
+		+ Add Intermediate
+		<svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"></path></svg>
+	</button>
+}
+
+templ buttonAddFinal() {
+	<button
+		class="btn btn-primary"
+	>
+		+ Add Final
+		<svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"></path></svg>
+	</button>
+}
+
 func nextDraftAction(survey *types.Survey) string {
-	for _, d := range survey.Drafts {
-		if d.Status == types.DraftStatusPending {
-			return "start"
-		}
-		if d.Status == types.DraftStatusActive {
-			return "finish"
-		}
+	if survey.Drafts[len(survey.Drafts)-1].Status == types.DraftStatusPending {
+		return "start"
 	}
-	return "add" // все complete — показать кнопки Add
+
+	if survey.Drafts[len(survey.Drafts)-1].Status == types.DraftStatusActive {
+		return "finish"
+	}
+	return "add"
+}
+
+templ draftActionButtons(survey *types.Survey) {
+	switch nextDraftAction(survey) {
+		case "start":
+			@buttonStartDraft()
+		case "finish":
+			@buttonEndDraft()
+		case "add":
+			@buttonAddIntermediate()
+			@buttonAddFinal()
+	}
 }

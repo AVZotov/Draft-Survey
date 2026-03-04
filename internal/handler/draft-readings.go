@@ -21,7 +21,10 @@ func (h *Handler) draftReadings(c *fiber.Ctx) error {
 	survey.Status = types.SurveyStatusInProgress
 
 	drafts := []types.Draft{
-		{Type: types.DraftTypeInitial},
+		{
+			Type:   types.DraftTypeInitial,
+			Status: types.DraftStatusPending,
+		},
 	}
 
 	if survey.Drafts == nil {
