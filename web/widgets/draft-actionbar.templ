@@ -2,6 +2,7 @@ package widgets
 
 import (
 	"github.com/AVZotov/draft-survey/internal/types"
+	"strconv"
 	"time"
 )
 
@@ -21,18 +22,22 @@ templ DraftActionBar(survey *types.Survey) {
 	</div>
 }
 
-templ buttonStartDraft() {
+templ buttonStartDraft(surveyID string, index int) {
 	<button
 		class="btn btn-primary"
+		hx-post={ "/api/v1/survey/" + surveyID + "/draft/" + strconv.Itoa(index) + "/start" }
+		hx-swap="none"
 	>
 		▶ Start DS
 		<svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"></path></svg>
 	</button>
 }
 
-templ buttonEndDraft() {
+templ buttonEndDraft(surveyID string, index int) {
 	<button
 		class="btn btn-primary"
+		hx-post={ "/api/v1/survey/" + surveyID + "/draft/" + strconv.Itoa(index) + "/finish" }
+		hx-swap="none"
 	>
 		⏹ Finish DS
 		<svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"></path></svg>
@@ -71,9 +76,9 @@ func nextDraftAction(survey *types.Survey) string {
 templ draftActionButtons(survey *types.Survey) {
 	switch nextDraftAction(survey) {
 		case "start":
-			@buttonStartDraft()
+			@buttonStartDraft(survey.ID, len(survey.Drafts)-1)
 		case "finish":
-			@buttonEndDraft()
+			@buttonEndDraft(survey.ID, len(survey.Drafts)-1)
 		case "add":
 			@buttonAddIntermediate()
 			@buttonAddFinal()

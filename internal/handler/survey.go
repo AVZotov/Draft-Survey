@@ -75,7 +75,10 @@ func (h *Handler) getNewSurvey(c *fiber.Ctx) (*types.Survey, error) {
 	createdAt := time.Now()
 	if v := c.FormValue("created_at"); v != "" {
 		if t, err := time.Parse(time.RFC3339, v); err == nil {
-			createdAt = t
+			if !t.IsZero() {
+				createdAt = t
+			}
+
 		}
 	}
 
