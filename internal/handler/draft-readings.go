@@ -22,7 +22,6 @@ func (h *Handler) draftReadings(c *fiber.Ctx) error {
 
 	drafts := []types.Draft{
 		{Type: types.DraftTypeInitial},
-		{Type: types.DraftTypeFinal},
 	}
 
 	if survey.Drafts == nil {
