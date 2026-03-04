@@ -1,130 +1,31 @@
 package widgets
 
-import "github.com/AVZotov/draft-survey/internal/types"
+import (
+	"github.com/AVZotov/draft-survey/internal/types"
+	"time"
+)
 
 templ DraftActionBar(survey *types.Survey) {
 	<div class="action-bar">
 		<div class="ab-info">
-			<span class="ab-vessel">OCEAN CHEERS</span>
-			<span class="ab-meta">IMO 9233387 · Loading · Vanino, Russia · 16–17 Feb 2026</span>
+			<span class="ab-vessel">{ survey.VesselData.Name }</span>
+			<span class="ab-meta">IMO { survey.VesselData.IMO } · Loading · { survey.CargoOperation.PlaceOfInspection } · { time.Now().Format("Mon, 02 Jan 2006") } </span>
 		</div>
 		<div class="ab-btns">
 			<button class="btn btn-ghost"><svg viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v14a2 2 0 0 1-2 2z"></path><path d="M17 21v-8H7v8M7 3v5h8"></path></svg>Save</button>
 			<button class="btn btn-primary">Calculate &amp; View Results<svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></button>
 		</div>
 	</div>
-	<script>
-const SUMMER = 12.022, BREADTH = 32.26;
-
-const SEA_MAP = {
-  calm:     { label: 'Calm',     cls: 'calm'     },
-  smooth:   { label: 'Smooth',   cls: 'smooth'   },
-  slight:   { label: 'Slight',   cls: 'slight'   },
-  moderate: { label: 'Moderate', cls: 'moderate' },
-  rough:    { label: 'Rough',    cls: 'rough'    },
-};
-
-function updateSeaBadge(p, pos) {
-  const sel = document.getElementById(p+'-sea-'+pos);
-  const badge = document.getElementById(p+'-sea-'+pos+'-badge');
-  if (!sel || !badge) return;
-  const v = sel.value;
-  const info = SEA_MAP[v] || SEA_MAP.calm;
-  badge.className = 'sea-badge ' + info.cls;
-  badge.innerHTML = '<span class="sea-badge-dot"></span>' + info.label;
 }
 
-function g(id) { const v = parseFloat(document.getElementById(id)?.value); return isNaN(v) ? null : v; }
-
-function calc(p) {
-  const fp=g(p+'-fp'), mp=g(p+'-mp'), ap=g(p+'-ap');
-  const fs=g(p+'-fs'), ms=g(p+'-ms'), as_=g(p+'-as');
-
-  // Summer draft check
-  [p+'-fp',p+'-mp',p+'-ap',p+'-fs',p+'-ms',p+'-as'].forEach(id => {
-    const el = document.getElementById(id); if (!el) return;
-    el.classList.toggle('over-summer', !isNaN(parseFloat(el.value)) && parseFloat(el.value) > SUMMER);
-  });
-
-  const mF = fp!==null && fs!==null ? (fp+fs)/2 : null;
-  const mM = mp!==null && ms!==null ? (mp+ms)/2 : null;
-  const mA = ap!==null && as_!==null ? (ap+as_)/2 : null;
-
-  const mmc = mF!==null && mM!==null && mA!==null ? (mF+6*mM+mA)/8 : null;
-  const mfa = mF!==null && mA!==null ? (mF+mA)/2 : null;
-  const oTrim = mA!==null && mF!==null ? mA-mF : null;
-
-  // List
-  let listDeg=null, lstTxt='Upright', lstCls='';
-  if (mp!==null && ms!==null) {
-    listDeg = Math.atan(Math.abs(mp-ms)/BREADTH)*180/Math.PI;
-    if (Math.abs(mp-ms)<0.001) { lstTxt='Upright'; lstCls=''; }
-    else if (listDeg<=0.5) { lstTxt=listDeg.toFixed(3)+'° '+(mp>ms?'Port':'Stbd')+'. List corr. to be applied.'; lstCls='warn'; }
-    else { lstTxt=listDeg.toFixed(3)+'° '+(mp>ms?'Port':'Stbd')+'. LOP to be issued.'; lstCls='lop'; }
-  }
-
-  // Deflection + draft checks
-  let deflTxt='', deflCls='';
-  if (mF!==null && mM!==null && mA!==null) {
-    const dc=(mM-(mF+mA)/2)*100;
-    if (Math.abs(dc)>0.5) { deflTxt=(dc>0?'Hogging ':'Sagging ')+Math.abs(dc).toFixed(1)+' cm'; deflCls=Math.abs(dc)>30?'show critical':'show'; }
-  }
-  const k=0.05; let cP=false, cS=false;
-  if (fp!==null&&mp!==null&&ap!==null) cP=Math.abs(((fp+ap)/2)-mp)>((fp+mp+ap)/3*k);
-  if (fs!==null&&ms!==null&&as_!==null) cS=Math.abs(((fs+as_)/2)-ms)>((fs+ms+as_)/3*k);
-  if (cP&&cS) deflTxt='CHECK DRAFTS!  '+deflTxt;
-  else if (cP) deflTxt='CHECK PORT DRAFTS!  '+deflTxt;
-  else if (cS) deflTxt='CHECK STBD DRAFTS!  '+deflTxt;
-  if ((cP||cS)&&!deflCls) deflCls='show critical';
-
-  // SVG
-  document.getElementById(p+'-sv-fwd').textContent = mF!==null?mF.toFixed(3):'—';
-  document.getElementById(p+'-sv-mid').textContent = mM!==null?mM.toFixed(3):'—';
-  document.getElementById(p+'-sv-aft').textContent = mA!==null?mA.toFixed(3):'—';
-
-  if (mF!==null&&mM!==null&&mA!==null) {
-    const cy=115, sc=10, avg=(mF+mA)/2;
-    const yA=cy+(mA-avg)*sc, yM=cy+(mM-avg)*sc, yF=cy+(mF-avg)*sc;
-    document.getElementById(p+'-trl').setAttribute('points',`26,${yA.toFixed(1)} 134,${yM.toFixed(1)} 240,${yF.toFixed(1)}`);
-  }
-
-  // Calc panel
-  const sv=(id,val,suf='',w=false)=>{
-    const el=document.getElementById(id); if(!el) return;
-    el.textContent=val!==null?val.toFixed(3)+suf:'—';
-    el.className='cp-val'+(val!==null?' v':'')+(w?' w':'');
-  };
-  sv(p+'-c-mfa',mfa,' m');
-  sv(p+'-c-mm',mmc,' m');
-
-  const oe=document.getElementById(p+'-c-otr');
-  if(oTrim!==null){oe.textContent=Math.abs(oTrim).toFixed(3)+' m '+(oTrim>=0?'Aft':'Fwd');oe.className='cp-val v';}
-  else{oe.textContent='—';oe.className='cp-val';}
-
-  const te=document.getElementById(p+'-c-ttr');
-  if(oTrim!==null){te.textContent=Math.abs(oTrim).toFixed(3)+' m '+(oTrim<0?'Fwd':'Aft');te.className='cp-val v'+(oTrim<0?' w':'');}
-  else{te.textContent='—';te.className='cp-val';}
-
-  const le=document.getElementById(p+'-c-lst');
-  if(listDeg!==null){le.textContent=listDeg.toFixed(3)+'°';le.className='cp-val v'+(listDeg>0?' w':'');}
-  else{le.textContent='—';le.className='cp-val';}
-
-  const me=document.getElementById(p+'-c-mmc');
-  if(mmc!==null){me.textContent=mmc.toFixed(3)+' m';me.className='cp-val v';}
-  else{me.textContent='—';me.className='cp-val';}
-
-  const hm=document.getElementById(p+'-hmmc');
-  if(hm) hm.textContent=mmc!==null?'MMC '+mmc.toFixed(3)+' m':'MMC — m';
-
-  // Deflection
-  const de=document.getElementById(p+'-defl');
-  de.textContent=deflTxt; de.className='defl-warn '+deflCls;
-
-  // Vessel status
-  const lse=document.getElementById(p+'-lst'); lse.textContent=lstTxt; lse.className='vs-line '+lstCls;
-  const tre=document.getElementById(p+'-trm');
-  if(oTrim!==null){tre.textContent=oTrim<0?'Trim by Head '+Math.abs(oTrim).toFixed(3)+' m':'Trim '+Math.abs(oTrim).toFixed(3)+' m Aft';tre.className='vs-line'+(oTrim<0?' warn':'');}
-  else tre.textContent='';
-}
-</script>
+func nextDraftAction(survey *types.Survey) string {
+	for _, d := range survey.Drafts {
+		if d.Status == types.DraftStatusPending {
+			return "start"
+		}
+		if d.Status == types.DraftStatusActive {
+			return "finish"
+		}
+	}
+	return "add" // все complete — показать кнопки Add
 }

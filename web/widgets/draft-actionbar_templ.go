@@ -8,7 +8,10 @@ package widgets
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
-import "github.com/AVZotov/draft-survey/internal/types"
+import (
+	"github.com/AVZotov/draft-survey/internal/types"
+	"time"
+)
 
 func DraftActionBar(survey *types.Survey) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
@@ -31,12 +34,76 @@ func DraftActionBar(survey *types.Survey) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"action-bar\"><div class=\"ab-info\"><span class=\"ab-vessel\">OCEAN CHEERS</span> <span class=\"ab-meta\">IMO 9233387 · Loading · Vanino, Russia · 16–17 Feb 2026</span></div><div class=\"ab-btns\"><button class=\"btn btn-ghost\"><svg viewBox=\"0 0 24 24\"><path d=\"M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v14a2 2 0 0 1-2 2z\"></path><path d=\"M17 21v-8H7v8M7 3v5h8\"></path></svg>Save</button> <button class=\"btn btn-primary\">Calculate &amp; View Results<svg viewBox=\"0 0 24 24\"><path d=\"M5 12h14M12 5l7 7-7 7\"></path></svg></button></div></div><script>\nconst SUMMER = 12.022, BREADTH = 32.26;\n\nconst SEA_MAP = {\n  calm:     { label: 'Calm',     cls: 'calm'     },\n  smooth:   { label: 'Smooth',   cls: 'smooth'   },\n  slight:   { label: 'Slight',   cls: 'slight'   },\n  moderate: { label: 'Moderate', cls: 'moderate' },\n  rough:    { label: 'Rough',    cls: 'rough'    },\n};\n\nfunction updateSeaBadge(p, pos) {\n  const sel = document.getElementById(p+'-sea-'+pos);\n  const badge = document.getElementById(p+'-sea-'+pos+'-badge');\n  if (!sel || !badge) return;\n  const v = sel.value;\n  const info = SEA_MAP[v] || SEA_MAP.calm;\n  badge.className = 'sea-badge ' + info.cls;\n  badge.innerHTML = '<span class=\"sea-badge-dot\"></span>' + info.label;\n}\n\nfunction g(id) { const v = parseFloat(document.getElementById(id)?.value); return isNaN(v) ? null : v; }\n\nfunction calc(p) {\n  const fp=g(p+'-fp'), mp=g(p+'-mp'), ap=g(p+'-ap');\n  const fs=g(p+'-fs'), ms=g(p+'-ms'), as_=g(p+'-as');\n\n  // Summer draft check\n  [p+'-fp',p+'-mp',p+'-ap',p+'-fs',p+'-ms',p+'-as'].forEach(id => {\n    const el = document.getElementById(id); if (!el) return;\n    el.classList.toggle('over-summer', !isNaN(parseFloat(el.value)) && parseFloat(el.value) > SUMMER);\n  });\n\n  const mF = fp!==null && fs!==null ? (fp+fs)/2 : null;\n  const mM = mp!==null && ms!==null ? (mp+ms)/2 : null;\n  const mA = ap!==null && as_!==null ? (ap+as_)/2 : null;\n\n  const mmc = mF!==null && mM!==null && mA!==null ? (mF+6*mM+mA)/8 : null;\n  const mfa = mF!==null && mA!==null ? (mF+mA)/2 : null;\n  const oTrim = mA!==null && mF!==null ? mA-mF : null;\n\n  // List\n  let listDeg=null, lstTxt='Upright', lstCls='';\n  if (mp!==null && ms!==null) {\n    listDeg = Math.atan(Math.abs(mp-ms)/BREADTH)*180/Math.PI;\n    if (Math.abs(mp-ms)<0.001) { lstTxt='Upright'; lstCls=''; }\n    else if (listDeg<=0.5) { lstTxt=listDeg.toFixed(3)+'° '+(mp>ms?'Port':'Stbd')+'. List corr. to be applied.'; lstCls='warn'; }\n    else { lstTxt=listDeg.toFixed(3)+'° '+(mp>ms?'Port':'Stbd')+'. LOP to be issued.'; lstCls='lop'; }\n  }\n\n  // Deflection + draft checks\n  let deflTxt='', deflCls='';\n  if (mF!==null && mM!==null && mA!==null) {\n    const dc=(mM-(mF+mA)/2)*100;\n    if (Math.abs(dc)>0.5) { deflTxt=(dc>0?'Hogging ':'Sagging ')+Math.abs(dc).toFixed(1)+' cm'; deflCls=Math.abs(dc)>30?'show critical':'show'; }\n  }\n  const k=0.05; let cP=false, cS=false;\n  if (fp!==null&&mp!==null&&ap!==null) cP=Math.abs(((fp+ap)/2)-mp)>((fp+mp+ap)/3*k);\n  if (fs!==null&&ms!==null&&as_!==null) cS=Math.abs(((fs+as_)/2)-ms)>((fs+ms+as_)/3*k);\n  if (cP&&cS) deflTxt='CHECK DRAFTS!  '+deflTxt;\n  else if (cP) deflTxt='CHECK PORT DRAFTS!  '+deflTxt;\n  else if (cS) deflTxt='CHECK STBD DRAFTS!  '+deflTxt;\n  if ((cP||cS)&&!deflCls) deflCls='show critical';\n\n  // SVG\n  document.getElementById(p+'-sv-fwd').textContent = mF!==null?mF.toFixed(3):'—';\n  document.getElementById(p+'-sv-mid').textContent = mM!==null?mM.toFixed(3):'—';\n  document.getElementById(p+'-sv-aft').textContent = mA!==null?mA.toFixed(3):'—';\n\n  if (mF!==null&&mM!==null&&mA!==null) {\n    const cy=115, sc=10, avg=(mF+mA)/2;\n    const yA=cy+(mA-avg)*sc, yM=cy+(mM-avg)*sc, yF=cy+(mF-avg)*sc;\n    document.getElementById(p+'-trl').setAttribute('points',`26,${yA.toFixed(1)} 134,${yM.toFixed(1)} 240,${yF.toFixed(1)}`);\n  }\n\n  // Calc panel\n  const sv=(id,val,suf='',w=false)=>{\n    const el=document.getElementById(id); if(!el) return;\n    el.textContent=val!==null?val.toFixed(3)+suf:'—';\n    el.className='cp-val'+(val!==null?' v':'')+(w?' w':'');\n  };\n  sv(p+'-c-mfa',mfa,' m');\n  sv(p+'-c-mm',mmc,' m');\n\n  const oe=document.getElementById(p+'-c-otr');\n  if(oTrim!==null){oe.textContent=Math.abs(oTrim).toFixed(3)+' m '+(oTrim>=0?'Aft':'Fwd');oe.className='cp-val v';}\n  else{oe.textContent='—';oe.className='cp-val';}\n\n  const te=document.getElementById(p+'-c-ttr');\n  if(oTrim!==null){te.textContent=Math.abs(oTrim).toFixed(3)+' m '+(oTrim<0?'Fwd':'Aft');te.className='cp-val v'+(oTrim<0?' w':'');}\n  else{te.textContent='—';te.className='cp-val';}\n\n  const le=document.getElementById(p+'-c-lst');\n  if(listDeg!==null){le.textContent=listDeg.toFixed(3)+'°';le.className='cp-val v'+(listDeg>0?' w':'');}\n  else{le.textContent='—';le.className='cp-val';}\n\n  const me=document.getElementById(p+'-c-mmc');\n  if(mmc!==null){me.textContent=mmc.toFixed(3)+' m';me.className='cp-val v';}\n  else{me.textContent='—';me.className='cp-val';}\n\n  const hm=document.getElementById(p+'-hmmc');\n  if(hm) hm.textContent=mmc!==null?'MMC '+mmc.toFixed(3)+' m':'MMC — m';\n\n  // Deflection\n  const de=document.getElementById(p+'-defl');\n  de.textContent=deflTxt; de.className='defl-warn '+deflCls;\n\n  // Vessel status\n  const lse=document.getElementById(p+'-lst'); lse.textContent=lstTxt; lse.className='vs-line '+lstCls;\n  const tre=document.getElementById(p+'-trm');\n  if(oTrim!==null){tre.textContent=oTrim<0?'Trim by Head '+Math.abs(oTrim).toFixed(3)+' m':'Trim '+Math.abs(oTrim).toFixed(3)+' m Aft';tre.className='vs-line'+(oTrim<0?' warn':'');}\n  else tre.textContent='';\n}\n</script>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"action-bar\"><div class=\"ab-info\"><span class=\"ab-vessel\">")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var2 string
+		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(survey.VesselData.Name)
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/draft-actionbar.templ`, Line: 11, Col: 51}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</span> <span class=\"ab-meta\">IMO ")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var3 string
+		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(survey.VesselData.IMO)
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/draft-actionbar.templ`, Line: 12, Col: 52}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, " · Loading · ")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var4 string
+		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(survey.CargoOperation.PlaceOfInspection)
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/draft-actionbar.templ`, Line: 12, Col: 110}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, " · ")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var5 string
+		templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(time.Now().Format("Mon, 02 Jan 2006"))
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/draft-actionbar.templ`, Line: 12, Col: 155}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "</span></div><div class=\"ab-btns\"><button class=\"btn btn-ghost\"><svg viewBox=\"0 0 24 24\"><path d=\"M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v14a2 2 0 0 1-2 2z\"></path><path d=\"M17 21v-8H7v8M7 3v5h8\"></path></svg>Save</button> <button class=\"btn btn-primary\">Calculate &amp; View Results<svg viewBox=\"0 0 24 24\"><path d=\"M5 12h14M12 5l7 7-7 7\"></path></svg></button></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		return nil
 	})
+}
+
+func nextDraftAction(survey *types.Survey) string {
+	for _, d := range survey.Drafts {
+		if d.Status == types.DraftStatusPending {
+			return "start"
+		}
+		if d.Status == types.DraftStatusActive {
+			return "finish"
+		}
+	}
+	return "add" // все complete — показать кнопки Add
 }
 
 var _ = templruntime.GeneratedTemplate
