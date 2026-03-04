@@ -54,8 +54,17 @@ const (
 	DraftTypeFinal        DraftType = "final"
 )
 
+type DraftStatus string
+
+const (
+	DraftStatusPending  DraftStatus = "pending"
+	DraftStatusActive   DraftStatus = "active"
+	DraftStatusComplete DraftStatus = "complete"
+)
+
 type Draft struct {
 	Type              DraftType          `json:"type"`
+	Status            DraftStatus        `json:"status"`
 	SeaCondition      SeaCondition       `json:"sea_condition"`
 	Marks             Marks              `json:"marks"`
 	Deductibles       Deductibles        `json:"deductibles"`

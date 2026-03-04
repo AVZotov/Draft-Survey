@@ -24,11 +24,12 @@ func (h *Handler) newSurvey(c *fiber.Ctx) error {
 	return tadaptor.Render(c, component)
 }
 
-func (h *Handler) createSurvey(c *fiber.Ctx) error {
+func (h *Handler) saveSurvey(c *fiber.Ctx) error {
 	survey, err := h.getNewSurvey(c)
 	if err != nil {
 		return err
 	}
+
 	if err = h.surveyRepository.Save(survey); err != nil {
 		return err
 	}
@@ -61,6 +62,10 @@ func (h *Handler) getSurvey(c *fiber.Ctx) error {
 	return tadaptor.Render(c, web.NewSurvey(props))
 }
 
+/*
+Helper function to parse survey data from the context recieved.
+This function not a part of API
+*/
 func (h *Handler) getNewSurvey(c *fiber.Ctx) (*types.Survey, error) {
 	user, err := h.userRepository.Get()
 	if err != nil {
@@ -79,6 +84,7 @@ func (h *Handler) getNewSurvey(c *fiber.Ctx) (*types.Survey, error) {
 		DSNumber:  parseInt(c, "ds_no"),
 		Principal: c.FormValue("client"),
 	}
+
 	cargoOperation := types.CargoOperation{
 		PlaceOfInspection: c.FormValue("port"),
 		Destination:       c.FormValue("destination"),
@@ -86,6 +92,7 @@ func (h *Handler) getNewSurvey(c *fiber.Ctx) (*types.Survey, error) {
 		Cargo:             c.FormValue("cargo"),
 		Packing:           c.FormValue("packing"),
 	}
+
 	vesselData := vessel.VesselData{
 		Name:             c.FormValue("vessel_name"),
 		Flag:             c.FormValue("flag"),

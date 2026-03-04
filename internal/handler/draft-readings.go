@@ -18,14 +18,20 @@ func (h *Handler) draftReadings(c *fiber.Ctx) error {
 		return err
 	}
 
-	if len(survey.Drafts) == 0 {
-		survey.Drafts = []types.Draft{
-			{Type: types.DraftTypeInitial},
-			{Type: types.DraftTypeFinal},
+	survey.Status = types.SurveyStatusInProgress
+
+	drafts := []types.Draft{
+		{Type: types.DraftTypeInitial},
+		{Type: types.DraftTypeFinal},
+	}
+
+	if survey.Drafts == nil {
+		survey.Drafts = drafts
+		if err = h.surveyRepository.Save(survey); err != nil {
+			return err
 		}
 	}
 
 	props := web.DraftReadingsProps(user, survey)
 	return tadaptor.Render(c, web.DraftReadings(props))
-
 }
