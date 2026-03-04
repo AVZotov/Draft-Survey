@@ -23,6 +23,7 @@ templ DraftBlock(props components.DraftBlockProps) {
         templ.KV("draft-block--mid", props.Draft.Type == types.DraftTypeIntermediate),
     ) }
 	>
+		<!-- TODO: add CSS for draft-block mid selector in draft-readings.css -->
 		<div class="block-header">
 			<div class="block-label">
 				<span class="block-dot"></span>
@@ -105,17 +106,17 @@ templ DraftBlock(props components.DraftBlockProps) {
 				<div class="side-label"><span class="side-dot port-dot"></span>Port (P)</div>
 				<div class="dr-row">
 					<span class="dr-lbl">Fwd P</span>
-					<input class="di" type="number" id={ props.Prefix + "-fp" } placeholder="0.000" step="any" oninput={ calcDraft(props.Prefix) }/>
+					<input class="di" name={ fmt.Sprintf("fwd_port-d%d", props.Index) } type="number" id={ props.Prefix + "-fp" } placeholder="0.000" step="any" oninput={ calcDraft(props.Prefix) }/>
 					<span class="di-badge">Dir</span>
 				</div>
 				<div class="dr-row">
 					<span class="dr-lbl">Mid P</span>
-					<input class="di" type="number" id={ props.Prefix + "-mp" } placeholder="0.000" step="any" oninput={ calcDraft(props.Prefix) }/>
+					<input class="di" name={ fmt.Sprintf("mid_port-d%d", props.Index) } type="number" id={ props.Prefix + "-mp" } placeholder="0.000" step="any" oninput={ calcDraft(props.Prefix) }/>
 					<span class="di-badge">Dir</span>
 				</div>
 				<div class="dr-row" style="margin-bottom:0">
 					<span class="dr-lbl">Aft P</span>
-					<input class="di" type="number" id={ props.Prefix + "-ap" } placeholder="0.000" step="any" oninput={ calcDraft(props.Prefix) }/>
+					<input class="di" name={ fmt.Sprintf("aft_port-d%d", props.Index) } type="number" id={ props.Prefix + "-ap" } placeholder="0.000" step="any" oninput={ calcDraft(props.Prefix) }/>
 					<span class="di-badge">Dir</span>
 				</div>
 			</div>
@@ -160,17 +161,17 @@ templ DraftBlock(props components.DraftBlockProps) {
 				<div class="side-label"><span class="side-dot stbd-dot"></span>Starboard (S)</div>
 				<div class="dr-row">
 					<span class="dr-lbl">Fwd S</span>
-					<input class="di" type="number" id={ props.Prefix + "-fs" } placeholder="0.000" step="any" oninput={ calcDraft(props.Prefix) }/>
+					<input class="di" name={ fmt.Sprintf("fwd_stbd-d%d", props.Index) } type="number" id={ props.Prefix + "-fs" } placeholder="0.000" step="any" oninput={ calcDraft(props.Prefix) }/>
 					<span class="di-badge">Dir</span>
 				</div>
 				<div class="dr-row">
 					<span class="dr-lbl">Mid S</span>
-					<input class="di" type="number" id={ props.Prefix + "-ms" } placeholder="0.000" step="any" oninput={ calcDraft(props.Prefix) }/>
+					<input class="di" name={ fmt.Sprintf("mid_stbd-d%d", props.Index) } type="number" id={ props.Prefix + "-ms" } placeholder="0.000" step="any" oninput={ calcDraft(props.Prefix) }/>
 					<span class="di-badge">Dir</span>
 				</div>
 				<div class="dr-row" style="margin-bottom:0">
 					<span class="dr-lbl">Aft S</span>
-					<input class="di" type="number" id={ props.Prefix + "-as" } placeholder="0.000" step="any" oninput={ calcDraft(props.Prefix) }/>
+					<input class="di" name={ fmt.Sprintf("aft_stbd-d%d", props.Index) } type="number" id={ props.Prefix + "-as" } placeholder="0.000" step="any" oninput={ calcDraft(props.Prefix) }/>
 					<span class="di-badge">Dir</span>
 				</div>
 			</div>
@@ -180,36 +181,36 @@ templ DraftBlock(props components.DraftBlockProps) {
 			<div class="pp-group">
 				<div class="pp-group-title">Fwd — distances &amp; keel</div>
 				<div class="pp-fields">
-					<input class="ppi" type="number" id={ props.Prefix + "-dfwd" } placeholder="dFwd, m" step="any" oninput={ calcDraft(props.Prefix) }/>
-					<select class="dir-sel" id={ props.Prefix + "-dfwd-dir" } onchange={ calcDraft(props.Prefix) }><option>A</option><option>F</option></select>
+					<input class="ppi" name={ fmt.Sprintf("dFwd-d%d", props.Index) } type="number" id={ props.Prefix + "-dfwd" } placeholder="dFwd, m" step="any" oninput={ calcDraft(props.Prefix) }/>
+					<select class="dir-sel" name={ fmt.Sprintf("dFwdDir-d%d", props.Index) } id={ props.Prefix + "-dfwd-dir" } onchange={ calcDraft(props.Prefix) }><option>A</option><option>F</option></select>
 					<span class="pp-unit">A/F</span>
 				</div>
 				<div class="keel-fields">
-					<input class="ppi" type="number" id={ props.Prefix + "-fk" } placeholder="Fk, mm" step="any" oninput={ calcDraft(props.Prefix) }/>
+					<input class="ppi" name={ fmt.Sprintf("Fk-d%d", props.Index) } type="number" id={ props.Prefix + "-fk" } placeholder="Fk, mm" step="any" oninput={ calcDraft(props.Prefix) }/>
 					<span class="pp-unit">mm keel</span>
 				</div>
 			</div>
 			<div class="pp-group">
 				<div class="pp-group-title">Mid — distances &amp; keel</div>
 				<div class="pp-fields">
-					<input class="ppi" type="number" id={ props.Prefix + "-dmid" } placeholder="dMid, m" step="any" oninput={ calcDraft(props.Prefix) }/>
-					<select class="dir-sel" id={ props.Prefix + "-dmid-dir" } onchange={ calcDraft(props.Prefix) }><option>A</option><option>F</option></select>
+					<input class="ppi" name={ fmt.Sprintf("dMid-d%d", props.Index) } type="number" id={ props.Prefix + "-dmid" } placeholder="dMid, m" step="any" oninput={ calcDraft(props.Prefix) }/>
+					<select class="dir-sel" name={ fmt.Sprintf("dMidDir-d%d", props.Index) } id={ props.Prefix + "-dmid-dir" } onchange={ calcDraft(props.Prefix) }><option>A</option><option>F</option></select>
 					<span class="pp-unit">A/F</span>
 				</div>
 				<div class="keel-fields">
-					<input class="ppi" type="number" id={ props.Prefix + "-mk" } placeholder="Mk, mm" step="any" oninput={ calcDraft(props.Prefix) }/>
+					<input class="ppi" name={ fmt.Sprintf("Mk-d%d", props.Index) } type="number" id={ props.Prefix + "-mk" } placeholder="Mk, mm" step="any" oninput={ calcDraft(props.Prefix) }/>
 					<span class="pp-unit">mm keel</span>
 				</div>
 			</div>
 			<div class="pp-group">
 				<div class="pp-group-title">Aft — distances &amp; keel</div>
 				<div class="pp-fields">
-					<input class="ppi" type="number" id={ props.Prefix + "-daft" } placeholder="dAft, m" step="any" oninput={ calcDraft(props.Prefix) }/>
-					<select class="dir-sel" id={ props.Prefix + "-daft-dir" } onchange={ calcDraft(props.Prefix) }><option>F</option><option>A</option></select>
+					<input class="ppi" name={ fmt.Sprintf("dAft-d%d", props.Index) } type="number" id={ props.Prefix + "-daft" } placeholder="dAft, m" step="any" oninput={ calcDraft(props.Prefix) }/>
+					<select class="dir-sel" name={ fmt.Sprintf("dAftDir-d%d", props.Index) } id={ props.Prefix + "-daft-dir" } onchange={ calcDraft(props.Prefix) }><option>F</option><option>A</option></select>
 					<span class="pp-unit">A/F</span>
 				</div>
 				<div class="keel-fields">
-					<input class="ppi" type="number" id={ props.Prefix + "-ak" } placeholder="Ak, mm" step="any" oninput={ calcDraft(props.Prefix) }/>
+					<input class="ppi" name={ fmt.Sprintf("Ak-d%d", props.Index) } type="number" id={ props.Prefix + "-ak" } placeholder="Ak, mm" step="any" oninput={ calcDraft(props.Prefix) }/>
 					<span class="pp-unit">mm keel</span>
 				</div>
 			</div>
@@ -232,36 +233,48 @@ templ DraftBlock(props components.DraftBlockProps) {
 			<div class="sec-title">
 				<span>Hydrostatic Data</span>
 				<span><span class="sec-title-mmc" id={ props.Prefix + "-hmmc" }>MMC — m</span><span class="sec-title-method">(6M/8) Full LBP</span></span>
+				<!-- TODO: replace (6M/8) Full LBP with dynamic method from survey.VesselData.VesselType -->
 			</div>
 			<table class="hydro-table">
 				<thead><tr><th></th><th>Draft, m</th><th>Displ. (Extreme), MT</th><th>TPC, MT/cm</th><th>LCF / LCA, m</th></tr></thead>
 				<tbody>
-					<tr><td>Upper</td><td><input type="number" placeholder="0.000" step="any"/></td><td><input type="number" placeholder="0.000" step="any"/></td><td><input type="number" placeholder="0.000" step="any"/></td><td><input type="number" placeholder="0.000" step="any"/></td></tr>
+					<tr><td>Upper</td><td><input type="number" name={ fmt.Sprintf("uDraft-d%d", props.Index) } placeholder="0.000" step="any"/></td><td><input type="number" name={ fmt.Sprintf("uDisp-d%d", props.Index) } placeholder="0.000" step="any"/></td><td><input type="number" name={ fmt.Sprintf("uTpc-d%d", props.Index) } placeholder="0.000" step="any"/></td><td><input type="number" name={ fmt.Sprintf("uLcfLca-d%d", props.Index) } placeholder="0.000" step="any"/></td></tr>
 					<tr class="mmc-row"><td>MMC (interp.)</td><td id={ props.Prefix + "-ht-d" }>—</td><td id={ props.Prefix + "-ht-dp" }>—</td><td id={ props.Prefix + "-ht-t" }>—</td><td id={ props.Prefix + "-ht-l" }>—</td></tr>
-					<tr><td>Lower</td><td><input type="number" placeholder="0.000" step="any"/></td><td><input type="number" placeholder="0.000" step="any"/></td><td><input type="number" placeholder="0.000" step="any"/></td><td><input type="number" placeholder="0.000" step="any"/></td></tr>
+					<tr><td>Lower</td><td><input type="number" name={ fmt.Sprintf("lDraft-d%d", props.Index) } placeholder="0.000" step="any"/></td><td><input type="number" name={ fmt.Sprintf("lDisp-d%d", props.Index) } placeholder="0.000" step="any"/></td><td><input type="number" name={ fmt.Sprintf("lTpc-d%d", props.Index) } placeholder="0.000" step="any"/></td><td><input type="number" name={ fmt.Sprintf("lLcfLca-d%d", props.Index) } placeholder="0.000" step="any"/></td></tr>
 				</tbody>
 			</table>
 			<div class="mtc-grid">
-				<div class="mtc-card"><div class="mtc-hdr">MTC +0.5 m</div><div class="mtc-body"><div class="mtc-cell"><label>Draft, m</label><input type="number" placeholder="0.000" step="any"/></div><div class="mtc-cell"><label>MTC, MT/m</label><input type="number" placeholder="0.000" step="any"/></div></div></div>
-				<div class="mtc-card"><div class="mtc-hdr">MTC −0.5 m</div><div class="mtc-body"><div class="mtc-cell"><label>Draft, m</label><input type="number" placeholder="0.000" step="any"/></div><div class="mtc-cell"><label>MTC, MT/m</label><input type="number" placeholder="0.000" step="any"/></div></div><div class="mtc-delta">ΔMTC: —</div></div>
+				<div class="mtc-card"><div class="mtc-hdr">MTC +0.5 m</div><div class="mtc-body"><div class="mtc-cell"><label>Draft, m</label><input type="number" name={ fmt.Sprintf("pMtcDraft-d%d", props.Index) } placeholder="0.000" step="any"/></div><div class="mtc-cell"><label>MTC, MT/m</label><input type="number" name={ fmt.Sprintf("pMtc-d%d", props.Index) } placeholder="0.000" step="any"/></div></div></div>
+				<div class="mtc-card"><div class="mtc-hdr">MTC −0.5 m</div><div class="mtc-body"><div class="mtc-cell"><label>Draft, m</label><input type="number" name={ fmt.Sprintf("nMtcDraft-d%d", props.Index) } placeholder="0.000" step="any"/></div><div class="mtc-cell"><label>MTC, MT/m</label><input type="number" name={ fmt.Sprintf("nMtc-d%d", props.Index) } placeholder="0.000" step="any"/></div></div><div class="mtc-delta">ΔMTC: —</div></div>
 			</div>
 		</div>
 		<!-- Deductibles -->
 		<div class="deduct-section">
 			<div class="sec-title">Deductibles &amp; Density</div>
 			<div class="density-row">
-				<div class="df"><label>Table Density</label><input type="number" placeholder="1.025" step="any"/></div>
-				<div class="df"><label>Dockwater Density</label><input type="number" placeholder="1.025" step="any"/></div>
+				<div class="df"><label>Table Density</label><input type="number" name={ fmt.Sprintf("tDens-d%d", props.Index) } placeholder="1.025" step="any"/></div>
+				<div class="df"><label>Dockwater Density</label><input type="number" name={ fmt.Sprintf("dwDens-d%d", props.Index) } placeholder="1.025" step="any"/></div>
 			</div>
 			<div class="deduct-grid">
-				<div class="df"><label>HFO, MT</label><input type="number" placeholder="0.000" step="any"/></div>
-				<div class="df"><label>MDO, MT</label><input type="number" placeholder="0.000" step="any"/></div>
-				<div class="df"><label>Lube Oil, MT</label><input type="number" placeholder="0.000" step="any"/></div>
-				<div class="df"><label>Fresh Water, MT</label><input type="number" placeholder="0.000" step="any"/></div>
-				<div class="df"><label>Ballast Water, MT</label><input type="number" placeholder="0.000" step="any"/></div>
-				<div class="df"><label>Bilge Water, MT</label><input type="number" placeholder="0.000" step="any"/></div>
-				<div class="df"><label>Constant Declared, MT</label><input type="number" placeholder="0.000" step="any"/></div>
-				<div class="df"><label>Others, MT</label><input type="number" placeholder="0.000" step="any"/></div>
+				<div class="df"><label>HFO, MT</label><input type="number" name={ fmt.Sprintf("hfo-d%d", props.Index) } placeholder="0.000" step="any"/></div>
+				<div class="df"><label>MDO, MT</label><input type="number" name={ fmt.Sprintf("mdo-d%d", props.Index) } placeholder="0.000" step="any"/></div>
+				<div class="df"><label>Lube Oil, MT</label><input type="number" name={ fmt.Sprintf("lub-d%d", props.Index) } placeholder="0.000" step="any"/></div>
+				<div class="df"><label>Fresh Water, MT</label><input type="number" name={ fmt.Sprintf("fw-d%d", props.Index) } placeholder="0.000" step="any"/></div>
+				<div class="df"><label>Ballast Water, MT</label><input type="number" name={ fmt.Sprintf("bw-d%d", props.Index) } placeholder="0.000" step="any"/></div>
+				<div class="df"><label>Bilge Water, MT</label><input type="number" name={ fmt.Sprintf("bilW-d%d", props.Index) } placeholder="0.000" step="any"/></div>
+				if props.Draft.Type == types.DraftTypeInitial {
+					<div class="df">
+						<label>Constant Declared, MT</label>
+						<input type="number" name="constDeclared" placeholder="0.000" step="any"/>
+					</div>
+				} else {
+					<div class="df">
+						<label>Cargo Declared, MT</label>
+						<input type="number" name={ fmt.Sprintf("cargoDeclared-d%d", props.Index) } placeholder="0.000" step="any"/>
+					</div>
+				}
+				<!-- <div class="df"><label>Constant Declared, MT</label><input type="number" name="constDeclared" placeholder="0.000" step="any"/></div> -->
+				<div class="df"><label>Others, MT</label><input type="number" name={ fmt.Sprintf("others-d%d", props.Index) } placeholder="0.000" step="any"/></div>
 			</div>
 			<a href="#" class="tanks-btn">
 				<svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
