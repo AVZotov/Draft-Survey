@@ -52,25 +52,6 @@ function updateIceBadge() {
     badge.className = 'sea-badge ice-active';
 }
 
-// ── Sidebar active on scroll ──────────────────────────────────
-const sections = ['section-survey', 'section-vessel', 'section-marks', 'section-calc'];
-const navMap = {
-    'section-survey': 'nav-survey',
-    'section-vessel': 'nav-vessel',
-    'section-marks': 'nav-marks',
-    'section-calc': 'nav-calc'
-};
-
-window.addEventListener('scroll', () => {
-    let current = sections[0];
-    sections.forEach(id => {
-        const el = document.getElementById(id);
-        if (el && el.getBoundingClientRect().top < 80) current = id;
-    });
-    document.querySelectorAll('.sidebar-nav-item').forEach(i => i.classList.remove('is-active'));
-    document.getElementById(navMap[current]).classList.add('is-active');
-});
-
 // ── LBP / 2 calc hint ─────────────────────────────────────────
 function updateCalcHints() {
     const lbp = parseFloat(document.getElementById('lbp').value);

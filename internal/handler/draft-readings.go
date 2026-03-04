@@ -87,3 +87,43 @@ func (h *Handler) finishDraft(c *fiber.Ctx) error {
 	c.Set("HX-Redirect", "/survey/"+id+"/draft")
 	return c.SendStatus(http.StatusOK)
 }
+
+func (h *Handler) addIntermediateDraft(c *fiber.Ctx) error {
+	id := c.Params("id")
+	survey, err := h.surveyRepository.Get(id)
+	if err != nil {
+		return err
+	}
+
+	survey.Drafts = append(survey.Drafts, types.Draft{
+		Type:   types.DraftTypeIntermediate,
+		Status: types.DraftStatusPending,
+	})
+
+	if err = h.surveyRepository.Save(survey); err != nil {
+		return err
+	}
+
+	c.Set("HX-Redirect", "/survey/"+id+"/draft")
+	return c.SendStatus(http.StatusOK)
+}
+
+func (h *Handler) addFinalDraft(c *fiber.Ctx) error {
+	id := c.Params("id")
+	survey, err := h.surveyRepository.Get(id)
+	if err != nil {
+		return err
+	}
+
+	survey.Drafts = append(survey.Drafts, types.Draft{
+		Type:   types.DraftTypeFinal,
+		Status: types.DraftStatusPending,
+	})
+
+	if err = h.surveyRepository.Save(survey); err != nil {
+		return err
+	}
+
+	c.Set("HX-Redirect", "/survey/"+id+"/draft")
+	return c.SendStatus(http.StatusOK)
+}
