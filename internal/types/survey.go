@@ -77,6 +77,15 @@ type Draft struct {
 	HydrostaticRows   []HydrostaticRow   `json:"hydrostatic_rows"`
 	TPCListPort       float64            `json:"tpc_list_port"`
 	TPCListStarboard  float64            `json:"tpc_list_starboard"`
+	DistancePPFwd     float64            `json:"distance_pp_fwd"`
+	PPFwdDirection    string             `json:"pp_fwd_direction"`
+	DistancePPMid     float64            `json:"distance_pp_mid"`
+	PPMidDirection    string             `json:"pp_mid_direction"`
+	DistancePPAft     float64            `json:"distance_pp_aft"`
+	PPAftDirection    string             `json:"pp_aft_direction"`
+	KeelFwd           float64            `json:"keel_fwd"`
+	KeelMid           float64            `json:"keel_mid"`
+	KeelAft           float64            `json:"keel_aft"`
 	StartedAt         time.Time          `json:"started_at"`
 	FinishedAt        time.Time          `json:"finished_at"`
 }

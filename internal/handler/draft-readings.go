@@ -189,6 +189,16 @@ func (h *Handler) parseDraft(c *fiber.Ctx, survey *types.Survey) {
 
 		survey.Drafts[i].Density = parseFloat(c, fmt.Sprintf("dwDens-d%d", i))
 
+		survey.Drafts[i].DistancePPFwd = parseFloat(c, fmt.Sprintf("dFwd-d%d", i))
+		survey.Drafts[i].PPFwdDirection = c.FormValue(fmt.Sprintf("dFwdDir-d%d", i))
+		survey.Drafts[i].DistancePPMid = parseFloat(c, fmt.Sprintf("dMid-d%d", i))
+		survey.Drafts[i].PPMidDirection = c.FormValue(fmt.Sprintf("dMidDir-d%d", i))
+		survey.Drafts[i].DistancePPAft = parseFloat(c, fmt.Sprintf("dAft-d%d", i))
+		survey.Drafts[i].PPAftDirection = c.FormValue(fmt.Sprintf("dAftDir-d%d", i))
+		survey.Drafts[i].KeelFwd = parseFloat(c, fmt.Sprintf("Fk-d%d", i))
+		survey.Drafts[i].KeelMid = parseFloat(c, fmt.Sprintf("Mk-d%d", i))
+		survey.Drafts[i].KeelAft = parseFloat(c, fmt.Sprintf("Ak-d%d", i))
+
 		if survey.Drafts[i].Type != types.DraftTypeInitial {
 			survey.Drafts[i].CargoDeclared = parseFloat(c, fmt.Sprintf("cargoDeclared-d%d", i))
 		}
