@@ -55,7 +55,7 @@ func (h *Handler) startDraft(c *fiber.Ctx) error {
 		return err
 	}
 
-	h.parseDraftMarks(c, survey)
+	h.parseDraft(c, survey)
 
 	survey.Drafts[index].Status = types.DraftStatusActive
 	survey.Drafts[index].StartedAt = time.Now()
@@ -80,7 +80,7 @@ func (h *Handler) finishDraft(c *fiber.Ctx) error {
 		return err
 	}
 
-	h.parseDraftMarks(c, survey)
+	h.parseDraft(c, survey)
 
 	survey.Drafts[index].Status = types.DraftStatusComplete
 	survey.Drafts[index].FinishedAt = time.Now()
@@ -140,7 +140,7 @@ func (h *Handler) saveDraft(c *fiber.Ctx) error {
 		return err
 	}
 
-	h.parseDraftMarks(c, survey)
+	h.parseDraft(c, survey)
 
 	if err = h.surveyRepository.Save(survey); err != nil {
 		return err
@@ -149,13 +149,41 @@ func (h *Handler) saveDraft(c *fiber.Ctx) error {
 	return c.SendStatus(http.StatusOK)
 }
 
-func (h *Handler) parseDraftMarks(c *fiber.Ctx, survey *types.Survey) {
+func (h *Handler) parseDraft(c *fiber.Ctx, survey *types.Survey) {
+	total := len(survey.Drafts)
 	for i := range survey.Drafts {
+		prefix := draftPrefix(i, total)
+
 		survey.Drafts[i].Marks.FwdPort = types.Mark{Value: parseFloat(c, fmt.Sprintf("fwd_port-d%d", i))}
 		survey.Drafts[i].Marks.MidPort = types.Mark{Value: parseFloat(c, fmt.Sprintf("mid_port-d%d", i))}
 		survey.Drafts[i].Marks.AftPort = types.Mark{Value: parseFloat(c, fmt.Sprintf("aft_port-d%d", i))}
 		survey.Drafts[i].Marks.FwdStarboard = types.Mark{Value: parseFloat(c, fmt.Sprintf("fwd_stbd-d%d", i))}
 		survey.Drafts[i].Marks.MidStarboard = types.Mark{Value: parseFloat(c, fmt.Sprintf("mid_stbd-d%d", i))}
 		survey.Drafts[i].Marks.AftStarboard = types.Mark{Value: parseFloat(c, fmt.Sprintf("aft_stbd-d%d", i))}
+
+		survey.Drafts[i].SeaCondition.Type = types.SeaConditionType(c.FormValue(fmt.Sprintf("%s_sea_type", prefix)))
+
+		survey.Drafts[i].Deductibles.HFO = parseFloat(c, fmt.Sprintf("hfo-d%d", i))
+		survey.Drafts[i].Deductibles.MDO = parseFloat(c, fmt.Sprintf("mdo-d%d", i))
+		survey.Drafts[i].Deductibles.LubOil = parseFloat(c, fmt.Sprintf("lub-d%d", i))
+		survey.Drafts[i].Deductibles.BilgeWater = parseFloat(c, fmt.Sprintf("bilW-d%d", i))
+		survey.Drafts[i].Deductibles.Others = parseFloat(c, fmt.Sprintf("others-d%d", i))
+
+		survey.Drafts[i].Density = parseFloat(c, fmt.Sprintf("dwDens-d%d", i))
+
+		if survey.Drafts[i].Type != types.DraftTypeInitial {
+			survey.Drafts[i].CargoDeclared = parseFloat(c, fmt.Sprintf("cargoDeclared-d%d", i))
+		}
 	}
+	survey.Drafts[0].ConstantDeclared = parseFloat(c, "constDeclared")
+}
+
+func draftPrefix(i, total int) string {
+	if i == 0 {
+		return "i"
+	}
+	if i == total-1 {
+		return "f"
+	}
+	return fmt.Sprintf("m%d", i)
 }
