@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/AVZotov/draft-survey/internal/formnames"
 	"github.com/AVZotov/draft-survey/internal/handler/tadaptor"
 	"github.com/AVZotov/draft-survey/internal/types"
 	"github.com/AVZotov/draft-survey/web"
@@ -155,64 +156,64 @@ func (h *Handler) parseDraft(c *fiber.Ctx, survey *types.Survey) {
 	for i := range survey.Drafts {
 		prefix := draftPrefix(i, total)
 
-		fwdPort, err := parseMark(c, fmt.Sprintf("%s-d%d", FormFwdPort, i))
+		fwdPort, err := parseMark(c, fmt.Sprintf("%s-d%d", formnames.FwdPort, i))
 		if err == nil {
 			survey.Drafts[i].Marks.FwdPort = types.Mark{Value: fwdPort}
 		}
-		midPort, err := parseMark(c, fmt.Sprintf("%s-d%d", FormMidPort, i))
+		midPort, err := parseMark(c, fmt.Sprintf("%s-d%d", formnames.MidPort, i))
 		if err == nil {
 			survey.Drafts[i].Marks.MidPort = types.Mark{Value: midPort}
 		}
-		aftPort, err := parseMark(c, fmt.Sprintf("%s-d%d", FormAftPort, i))
+		aftPort, err := parseMark(c, fmt.Sprintf("%s-d%d", formnames.AftPort, i))
 		if err == nil {
 			survey.Drafts[i].Marks.AftPort = types.Mark{Value: aftPort}
 		}
-		fwdStbd, err := parseMark(c, fmt.Sprintf("%s-d%d", FormFwdStbd, i))
+		fwdStbd, err := parseMark(c, fmt.Sprintf("%s-d%d", formnames.FwdStbd, i))
 		if err == nil {
 			survey.Drafts[i].Marks.FwdStarboard = types.Mark{Value: fwdStbd}
 		}
-		midStbd, err := parseMark(c, fmt.Sprintf("%s-d%d", FormMidStbd, i))
+		midStbd, err := parseMark(c, fmt.Sprintf("%s-d%d", formnames.MidStbd, i))
 		if err == nil {
 			survey.Drafts[i].Marks.MidStarboard = types.Mark{Value: midStbd}
 		}
-		aftStbd, err := parseMark(c, fmt.Sprintf("%s-d%d", FormAftStbd, i))
+		aftStbd, err := parseMark(c, fmt.Sprintf("%s-d%d", formnames.AftStbd, i))
 		if err == nil {
 			survey.Drafts[i].Marks.AftStarboard = types.Mark{Value: aftStbd}
 		}
-		survey.Drafts[i].SeaCondition.Type = types.SeaConditionType(c.FormValue(fmt.Sprintf("%s_%s", prefix, FormSeaType)))
+		survey.Drafts[i].SeaCondition.Type = types.SeaConditionType(c.FormValue(fmt.Sprintf("%s_%s", prefix, formnames.SeaType)))
 
-		survey.Drafts[i].Deductibles.HFO = parseFloat(c, fmt.Sprintf("%s-d%d", FormHFO, i))
-		survey.Drafts[i].Deductibles.MDO = parseFloat(c, fmt.Sprintf("%s-d%d", FormMDO, i))
-		survey.Drafts[i].Deductibles.LubOil = parseFloat(c, fmt.Sprintf("%s-d%d", FormLubOil, i))
-		survey.Drafts[i].Deductibles.BilgeWater = parseFloat(c, fmt.Sprintf("%s-d%d", FormBilgeWater, i))
-		survey.Drafts[i].Deductibles.Others = parseFloat(c, fmt.Sprintf("%s-d%d", FormOthers, i))
+		survey.Drafts[i].Deductibles.HFO = parseFloat(c, fmt.Sprintf("%s-d%d", formnames.HFO, i))
+		survey.Drafts[i].Deductibles.MDO = parseFloat(c, fmt.Sprintf("%s-d%d", formnames.MDO, i))
+		survey.Drafts[i].Deductibles.LubOil = parseFloat(c, fmt.Sprintf("%s-d%d", formnames.LubOil, i))
+		survey.Drafts[i].Deductibles.BilgeWater = parseFloat(c, fmt.Sprintf("%s-d%d", formnames.BilgeWater, i))
+		survey.Drafts[i].Deductibles.Others = parseFloat(c, fmt.Sprintf("%s-d%d", formnames.Others, i))
 
-		survey.Drafts[i].Density = parseFloat(c, fmt.Sprintf("%s-d%d", FormDockwaterDensity, i))
+		survey.Drafts[i].Density = parseFloat(c, fmt.Sprintf("%s-d%d", formnames.DockwaterDensity, i))
 
-		survey.Drafts[i].DistancePPFwd = parseFloat(c, fmt.Sprintf("%s-d%d", FormDFwd, i))
-		survey.Drafts[i].PPFwdDirection = c.FormValue(fmt.Sprintf("%s-d%d", FormDFwdDir, i))
-		survey.Drafts[i].DistancePPMid = parseFloat(c, fmt.Sprintf("%s-d%d", FormDMid, i))
-		survey.Drafts[i].PPMidDirection = c.FormValue(fmt.Sprintf("%s-d%d", FormDMidDir, i))
-		survey.Drafts[i].DistancePPAft = parseFloat(c, fmt.Sprintf("%s-d%d", FormDAft, i))
-		survey.Drafts[i].PPAftDirection = c.FormValue(fmt.Sprintf("%s-d%d", FormDAftDir, i))
-		survey.Drafts[i].KeelFwd = parseFloat(c, fmt.Sprintf("%s-d%d", FormKeelFwd, i))
-		survey.Drafts[i].KeelMid = parseFloat(c, fmt.Sprintf("%s-d%d", FormKeelMid, i))
-		survey.Drafts[i].KeelAft = parseFloat(c, fmt.Sprintf("%s-d%d", FormKeelAft, i))
+		survey.Drafts[i].DistancePPFwd = parseFloat(c, fmt.Sprintf("%s-d%d", formnames.DFwd, i))
+		survey.Drafts[i].PPFwdDirection = c.FormValue(fmt.Sprintf("%s-d%d", formnames.DFwdDir, i))
+		survey.Drafts[i].DistancePPMid = parseFloat(c, fmt.Sprintf("%s-d%d", formnames.DMid, i))
+		survey.Drafts[i].PPMidDirection = c.FormValue(fmt.Sprintf("%s-d%d", formnames.DMidDir, i))
+		survey.Drafts[i].DistancePPAft = parseFloat(c, fmt.Sprintf("%s-d%d", formnames.DAft, i))
+		survey.Drafts[i].PPAftDirection = c.FormValue(fmt.Sprintf("%s-d%d", formnames.DAftDir, i))
+		survey.Drafts[i].KeelFwd = parseFloat(c, fmt.Sprintf("%s-d%d", formnames.KeelFwd, i))
+		survey.Drafts[i].KeelMid = parseFloat(c, fmt.Sprintf("%s-d%d", formnames.KeelMid, i))
+		survey.Drafts[i].KeelAft = parseFloat(c, fmt.Sprintf("%s-d%d", formnames.KeelAft, i))
 
 		if survey.Drafts[i].Type != types.DraftTypeInitial {
-			survey.Drafts[i].CargoDeclared = parseFloat(c, fmt.Sprintf("%s-d%d", FormCargoDeclared, i))
+			survey.Drafts[i].CargoDeclared = parseFloat(c, fmt.Sprintf("%s-d%d", formnames.CargoDeclared, i))
 		}
 
 		survey.Drafts[i].HydrostaticRows = []types.HydrostaticRow{
-			{Draft: parseFloat(c, fmt.Sprintf("%s-d%d", FormUDraft, i)), Displacement: parseFloat(c, fmt.Sprintf("%s-d%d", FormUDisp, i)), TPC: parseFloat(c, fmt.Sprintf("%s-d%d", FormUTpc, i)), LCF: parseFloat(c, fmt.Sprintf("%s-d%d", FormULcfLca, i))},
-			{Draft: parseFloat(c, fmt.Sprintf("%s-d%d", FormLDraft, i)), Displacement: parseFloat(c, fmt.Sprintf("%s-d%d", FormLDisp, i)), TPC: parseFloat(c, fmt.Sprintf("%s-d%d", FormLTpc, i)), LCF: parseFloat(c, fmt.Sprintf("%s-d%d", FormLLcfLca, i))},
+			{Draft: parseFloat(c, fmt.Sprintf("%s-d%d", formnames.UDraft, i)), Displacement: parseFloat(c, fmt.Sprintf("%s-d%d", formnames.UDisp, i)), TPC: parseFloat(c, fmt.Sprintf("%s-d%d", formnames.UTpc, i)), LCF: parseFloat(c, fmt.Sprintf("%s-d%d", formnames.ULcfLca, i))},
+			{Draft: parseFloat(c, fmt.Sprintf("%s-d%d", formnames.LDraft, i)), Displacement: parseFloat(c, fmt.Sprintf("%s-d%d", formnames.LDisp, i)), TPC: parseFloat(c, fmt.Sprintf("%s-d%d", formnames.LTpc, i)), LCF: parseFloat(c, fmt.Sprintf("%s-d%d", formnames.LLcfLca, i))},
 		}
 		survey.Drafts[i].MTCRows = []types.MTCRow{
-			{Draft: parseFloat(c, fmt.Sprintf("%s-d%d", FormPMtcDraft, i)), MTC: parseFloat(c, fmt.Sprintf("%s-d%d", FormPMtc, i))},
-			{Draft: parseFloat(c, fmt.Sprintf("%s-d%d", FormNMtcDraft, i)), MTC: parseFloat(c, fmt.Sprintf("%s-d%d", FormNMtc, i))},
+			{Draft: parseFloat(c, fmt.Sprintf("%s-d%d", formnames.PMtcDraft, i)), MTC: parseFloat(c, fmt.Sprintf("%s-d%d", formnames.PMtc, i))},
+			{Draft: parseFloat(c, fmt.Sprintf("%s-d%d", formnames.NMtcDraft, i)), MTC: parseFloat(c, fmt.Sprintf("%s-d%d", formnames.NMtc, i))},
 		}
 	}
-	survey.Drafts[0].ConstantDeclared = parseFloat(c, FormConstDeclared)
+	survey.Drafts[0].ConstantDeclared = parseFloat(c, formnames.ConstDeclared)
 }
 
 func draftPrefix(i, total int) string {

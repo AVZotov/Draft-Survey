@@ -63,7 +63,7 @@ func (h *Handler) getSurvey(c *fiber.Ctx) error {
 }
 
 /*
-Helper function to parse survey data from the context recieved.
+Helper function to parse survey data from the context received.
 This function not a part of API
 */
 func (h *Handler) getNewSurvey(c *fiber.Ctx) (*types.Survey, error) {
