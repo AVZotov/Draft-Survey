@@ -23,11 +23,18 @@ func TotalBallastWater(bwt []types.BallastWaterTank) float64 {
 	return total
 }
 
+func markVal(p *float64) float64 {
+	if p == nil {
+		return 0
+	}
+	return *p
+}
+
 func MeanDrafts(m types.Marks) types.MeanDraft {
 	return types.MeanDraft{
-		DraftFwdMean: round3((m.FwdPort.Value + m.FwdStarboard.Value) / 2),
-		DraftMidMean: round3((m.MidPort.Value + m.MidStarboard.Value) / 2),
-		DraftAftMean: round3((m.AftPort.Value + m.AftStarboard.Value) / 2),
+		DraftFwdMean: round3((markVal(m.FwdPort.Value) + markVal(m.FwdStarboard.Value)) / 2),
+		DraftMidMean: round3((markVal(m.MidPort.Value) + markVal(m.MidStarboard.Value)) / 2),
+		DraftAftMean: round3((markVal(m.AftPort.Value) + markVal(m.AftStarboard.Value)) / 2),
 	}
 }
 
@@ -180,10 +187,10 @@ func CalcSecondTrimCorrection(dwk types.DraftsWKeel, mtcRows []types.MTCRow, lbp
 }
 
 func CalcListCorrection(marks types.Marks, tpcListPort, tpcListStarboard float64) float64 {
-	if marks.MidPort == marks.MidStarboard {
+	if markVal(marks.MidPort.Value) == markVal(marks.MidStarboard.Value) {
 		return 0.0
 	}
-	return round3(6 * math.Abs(marks.MidPort.Value-marks.MidStarboard.Value) * math.Abs(tpcListPort-tpcListStarboard))
+	return round3(6 * math.Abs(markVal(marks.MidPort.Value)-markVal(marks.MidStarboard.Value)) * math.Abs(tpcListPort-tpcListStarboard))
 }
 
 func CalcDensityCorrection(displacement float64, firstTrim float64, secondTrim float64, listCorrection float64, density float64) float64 {

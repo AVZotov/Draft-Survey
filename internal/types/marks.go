@@ -8,7 +8,7 @@ const (
 )
 
 type Mark struct {
-	Value  float64       `json:"value"`
+	Value  *float64      `json:"value"`
 	Method ReadingMethod `json:"method"`
 }
 

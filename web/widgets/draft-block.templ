@@ -109,17 +109,29 @@ templ DraftBlock(props components.DraftBlockProps) {
 				<div class="side-label"><span class="side-dot port-dot"></span>Port (P)</div>
 				<div class="dr-row">
 					<span class="dr-lbl">Fwd P</span>
-					<input class="di" name={ fmt.Sprintf("fwd_port-d%d", props.Index) } type="number" id={ props.Prefix + "-fp" } placeholder="0.000" step="any" disabled?={ props.Draft.Status == types.DraftStatusPending } oninput={ calcDraft(props.Prefix) }/>
+					if props.Draft.Marks.FwdPort.Value != nil {
+						<input class="di" name={ fmt.Sprintf("fwd_port-d%d", props.Index) } type="number" id={ props.Prefix + "-fp" } placeholder="0.000" step="any" value={ fmt.Sprintf("%g", *props.Draft.Marks.FwdPort.Value) } disabled?={ props.Draft.Status == types.DraftStatusPending } oninput={ calcDraft(props.Prefix) }/>
+					} else {
+						<input class="di" name={ fmt.Sprintf("fwd_port-d%d", props.Index) } type="number" id={ props.Prefix + "-fp" } placeholder="0.000" step="any" disabled?={ props.Draft.Status == types.DraftStatusPending } oninput={ calcDraft(props.Prefix) }/>
+					}
 					<span class="di-badge">Dir</span>
 				</div>
 				<div class="dr-row">
 					<span class="dr-lbl">Mid P</span>
-					<input class="di" name={ fmt.Sprintf("mid_port-d%d", props.Index) } type="number" id={ props.Prefix + "-mp" } placeholder="0.000" step="any" disabled?={ props.Draft.Status == types.DraftStatusPending } oninput={ calcDraft(props.Prefix) }/>
+					if props.Draft.Marks.MidPort.Value != nil {
+						<input class="di" name={ fmt.Sprintf("mid_port-d%d", props.Index) } type="number" id={ props.Prefix + "-mp" } placeholder="0.000" step="any" value={ fmt.Sprintf("%g", *props.Draft.Marks.MidPort.Value) } disabled?={ props.Draft.Status == types.DraftStatusPending } oninput={ calcDraft(props.Prefix) }/>
+					} else {
+						<input class="di" name={ fmt.Sprintf("mid_port-d%d", props.Index) } type="number" id={ props.Prefix + "-mp" } placeholder="0.000" step="any" disabled?={ props.Draft.Status == types.DraftStatusPending } oninput={ calcDraft(props.Prefix) }/>
+					}
 					<span class="di-badge">Dir</span>
 				</div>
 				<div class="dr-row" style="margin-bottom:0">
 					<span class="dr-lbl">Aft P</span>
-					<input class="di" name={ fmt.Sprintf("aft_port-d%d", props.Index) } type="number" id={ props.Prefix + "-ap" } placeholder="0.000" step="any" disabled?={ props.Draft.Status == types.DraftStatusPending } oninput={ calcDraft(props.Prefix) }/>
+					if props.Draft.Marks.AftPort.Value != nil {
+						<input class="di" name={ fmt.Sprintf("aft_port-d%d", props.Index) } type="number" id={ props.Prefix + "-ap" } placeholder="0.000" step="any" value={ fmt.Sprintf("%g", *props.Draft.Marks.AftPort.Value) } disabled?={ props.Draft.Status == types.DraftStatusPending } oninput={ calcDraft(props.Prefix) }/>
+					} else {
+						<input class="di" name={ fmt.Sprintf("aft_port-d%d", props.Index) } type="number" id={ props.Prefix + "-ap" } placeholder="0.000" step="any" disabled?={ props.Draft.Status == types.DraftStatusPending } oninput={ calcDraft(props.Prefix) }/>
+					}
 					<span class="di-badge">Dir</span>
 				</div>
 			</div>
@@ -164,17 +176,29 @@ templ DraftBlock(props components.DraftBlockProps) {
 				<div class="side-label"><span class="side-dot stbd-dot"></span>Starboard (S)</div>
 				<div class="dr-row">
 					<span class="dr-lbl">Fwd S</span>
-					<input class="di" name={ fmt.Sprintf("fwd_stbd-d%d", props.Index) } type="number" id={ props.Prefix + "-fs" } placeholder="0.000" step="any" disabled?={ props.Draft.Status == types.DraftStatusPending } oninput={ calcDraft(props.Prefix) }/>
+					if props.Draft.Marks.FwdStarboard.Value != nil {
+						<input class="di" name={ fmt.Sprintf("fwd_stbd-d%d", props.Index) } type="number" id={ props.Prefix + "-fs" } placeholder="0.000" step="any" value={ fmt.Sprintf("%g", *props.Draft.Marks.FwdStarboard.Value) } disabled?={ props.Draft.Status == types.DraftStatusPending } oninput={ calcDraft(props.Prefix) }/>
+					} else {
+						<input class="di" name={ fmt.Sprintf("fwd_stbd-d%d", props.Index) } type="number" id={ props.Prefix + "-fs" } placeholder="0.000" step="any" disabled?={ props.Draft.Status == types.DraftStatusPending } oninput={ calcDraft(props.Prefix) }/>
+					}
 					<span class="di-badge">Dir</span>
 				</div>
 				<div class="dr-row">
 					<span class="dr-lbl">Mid S</span>
-					<input class="di" name={ fmt.Sprintf("mid_stbd-d%d", props.Index) } type="number" id={ props.Prefix + "-ms" } placeholder="0.000" step="any" disabled?={ props.Draft.Status == types.DraftStatusPending } oninput={ calcDraft(props.Prefix) }/>
+					if props.Draft.Marks.MidStarboard.Value != nil {
+						<input class="di" name={ fmt.Sprintf("mid_stbd-d%d", props.Index) } type="number" id={ props.Prefix + "-ms" } placeholder="0.000" step="any" value={ fmt.Sprintf("%g", *props.Draft.Marks.MidStarboard.Value) } disabled?={ props.Draft.Status == types.DraftStatusPending } oninput={ calcDraft(props.Prefix) }/>
+					} else {
+						<input class="di" name={ fmt.Sprintf("mid_stbd-d%d", props.Index) } type="number" id={ props.Prefix + "-ms" } placeholder="0.000" step="any" disabled?={ props.Draft.Status == types.DraftStatusPending } oninput={ calcDraft(props.Prefix) }/>
+					}
 					<span class="di-badge">Dir</span>
 				</div>
 				<div class="dr-row" style="margin-bottom:0">
 					<span class="dr-lbl">Aft S</span>
-					<input class="di" name={ fmt.Sprintf("aft_stbd-d%d", props.Index) } type="number" id={ props.Prefix + "-as" } placeholder="0.000" step="any" disabled?={ props.Draft.Status == types.DraftStatusPending } oninput={ calcDraft(props.Prefix) }/>
+					if props.Draft.Marks.AftStarboard.Value != nil {
+						<input class="di" name={ fmt.Sprintf("aft_stbd-d%d", props.Index) } type="number" id={ props.Prefix + "-as" } placeholder="0.000" step="any" value={ fmt.Sprintf("%g", *props.Draft.Marks.AftStarboard.Value) } disabled?={ props.Draft.Status == types.DraftStatusPending } oninput={ calcDraft(props.Prefix) }/>
+					} else {
+						<input class="di" name={ fmt.Sprintf("aft_stbd-d%d", props.Index) } type="number" id={ props.Prefix + "-as" } placeholder="0.000" step="any" disabled?={ props.Draft.Status == types.DraftStatusPending } oninput={ calcDraft(props.Prefix) }/>
+					}
 					<span class="di-badge">Dir</span>
 				</div>
 			</div>

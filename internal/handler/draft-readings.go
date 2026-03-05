@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
 	"strconv"
@@ -154,13 +155,30 @@ func (h *Handler) parseDraft(c *fiber.Ctx, survey *types.Survey) {
 	for i := range survey.Drafts {
 		prefix := draftPrefix(i, total)
 
-		survey.Drafts[i].Marks.FwdPort = types.Mark{Value: parseFloat(c, fmt.Sprintf("fwd_port-d%d", i))}
-		survey.Drafts[i].Marks.MidPort = types.Mark{Value: parseFloat(c, fmt.Sprintf("mid_port-d%d", i))}
-		survey.Drafts[i].Marks.AftPort = types.Mark{Value: parseFloat(c, fmt.Sprintf("aft_port-d%d", i))}
-		survey.Drafts[i].Marks.FwdStarboard = types.Mark{Value: parseFloat(c, fmt.Sprintf("fwd_stbd-d%d", i))}
-		survey.Drafts[i].Marks.MidStarboard = types.Mark{Value: parseFloat(c, fmt.Sprintf("mid_stbd-d%d", i))}
-		survey.Drafts[i].Marks.AftStarboard = types.Mark{Value: parseFloat(c, fmt.Sprintf("aft_stbd-d%d", i))}
-
+		fwdPort, err := parseMark(c, fmt.Sprintf("fwd_port-d%d", i))
+		if err == nil {
+			survey.Drafts[i].Marks.FwdPort = types.Mark{Value: fwdPort}
+		}
+		midPort, err := parseMark(c, fmt.Sprintf("mid_port-d%d", i))
+		if err == nil {
+			survey.Drafts[i].Marks.MidPort = types.Mark{Value: midPort}
+		}
+		aftPort, err := parseMark(c, fmt.Sprintf("aft_port-d%d", i))
+		if err == nil {
+			survey.Drafts[i].Marks.AftPort = types.Mark{Value: aftPort}
+		}
+		fwdStbd, err := parseMark(c, fmt.Sprintf("fwd_stbd-d%d", i))
+		if err == nil {
+			survey.Drafts[i].Marks.FwdStarboard = types.Mark{Value: fwdStbd}
+		}
+		midStbd, err := parseMark(c, fmt.Sprintf("mid_stbd-d%d", i))
+		if err == nil {
+			survey.Drafts[i].Marks.MidStarboard = types.Mark{Value: midStbd}
+		}
+		aftStbd, err := parseMark(c, fmt.Sprintf("aft_stbd-d%d", i))
+		if err == nil {
+			survey.Drafts[i].Marks.AftStarboard = types.Mark{Value: aftStbd}
+		}
 		survey.Drafts[i].SeaCondition.Type = types.SeaConditionType(c.FormValue(fmt.Sprintf("%s_sea_type", prefix)))
 
 		survey.Drafts[i].Deductibles.HFO = parseFloat(c, fmt.Sprintf("hfo-d%d", i))
@@ -186,4 +204,17 @@ func draftPrefix(i, total int) string {
 		return "f"
 	}
 	return fmt.Sprintf("m%d", i)
+}
+
+func parseMark(c *fiber.Ctx, name string) (*float64, error) {
+	var ErrEmptyField = errors.New("empty field")
+	v := c.FormValue(name)
+	if v == "" {
+		return nil, ErrEmptyField
+	}
+	f, err := strconv.ParseFloat(v, 64)
+	if err != nil {
+		return nil, ErrEmptyField
+	}
+	return &f, nil
 }
