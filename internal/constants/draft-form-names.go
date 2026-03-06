@@ -1,4 +1,4 @@
-package formnames
+package constants
 
 const (
 	// Marks
@@ -52,5 +52,7 @@ const (
 	DockwaterDensity = "dwDens"
 
 	// Sea condition
-	SeaType = "sea_type"
+	SeaType          = "sea_type"
+	SeaConditionWave = "sea_wave"
+	SeaConditionIce  = "sea_ice"
 )

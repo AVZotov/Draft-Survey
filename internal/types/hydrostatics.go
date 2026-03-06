@@ -9,16 +9,16 @@ const (
 )
 
 type HydrostaticRow struct {
-	Draft        float64      `json:"draft"`
-	Displacement float64      `json:"displacement"`
-	TPC          float64      `json:"tpc"`
-	LCF          float64      `json:"lcf"`
+	Draft        *float64     `json:"draft"`
+	Displacement *float64     `json:"displacement"`
+	TPC          *float64     `json:"tpc"`
+	LCF          *float64     `json:"lcf"`
 	LCFDirection LCFDirection `json:"lcf_direction"`
 }
 
 type MTCRow struct {
-	Draft float64 `json:"draft"`
-	MTC   float64 `json:"mtc"`
+	Draft *float64 `json:"draft"`
+	MTC   *float64 `json:"mtc"`
 }
 
 type Hydrostatics struct {

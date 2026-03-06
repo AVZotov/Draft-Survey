@@ -70,22 +70,22 @@ type Draft struct {
 	Deductibles       Deductibles        `json:"deductibles"`
 	BallastWaterTanks []BallastWaterTank `json:"ballast_water_tanks"`
 	FreshWaterTanks   []FreshWaterTank   `json:"fresh_water_tanks"`
-	Density           float64            `json:"density"`
-	ConstantDeclared  float64            `json:"constant_declared"`
-	CargoDeclared     float64            `json:"cargo_declared"`
+	Density           *float64           `json:"density"`
+	ConstantDeclared  *float64           `json:"constant_declared"`
+	CargoDeclared     *float64           `json:"cargo_declared"`
 	MTCRows           []MTCRow           `json:"mtc_rows"`
 	HydrostaticRows   []HydrostaticRow   `json:"hydrostatic_rows"`
 	TPCListPort       float64            `json:"tpc_list_port"`
 	TPCListStarboard  float64            `json:"tpc_list_starboard"`
-	DistancePPFwd     float64            `json:"distance_pp_fwd"`
+	DistancePPFwd     *float64           `json:"distance_pp_fwd"`
 	PPFwdDirection    string             `json:"pp_fwd_direction"`
-	DistancePPMid     float64            `json:"distance_pp_mid"`
+	DistancePPMid     *float64           `json:"distance_pp_mid"`
 	PPMidDirection    string             `json:"pp_mid_direction"`
-	DistancePPAft     float64            `json:"distance_pp_aft"`
+	DistancePPAft     *float64           `json:"distance_pp_aft"`
 	PPAftDirection    string             `json:"pp_aft_direction"`
-	KeelFwd           float64            `json:"keel_fwd"`
-	KeelMid           float64            `json:"keel_mid"`
-	KeelAft           float64            `json:"keel_aft"`
+	KeelFwd           *float64           `json:"keel_fwd"`
+	KeelMid           *float64           `json:"keel_mid"`
+	KeelAft           *float64           `json:"keel_aft"`
 	StartedAt         time.Time          `json:"started_at"`
 	FinishedAt        time.Time          `json:"finished_at"`
 }

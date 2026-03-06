@@ -38,20 +38,20 @@ func MeanDrafts(m types.Marks) types.MeanDraft {
 	}
 }
 
-func CalcFullLBPPPCorrections(m types.MeanDraft, v vessel.VesselData) types.PPCorrections {
+func CalcFullLBPPPCorrections(m types.MeanDraft, draft types.Draft, lbp float64) types.PPCorrections {
 	trim := m.DraftAftMean - m.DraftFwdMean
 	var dFwdDir, dMidDir, dAftDir float64
 
-	if dFwdDir = v.DistancePPFwd; v.PPFwdDirection == vessel.PPDirectionAft {
+	if dFwdDir = markVal(draft.DistancePPFwd); draft.PPFwdDirection == "A" {
 		dFwdDir *= -1
 	}
-	if dMidDir = v.DistancePPMid; v.PPMidDirection == vessel.PPDirectionAft {
+	if dMidDir = markVal(draft.DistancePPMid); draft.PPMidDirection == "A" {
 		dMidDir *= -1
 	}
-	if dAftDir = v.DistancePPAft; v.PPAftDirection == vessel.PPDirectionAft {
+	if dAftDir = markVal(draft.DistancePPAft); draft.PPAftDirection == "A" {
 		dAftDir *= -1
 	}
-	lbm := round3(v.LBP - dAftDir + dFwdDir)
+	lbm := round3(lbp - dAftDir + dFwdDir)
 	return types.PPCorrections{
 		FwdCorrection: round3(dFwdDir * trim / lbm),
 		MidCorrection: round3(dMidDir * trim / lbm),
@@ -59,25 +59,25 @@ func CalcFullLBPPPCorrections(m types.MeanDraft, v vessel.VesselData) types.PPCo
 	}
 }
 
-func CalcHalfLBPPPCorrections(m types.MeanDraft, v vessel.VesselData) types.PPCorrections {
+func CalcHalfLBPPPCorrections(m types.MeanDraft, draft types.Draft, lbp float64) types.PPCorrections {
 	var dFwdDir, dMidDir, dAftDir float64
 
-	if dFwdDir = v.DistancePPFwd; v.PPFwdDirection == vessel.PPDirectionAft {
+	if dFwdDir = markVal(draft.DistancePPFwd); draft.PPFwdDirection == "A" {
 		dFwdDir *= -1
 	}
-	if dMidDir = v.DistancePPMid; v.PPMidDirection == vessel.PPDirectionAft {
+	if dMidDir = markVal(draft.DistancePPMid); draft.PPMidDirection == "A" {
 		dMidDir *= -1
 	}
-	if dAftDir = v.DistancePPAft; v.PPAftDirection == vessel.PPDirectionAft {
+	if dAftDir = markVal(draft.DistancePPAft); draft.PPAftDirection == "A" {
 		dAftDir *= -1
 	}
 
-	lbmMidFwd := round3((v.LBP / 2) - dMidDir - dFwdDir)
-	lbmAftMid := round3((v.LBP / 2) - dAftDir - dMidDir)
+	lbmMidFwd := round3((lbp / 2) - dMidDir - dFwdDir)
+	lbmAftMid := round3((lbp / 2) - dAftDir - dMidDir)
 
 	fwdCorr := round3(dFwdDir * (m.DraftMidMean - m.DraftFwdMean) / lbmMidFwd)
 	midCorr := round3(dMidDir * (m.DraftMidMean - m.DraftFwdMean) / lbmMidFwd)
-	midWKeel := round3(m.DraftMidMean + midCorr - (v.KeelMid / 1000))
+	midWKeel := round3(m.DraftMidMean + midCorr - (markVal(draft.KeelMid) / 1000))
 	aftCorr := round3(dAftDir * (m.DraftAftMean - midWKeel) / lbmAftMid)
 
 	return types.PPCorrections{
@@ -88,10 +88,10 @@ func CalcHalfLBPPPCorrections(m types.MeanDraft, v vessel.VesselData) types.PPCo
 }
 
 func CalcDraftsWKeel(
-	meanDraft types.MeanDraft, ppCorrections types.PPCorrections, v vessel.VesselData) types.DraftsWKeel {
-	keelCorrectionFwd := -1 * v.KeelFwd / 1000
-	keelCorrectionMid := -1 * v.KeelMid / 1000
-	keelCorrectionAft := -1 * v.KeelAft / 1000
+	meanDraft types.MeanDraft, ppCorrections types.PPCorrections, draft types.Draft) types.DraftsWKeel {
+	keelCorrectionFwd := -1 * markVal(draft.KeelFwd) / 1000
+	keelCorrectionMid := -1 * markVal(draft.KeelMid) / 1000
+	keelCorrectionAft := -1 * markVal(draft.KeelAft) / 1000
 
 	return types.DraftsWKeel{
 		FwdDraftWKeel: round3(meanDraft.DraftFwdMean + ppCorrections.FwdCorrection + keelCorrectionFwd),
@@ -123,22 +123,22 @@ func Interpolate(fact, lowerDraft, lowerValue, upperDraft, upperValue float64) f
 
 func CalcHydrostatics(mmc float64, hr []types.HydrostaticRow, v vessel.VesselData) types.Hydrostatics {
 	var lower, upper types.HydrostaticRow
-	if hr[0].Draft < hr[1].Draft {
+	if markVal(hr[0].Draft) < markVal(hr[1].Draft) {
 		lower = hr[0]
 		upper = hr[1]
 	} else {
 		lower = hr[1]
 		upper = hr[0]
 	}
-	displacement := Interpolate(mmc, lower.Draft, lower.Displacement, upper.Draft, upper.Displacement)
-	tpc := Interpolate(mmc, lower.Draft, lower.TPC, upper.Draft, upper.TPC)
+	displacement := Interpolate(mmc, markVal(lower.Draft), markVal(lower.Displacement), markVal(upper.Draft), markVal(upper.Displacement))
+	tpc := Interpolate(mmc, markVal(lower.Draft), markVal(lower.TPC), markVal(upper.Draft), markVal(upper.TPC))
 	const k3 = 0.045
-	lowerLcf := lower.LCF
-	upperLcf := upper.LCF
+	lowerLcf := markVal(lower.LCF)
+	upperLcf := markVal(upper.LCF)
 
-	if lower.LCFDirection == types.LCFDirectionFromAP || lower.LCF > v.LBP*k3 {
-		lowerLcf = (v.LBP / 2) - lower.LCF
-		upperLcf = (v.LBP / 2) - upper.LCF
+	if lower.LCFDirection == types.LCFDirectionFromAP || markVal(lower.LCF) > v.LBP*k3 {
+		lowerLcf = (v.LBP / 2) - markVal(lower.LCF)
+		upperLcf = (v.LBP / 2) - markVal(upper.LCF)
 	} else {
 		if lower.LCFDirection == types.LCFDirectionForward {
 			lowerLcf *= -1
@@ -148,7 +148,7 @@ func CalcHydrostatics(mmc float64, hr []types.HydrostaticRow, v vessel.VesselDat
 		}
 	}
 
-	lcf := Interpolate(mmc, lower.Draft, lowerLcf, upper.Draft, upperLcf)
+	lcf := Interpolate(mmc, markVal(lower.Draft), lowerLcf, markVal(upper.Draft), upperLcf)
 
 	return types.Hydrostatics{
 		Displacement: displacement,
@@ -172,7 +172,7 @@ func CalcFirstTrimCorrection(dwk types.DraftsWKeel, tpc float64, lcf float64, lb
 
 func CalcSecondTrimCorrection(dwk types.DraftsWKeel, mtcRows []types.MTCRow, lbp float64) float64 {
 	var lowerMtcRow, upperMtcRow types.MTCRow
-	if mtcRows[0].Draft < mtcRows[1].Draft {
+	if markVal(mtcRows[0].Draft) < markVal(mtcRows[1].Draft) {
 		lowerMtcRow = mtcRows[0]
 		upperMtcRow = mtcRows[1]
 	} else {
@@ -180,7 +180,7 @@ func CalcSecondTrimCorrection(dwk types.DraftsWKeel, mtcRows []types.MTCRow, lbp
 		upperMtcRow = mtcRows[0]
 	}
 
-	deltaMtc := upperMtcRow.MTC - lowerMtcRow.MTC
+	deltaMtc := markVal(upperMtcRow.MTC) - markVal(lowerMtcRow.MTC)
 	trueTrim := dwk.AftDraftWKeel - dwk.FwdDraftWKeel
 
 	return round3(50 * math.Pow(trueTrim, 2) * deltaMtc / lbp)
@@ -202,7 +202,7 @@ func CalcTotalDeductibles(bwt []types.BallastWaterTank, fwt []types.FreshWaterTa
 	tbw := TotalBallastWater(bwt)
 	tfw := TotalFreshWater(fwt)
 
-	return round3(tbw + tfw + d.HFO + d.MDO + d.LubOil + d.BilgeWater + d.SewageWater + d.Others)
+	return round3(tbw + tfw + markVal(d.HFO) + markVal(d.MDO) + markVal(d.LubOil) + markVal(d.BilgeWater) + markVal(d.SewageWater) + markVal(d.Others))
 }
 
 func CalcNetDisplacement(displacement, firstTrim, secondTrim, listCorrection, densityCorrection, totalDeductibles float64) float64 {

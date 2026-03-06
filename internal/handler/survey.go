@@ -84,8 +84,10 @@ func (h *Handler) getNewSurvey(c *fiber.Ctx) (*types.Survey, error) {
 
 	job := types.Job{
 		JobNumber: c.FormValue("job_no"),
-		DSNumber:  parseInt(c, "ds_no"),
 		Principal: c.FormValue("client"),
+	}
+	if v, _ := parseInt(c, "ds_no"); v != nil {
+		job.DSNumber = *v
 	}
 
 	cargoOperation := types.CargoOperation{
@@ -100,17 +102,53 @@ func (h *Handler) getNewSurvey(c *fiber.Ctx) (*types.Survey, error) {
 		Name:             c.FormValue("vessel_name"),
 		Flag:             c.FormValue("flag"),
 		IMO:              c.FormValue("imo"),
-		BuiltYear:        parseInt(c, "built"),
-		Lightship:        parseFloat(c, "lightship"),
-		Breadth:          parseFloat(c, "breadth"),
-		Depth:            parseFloat(c, "depth"),
-		LBP:              parseFloat(c, "lbp"),
-		SummerDraft:      parseFloat(c, "summer_draft"),
-		SummerDWT:        parseFloat(c, "summer_dwt"),
-		SummerTPC:        parseFloat(c, "summer_tpc"),
-		SummerFreeboard:  parseFloat(c, "summer_freeboard"),
 		VesselType:       vessel.VesselType(c.FormValue("mmc_method")),
 		CorrectionMethod: vessel.CorrectionMethod(c.FormValue("corr_method")),
+	}
+	if v, _ := parseInt(c, "built"); v != nil {
+		vesselData.BuiltYear = *v
+	}
+	if v, _ := parseFloat(c, "lightship"); v != nil {
+		vesselData.Lightship = *v
+	}
+	if v, _ := parseFloat(c, "breadth"); v != nil {
+		vesselData.Breadth = *v
+	}
+	if v, _ := parseFloat(c, "depth"); v != nil {
+		vesselData.Depth = *v
+	}
+	if v, _ := parseFloat(c, "lbp"); v != nil {
+		vesselData.LBP = *v
+	}
+	if v, _ := parseFloat(c, "summer_draft"); v != nil {
+		vesselData.SummerDraft = *v
+	}
+	if v, _ := parseFloat(c, "summer_dwt"); v != nil {
+		vesselData.SummerDWT = *v
+	}
+	if v, _ := parseFloat(c, "summer_tpc"); v != nil {
+		vesselData.SummerTPC = *v
+	}
+	if v, _ := parseFloat(c, "summer_freeboard"); v != nil {
+		vesselData.SummerFreeboard = *v
+	}
+	if v, _ := parseFloat(c, "distance_pp_fwd"); v != nil {
+		vesselData.DistancePPFwd = *v
+	}
+	if v, _ := parseFloat(c, "distance_pp_mid"); v != nil {
+		vesselData.DistancePPMid = *v
+	}
+	if v, _ := parseFloat(c, "distance_pp_aft"); v != nil {
+		vesselData.DistancePPAft = *v
+	}
+	if v, _ := parseFloat(c, "keel_fwd"); v != nil {
+		vesselData.KeelFwd = *v
+	}
+	if v, _ := parseFloat(c, "keel_mid"); v != nil {
+		vesselData.KeelMid = *v
+	}
+	if v, _ := parseFloat(c, "keel_aft"); v != nil {
+		vesselData.KeelAft = *v
 	}
 
 	seaCondition := types.SeaCondition{
