@@ -42,8 +42,8 @@ func ResultsPageProps(user *types.User, survey *types.Survey, results *[]calcula
 	return components.LayoutProps{
 		Title:           "Drafts Results",
 		MetaDescription: "Review final findings for assesement",
-		ExtraCSS:        []string{},
-		ExtraJS:         []string{},
+		ExtraCSS:        []string{"/static/css/results.css"},
+		ExtraJS:         []string{"/static/js/results.js"},
 		User:            user,
 		Survey:          survey,
 		Results:         results,
