@@ -1,12 +1,16 @@
 package components
 
-import "github.com/AVZotov/draft-survey/internal/types"
+import (
+	"github.com/AVZotov/draft-survey/internal/calculation"
+	"github.com/AVZotov/draft-survey/internal/types"
+)
 
 type LayoutProps struct {
 	Title           string
 	MetaDescription string
 	User            *types.User
 	Survey          *types.Survey
+	Results         *[]calculation.DraftResult
 	ExtraCSS        []string
 	ExtraJS         []string
 }

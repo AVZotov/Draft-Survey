@@ -1,6 +1,7 @@
 package web
 
 import (
+	"github.com/AVZotov/draft-survey/internal/calculation"
 	"github.com/AVZotov/draft-survey/internal/types"
 	"github.com/AVZotov/draft-survey/web/components"
 )
@@ -34,6 +35,18 @@ func DraftReadingsProps(user *types.User, survey *types.Survey) components.Layou
 		ExtraJS:         []string{"/static/js/draft-readings.js"},
 		User:            user,
 		Survey:          survey,
+	}
+}
+
+func ResultsPageProps(user *types.User, survey *types.Survey, results *[]calculation.DraftResult) components.LayoutProps {
+	return components.LayoutProps{
+		Title:           "Drafts Results",
+		MetaDescription: "Review final findings for assesement",
+		ExtraCSS:        []string{},
+		ExtraJS:         []string{},
+		User:            user,
+		Survey:          survey,
+		Results:         results,
 	}
 }
 

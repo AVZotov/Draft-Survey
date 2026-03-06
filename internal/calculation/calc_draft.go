@@ -43,9 +43,13 @@ func CalcDraft(draft types.Draft, v vessel.VesselData) DraftResult {
 	listMeters = round3(markVal(draft.Marks.MidPort.Value) - markVal(draft.Marks.MidStarboard.Value))
 	listDegrees = round3(math.Atan2(listMeters, v.Breadth) * 180 / math.Pi)
 	deflection = round3((draftsWKeel.MidDraftWKeel - (draftsWKeel.FwdDraftWKeel+draftsWKeel.AftDraftWKeel)/2) * 100)
-	hydrostatics = CalcHydrostatics(mmc, draft.HydrostaticRows, v)
-	firstTrimCorrection = CalcFirstTrimCorrection(draftsWKeel, hydrostatics.TPC, hydrostatics.LCF, v.LBP)
-	secondTrimCorrection = CalcSecondTrimCorrection(draftsWKeel, draft.MTCRows, v.LBP)
+	if len(draft.HydrostaticRows) >= 2 {
+		hydrostatics = CalcHydrostatics(mmc, draft.HydrostaticRows, v)
+		firstTrimCorrection = CalcFirstTrimCorrection(draftsWKeel, hydrostatics.TPC, hydrostatics.LCF, v.LBP)
+	}
+	if len(draft.MTCRows) >= 2 {
+		secondTrimCorrection = CalcSecondTrimCorrection(draftsWKeel, draft.MTCRows, v.LBP)
+	}
 	listCorrection = CalcListCorrection(draft.Marks, draft.TPCListPort, draft.TPCListStarboard)
 	totalTrimCorrection = round3(firstTrimCorrection + secondTrimCorrection + listCorrection)
 	if draft.Density != nil {
