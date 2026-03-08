@@ -2,6 +2,7 @@ package handler
 
 import (
 	"github.com/AVZotov/draft-survey/internal/calculation"
+	"github.com/AVZotov/draft-survey/internal/handler/tadaptor"
 	"github.com/AVZotov/draft-survey/internal/types"
 	"github.com/AVZotov/draft-survey/web"
 	"github.com/gofiber/fiber/v2"
@@ -26,6 +27,6 @@ func (h *Handler) surveyResults(c *fiber.Ctx) error {
 			results[i] = calculation.CalcDraft(draft, survey.VesselData)
 		}
 	}
-	_ = web.ResultsPageProps(user, survey, &results)
-	return nil
+	props := web.ResultsPageProps(user, survey, &results)
+	return tadaptor.Render(c, web.Results(props))
 }
