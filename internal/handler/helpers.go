@@ -181,11 +181,11 @@ func (h *Handler) parseDraft(c *fiber.Ctx, survey *types.Survey) {
 		if err == nil {
 			survey.Drafts[i].KeelAft = keelAft
 		}
-		constDeclared, err := parseFloat(c, constants.ConstDeclared)
+		constDeclared, err := parseFloat(c, fmt.Sprintf("%s-d%d", constants.ConstDeclared, i))
 		if err == nil {
-			survey.Drafts[0].ConstantDeclared = constDeclared
+			survey.Drafts[i].ConstantDeclared = constDeclared
 		}
-		cargoDeclared, err := parseFloat(c, constants.CargoDeclared)
+		cargoDeclared, err := parseFloat(c, fmt.Sprintf("%s-d%d", constants.CargoDeclared, i))
 		if err == nil {
 			survey.Drafts[i].CargoDeclared = cargoDeclared
 		}

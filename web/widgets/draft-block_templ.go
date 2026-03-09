@@ -5276,7 +5276,7 @@ func DraftBlock(props components.DraftBlockProps, vessel vessel.VesselData) temp
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 639, "<!-- <div class=\"df\"><label>Constant Declared, MT</label><input type=\"number\" name={ constants.ConstDeclared } placeholder=\"0.000\" step=\"any\"/></div> --><div class=\"df\"><label>Others, MT</label> ")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 639, "<div class=\"df\"><label>Others, MT</label> ")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -5288,7 +5288,7 @@ func DraftBlock(props components.DraftBlockProps, vessel vessel.VesselData) temp
 			var templ_7745c5c3_Var256 string
 			templ_7745c5c3_Var256, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%s-d%d", constants.Others, props.Index))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/draft-block.templ`, Line: 534, Col: 86}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/draft-block.templ`, Line: 533, Col: 86}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var256))
 			if templ_7745c5c3_Err != nil {
@@ -5301,7 +5301,7 @@ func DraftBlock(props components.DraftBlockProps, vessel vessel.VesselData) temp
 			var templ_7745c5c3_Var257 string
 			templ_7745c5c3_Var257, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%g", *props.Draft.Deductibles.Others))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/draft-block.templ`, Line: 534, Col: 178}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/draft-block.templ`, Line: 533, Col: 178}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var257))
 			if templ_7745c5c3_Err != nil {
@@ -5329,7 +5329,7 @@ func DraftBlock(props components.DraftBlockProps, vessel vessel.VesselData) temp
 			var templ_7745c5c3_Var258 string
 			templ_7745c5c3_Var258, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%s-d%d", constants.Others, props.Index))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/draft-block.templ`, Line: 536, Col: 86}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/draft-block.templ`, Line: 535, Col: 86}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var258))
 			if templ_7745c5c3_Err != nil {
