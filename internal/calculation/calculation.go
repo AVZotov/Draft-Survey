@@ -136,7 +136,7 @@ func CalcHydrostatics(mmc float64, hr []types.HydrostaticRow, v vessel.VesselDat
 	lowerLcf := markVal(lower.LCF)
 	upperLcf := markVal(upper.LCF)
 
-	if lower.LCFDirection == types.LCFDirectionFromAP || markVal(lower.LCF) > v.LBP*k3 {
+	if upper.LCFDirection == types.LCFDirectionFromAP || markVal(upper.LCF) > v.LBP*k3 {
 		lowerLcf = (v.LBP / 2) - markVal(lower.LCF)
 		upperLcf = (v.LBP / 2) - markVal(upper.LCF)
 	} else {

@@ -7,89 +7,96 @@ import (
 	"github.com/AVZotov/draft-survey/internal/vessel"
 )
 
+func fp(v float64) *float64 { return &v }
+
 func getFreshWaterTank() types.FreshWaterTank {
 	return types.FreshWaterTank{
 		Name:     "test",
-		Sounding: 3.5,
-		Volume:   3.5,
+		Sounding: fp(3.5),
+		Volume:   fp(3.5),
 	}
 }
 
 func getInitFreshWaterTanks() []types.FreshWaterTank {
 	return []types.FreshWaterTank{
-		{Name: "FW P", Sounding: 364.000, Volume: 364.000},
+		{Name: "FW P", Sounding: fp(364.000), Volume: fp(364.000)},
 	}
 }
 
 func getBallastWaterTank() types.BallastWaterTank {
 	return types.BallastWaterTank{
 		Name:     "test",
-		Sounding: 3.5,
-		Volume:   3.5,
-		Density:  1.025,
+		Sounding: fp(3.5),
+		Volume:   fp(3.5),
+		Density:  fp(1.025),
 	}
 }
 
 func getInitBallastWaterTanks() []types.BallastWaterTank {
 	return []types.BallastWaterTank{
-		{Name: "FPT", Sounding: 10347.899, Volume: 10347.899, Density: 1.025},
+		{Name: "FPT", Sounding: fp(10347.899), Volume: fp(10347.899), Density: fp(1.025)},
 	}
 }
 
-func getInitDraftData() types.InitialDraft {
-	return types.InitialDraft{
+func getInitDraftData() types.Draft {
+	return types.Draft{
 		TPCListPort:      49.665,
 		TPCListStarboard: 49.688,
-		Density:          1.023,
+		Density:          fp(1.023),
 	}
 }
 
 func getMarks() types.Marks {
 	return types.Marks{
-		FwdPort:      types.Mark{Value: 3.41},
-		FwdStarboard: types.Mark{Value: 3.41},
-		MidPort:      types.Mark{Value: 4.51},
-		MidStarboard: types.Mark{Value: 4.54},
-		AftPort:      types.Mark{Value: 5.69},
-		AftStarboard: types.Mark{Value: 5.70},
+		FwdPort:      types.Mark{Value: fp(3.41)},
+		FwdStarboard: types.Mark{Value: fp(3.41)},
+		MidPort:      types.Mark{Value: fp(4.51)},
+		MidStarboard: types.Mark{Value: fp(4.54)},
+		AftPort:      types.Mark{Value: fp(5.69)},
+		AftStarboard: types.Mark{Value: fp(5.70)},
 	}
 }
 
 func getVesselData() vessel.VesselData {
 	return vessel.VesselData{
-		DistancePPFwd:  1.400,
-		DistancePPMid:  0.400,
-		DistancePPAft:  9.950,
-		PPFwdDirection: vessel.PPDirectionAft,
-		PPMidDirection: vessel.PPDirectionAft,
-		PPAftDirection: vessel.PPDirectionForward,
-		LBP:            182.000,
-		KeelFwd:        0.000,
-		KeelMid:        0.000,
-		KeelAft:        0.000,
-		VesselType:     vessel.VesselTypeMarine,
-		Lightship:      8390.000,
+		LBP:        182.000,
+		VesselType: vessel.VesselTypeMarine,
+		Lightship:  8390.000,
+	}
+}
+
+func getDraft() types.Draft {
+	return types.Draft{
+		DistancePPFwd:  fp(1.400),
+		PPFwdDirection: "A",
+		DistancePPMid:  fp(0.400),
+		PPMidDirection: "A",
+		DistancePPAft:  fp(9.950),
+		PPAftDirection: "F",
+		KeelFwd:        fp(0.000),
+		KeelMid:        fp(0.000),
+		KeelAft:        fp(0.000),
 	}
 }
 
 func getInitHydrostaticRows() []types.HydrostaticRow {
 	return []types.HydrostaticRow{
-		{Draft: 4.54, Displacement: 21226, TPC: 49.7, LCF: 6.93, LCFDirection: types.LCFDirectionForward},
-		{Draft: 4.55, Displacement: 21276, TPC: 49.7, LCF: 6.92, LCFDirection: types.LCFDirectionForward},
+		{Draft: fp(4.54), Displacement: fp(21226), TPC: fp(49.7), LCF: fp(6.93), LCFDirection: types.LCFDirectionForward},
+		{Draft: fp(4.55), Displacement: fp(21276), TPC: fp(49.7), LCF: fp(6.92), LCFDirection: types.LCFDirectionForward},
 	}
 }
 
 func getInitMtcRows() []types.MTCRow {
 	return []types.MTCRow{
-		{Draft: 4.04, MTC: 529.4},
-		{Draft: 5.04, MTC: 548.0},
+		{Draft: fp(4.04), MTC: fp(529.4)},
+		{Draft: fp(5.04), MTC: fp(548.0)},
 	}
 }
 
 func getInitDeductibles() types.Deductibles {
 	return types.Deductibles{
-		HFO: 683.868,
-		MDO: 89.130,
+		HFO: fp(683.868),
+		MDO: fp(89.130),
 	}
 }
 
@@ -161,7 +168,7 @@ func TestCalcFullLBPPPCorrections(t *testing.T) {
 
 	meanDrafts := MeanDrafts(getMarks())
 	vesselData := getVesselData()
-	ppCorrections := CalcFullLBPPPCorrections(meanDrafts, vesselData)
+	ppCorrections := CalcFullLBPPPCorrections(meanDrafts, getDraft(), vesselData.LBP)
 
 	if fwdCorrectionExpected != ppCorrections.FwdCorrection {
 		t.Errorf("Expected %f, got %f", fwdCorrectionExpected, ppCorrections.FwdCorrection)
@@ -181,7 +188,7 @@ func TestCalcHalfLBPPPCorrections(t *testing.T) {
 
 	meanDrafts := MeanDrafts(getMarks())
 	vesselData := getVesselData()
-	ppCorrections := CalcHalfLBPPPCorrections(meanDrafts, vesselData)
+	ppCorrections := CalcHalfLBPPPCorrections(meanDrafts, getDraft(), vesselData.LBP)
 
 	if fwdCorrectionExpected != ppCorrections.FwdCorrection {
 		t.Errorf("Expected %f, got %f", fwdCorrectionExpected, ppCorrections.FwdCorrection)
@@ -202,8 +209,8 @@ func TestCalcDraftsWKeel(t *testing.T) {
 	marks := getMarks()
 	meanDraft := MeanDrafts(marks)
 	vesselData := getVesselData()
-	ppCorrections := CalcFullLBPPPCorrections(meanDraft, vesselData)
-	draftsWKeel := CalcDraftsWKeel(meanDraft, ppCorrections, vesselData)
+	ppCorrections := CalcFullLBPPPCorrections(meanDraft, getDraft(), vesselData.LBP)
+	draftsWKeel := CalcDraftsWKeel(meanDraft, ppCorrections, getDraft())
 
 	if FWDDraftsWKeelExpected != draftsWKeel.FwdDraftWKeel {
 		t.Errorf("Expected %f, got %f", FWDDraftsWKeelExpected, draftsWKeel.FwdDraftWKeel)
@@ -221,8 +228,8 @@ func TestCalcMMC(t *testing.T) {
 	marks := getMarks()
 	meanDraft := MeanDrafts(marks)
 	vesselData := getVesselData()
-	ppCorrections := CalcFullLBPPPCorrections(meanDraft, vesselData)
-	draftsWKeel := CalcDraftsWKeel(meanDraft, ppCorrections, vesselData)
+	ppCorrections := CalcFullLBPPPCorrections(meanDraft, getDraft(), vesselData.LBP)
+	draftsWKeel := CalcDraftsWKeel(meanDraft, ppCorrections, getDraft())
 	mmc := CalcMMC(draftsWKeel, vesselData)
 
 	if mmcExpected != mmc {
@@ -246,8 +253,8 @@ func TestCalcHydrostatics(t *testing.T) {
 	marks := getMarks()
 	meanDraft := MeanDrafts(marks)
 	vesselData := getVesselData()
-	ppCorrections := CalcFullLBPPPCorrections(meanDraft, vesselData)
-	draftsWKeel := CalcDraftsWKeel(meanDraft, ppCorrections, vesselData)
+	ppCorrections := CalcFullLBPPPCorrections(meanDraft, getDraft(), vesselData.LBP)
+	draftsWKeel := CalcDraftsWKeel(meanDraft, ppCorrections, getDraft())
 	mmc := CalcMMC(draftsWKeel, vesselData)
 	hr := getInitHydrostaticRows()
 	hydrostatics := CalcHydrostatics(mmc, hr, vesselData)
@@ -268,8 +275,8 @@ func TestCalcFirstTrimCorrection(t *testing.T) {
 	marks := getMarks()
 	meanDraft := MeanDrafts(marks)
 	vesselData := getVesselData()
-	ppCorrections := CalcFullLBPPPCorrections(meanDraft, vesselData)
-	draftsWKeel := CalcDraftsWKeel(meanDraft, ppCorrections, vesselData)
+	ppCorrections := CalcFullLBPPPCorrections(meanDraft, getDraft(), vesselData.LBP)
+	draftsWKeel := CalcDraftsWKeel(meanDraft, ppCorrections, getDraft())
 	mmc := CalcMMC(draftsWKeel, vesselData)
 	hr := getInitHydrostaticRows()
 	hydrostatics := CalcHydrostatics(mmc, hr, vesselData)
@@ -285,8 +292,8 @@ func TestCalcSecondTrimCorrection(t *testing.T) {
 	marks := getMarks()
 	meanDraft := MeanDrafts(marks)
 	vesselData := getVesselData()
-	ppCorrections := CalcFullLBPPPCorrections(meanDraft, vesselData)
-	draftsWKeel := CalcDraftsWKeel(meanDraft, ppCorrections, vesselData)
+	ppCorrections := CalcFullLBPPPCorrections(meanDraft, getDraft(), vesselData.LBP)
+	draftsWKeel := CalcDraftsWKeel(meanDraft, ppCorrections, getDraft())
 	mtcRows := getInitMtcRows()
 	secondTrimCorrectionGot := CalcSecondTrimCorrection(draftsWKeel, mtcRows, vesselData.LBP)
 
@@ -310,8 +317,8 @@ func TestCalcDensityCorrection(t *testing.T) {
 	marks := getMarks()
 	meanDraft := MeanDrafts(marks)
 	vesselData := getVesselData()
-	ppCorrections := CalcFullLBPPPCorrections(meanDraft, vesselData)
-	draftsWKeel := CalcDraftsWKeel(meanDraft, ppCorrections, vesselData)
+	ppCorrections := CalcFullLBPPPCorrections(meanDraft, getDraft(), vesselData.LBP)
+	draftsWKeel := CalcDraftsWKeel(meanDraft, ppCorrections, getDraft())
 	mmc := CalcMMC(draftsWKeel, vesselData)
 	hr := getInitHydrostaticRows()
 	hydrostatics := CalcHydrostatics(mmc, hr, vesselData)
@@ -320,7 +327,7 @@ func TestCalcDensityCorrection(t *testing.T) {
 	firstTrim := CalcFirstTrimCorrection(draftsWKeel, hydrostatics.TPC, hydrostatics.LCF, vesselData.LBP)
 	secondTrim := CalcSecondTrimCorrection(draftsWKeel, mtcRows, vesselData.LBP)
 	listCorrection := CalcListCorrection(marks, initDS.TPCListPort, initDS.TPCListStarboard)
-	densityCorrGot := CalcDensityCorrection(hydrostatics.Displacement, firstTrim, secondTrim, listCorrection, initDS.Density)
+	densityCorrGot := CalcDensityCorrection(hydrostatics.Displacement, firstTrim, secondTrim, listCorrection, *initDS.Density)
 
 	if densityCorrExpected != densityCorrGot {
 		t.Errorf("Expected %f, got %f", densityCorrExpected, densityCorrGot)
@@ -348,8 +355,8 @@ func TestCalcNetDisplacement(t *testing.T) {
 	marks := getMarks()
 	meanDraft := MeanDrafts(marks)
 	vesselData := getVesselData()
-	ppCorrections := CalcFullLBPPPCorrections(meanDraft, vesselData)
-	draftsWKeel := CalcDraftsWKeel(meanDraft, ppCorrections, vesselData)
+	ppCorrections := CalcFullLBPPPCorrections(meanDraft, getDraft(), vesselData.LBP)
+	draftsWKeel := CalcDraftsWKeel(meanDraft, ppCorrections, getDraft())
 	mmc := CalcMMC(draftsWKeel, vesselData)
 	hr := getInitHydrostaticRows()
 	hydrostatics := CalcHydrostatics(mmc, hr, vesselData)
@@ -358,7 +365,7 @@ func TestCalcNetDisplacement(t *testing.T) {
 	firstTrim := CalcFirstTrimCorrection(draftsWKeel, hydrostatics.TPC, hydrostatics.LCF, vesselData.LBP)
 	secondTrim := CalcSecondTrimCorrection(draftsWKeel, mtcRows, vesselData.LBP)
 	listCorrection := CalcListCorrection(marks, initDS.TPCListPort, initDS.TPCListStarboard)
-	densityCorr := CalcDensityCorrection(hydrostatics.Displacement, firstTrim, secondTrim, listCorrection, initDS.Density)
+	densityCorr := CalcDensityCorrection(hydrostatics.Displacement, firstTrim, secondTrim, listCorrection, *initDS.Density)
 	netDisplacementGot := CalcNetDisplacement(hydrostatics.Displacement, firstTrim, secondTrim, listCorrection, densityCorr, totalDeductibles)
 	if netDisplacementExpected != netDisplacementGot {
 		t.Errorf("Expected %f, got %f", netDisplacementExpected, netDisplacementGot)
@@ -384,8 +391,8 @@ func TestCalcConstant(t *testing.T) {
 	marks := getMarks()
 	meanDraft := MeanDrafts(marks)
 	vesselData := getVesselData()
-	ppCorrections := CalcFullLBPPPCorrections(meanDraft, vesselData)
-	draftsWKeel := CalcDraftsWKeel(meanDraft, ppCorrections, vesselData)
+	ppCorrections := CalcFullLBPPPCorrections(meanDraft, getDraft(), vesselData.LBP)
+	draftsWKeel := CalcDraftsWKeel(meanDraft, ppCorrections, getDraft())
 	mmc := CalcMMC(draftsWKeel, vesselData)
 	hr := getInitHydrostaticRows()
 	hydrostatics := CalcHydrostatics(mmc, hr, vesselData)
@@ -394,7 +401,7 @@ func TestCalcConstant(t *testing.T) {
 	firstTrim := CalcFirstTrimCorrection(draftsWKeel, hydrostatics.TPC, hydrostatics.LCF, vesselData.LBP)
 	secondTrim := CalcSecondTrimCorrection(draftsWKeel, mtcRows, vesselData.LBP)
 	listCorrection := CalcListCorrection(marks, initDS.TPCListPort, initDS.TPCListStarboard)
-	densityCorr := CalcDensityCorrection(hydrostatics.Displacement, firstTrim, secondTrim, listCorrection, initDS.Density)
+	densityCorr := CalcDensityCorrection(hydrostatics.Displacement, firstTrim, secondTrim, listCorrection, *initDS.Density)
 	netDisplacement := CalcNetDisplacement(hydrostatics.Displacement, firstTrim, secondTrim, listCorrection, densityCorr, totalDeductibles)
 	constantGot := CalcConstant(netDisplacement, vesselData.Lightship)
 	if constantExpected != constantGot {
@@ -407,8 +414,8 @@ func TestCalcCurrentDWT(t *testing.T) {
 	marks := getMarks()
 	meanDraft := MeanDrafts(marks)
 	vesselData := getVesselData()
-	ppCorrections := CalcFullLBPPPCorrections(meanDraft, vesselData)
-	draftsWKeel := CalcDraftsWKeel(meanDraft, ppCorrections, vesselData)
+	ppCorrections := CalcFullLBPPPCorrections(meanDraft, getDraft(), vesselData.LBP)
+	draftsWKeel := CalcDraftsWKeel(meanDraft, ppCorrections, getDraft())
 	mmc := CalcMMC(draftsWKeel, vesselData)
 	hr := getInitHydrostaticRows()
 	hydrostatics := CalcHydrostatics(mmc, hr, vesselData)
@@ -417,7 +424,7 @@ func TestCalcCurrentDWT(t *testing.T) {
 	firstTrim := CalcFirstTrimCorrection(draftsWKeel, hydrostatics.TPC, hydrostatics.LCF, vesselData.LBP)
 	secondTrim := CalcSecondTrimCorrection(draftsWKeel, mtcRows, vesselData.LBP)
 	listCorrection := CalcListCorrection(marks, initDS.TPCListPort, initDS.TPCListStarboard)
-	densityCorr := CalcDensityCorrection(hydrostatics.Displacement, firstTrim, secondTrim, listCorrection, initDS.Density)
+	densityCorr := CalcDensityCorrection(hydrostatics.Displacement, firstTrim, secondTrim, listCorrection, *initDS.Density)
 	displCorrToDensity := round3(hydrostatics.Displacement + firstTrim + secondTrim + listCorrection + densityCorr)
 	DWTGot := CalcCurrentDWT(displCorrToDensity, vesselData.Lightship)
 	if constantExpected != DWTGot {

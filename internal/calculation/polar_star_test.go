@@ -11,39 +11,44 @@ import (
 
 func getPolarStarTrimNoListVessel() vessel.VesselData {
 	return vessel.VesselData{
-		LBP:            183.000,
-		DistancePPFwd:  4.800,
-		DistancePPMid:  0.500,
-		DistancePPAft:  1.200,
-		PPFwdDirection: vessel.PPDirectionAft,
-		PPMidDirection: vessel.PPDirectionAft,
-		PPAftDirection: vessel.PPDirectionAft,
-		KeelFwd:        0,
-		KeelMid:        0,
-		KeelAft:        0,
-		VesselType:     vessel.VesselTypeMarine,
+		LBP:        183.000,
+		VesselType: vessel.VesselTypeMarine,
+	}
+}
+
+func getPolarStarDraft() types.Draft {
+	return types.Draft{
+		DistancePPFwd:  fp(4.800),
+		PPFwdDirection: "A",
+		DistancePPMid:  fp(0.500),
+		PPMidDirection: "A",
+		DistancePPAft:  fp(1.200),
+		PPAftDirection: "A",
+		KeelFwd:        fp(0),
+		KeelMid:        fp(0),
+		KeelAft:        fp(0),
 	}
 }
 
 func getPolarStarTrimNoListMarks() types.Marks {
 	return types.Marks{
-		FwdPort: types.Mark{Value: 3.33}, FwdStarboard: types.Mark{Value: 3.33},
-		MidPort: types.Mark{Value: 4.64}, MidStarboard: types.Mark{Value: 4.64},
-		AftPort: types.Mark{Value: 6.12}, AftStarboard: types.Mark{Value: 6.12},
+		FwdPort: types.Mark{Value: fp(3.33)}, FwdStarboard: types.Mark{Value: fp(3.33)},
+		MidPort: types.Mark{Value: fp(4.64)}, MidStarboard: types.Mark{Value: fp(4.64)},
+		AftPort: types.Mark{Value: fp(6.12)}, AftStarboard: types.Mark{Value: fp(6.12)},
 	}
 }
 
 func getPolarStarTrimNoListHydrostaticRows() []types.HydrostaticRow {
 	return []types.HydrostaticRow{
-		{Draft: 4.617, Displacement: 19182.7, TPC: 45.2, LCF: 98.457, LCFDirection: types.LCFDirectionFromAP},
-		{Draft: 4.667, Displacement: 19409.0, TPC: 45.3, LCF: 98.405, LCFDirection: types.LCFDirectionFromAP},
+		{Draft: fp(4.617), Displacement: fp(19182.7), TPC: fp(45.2), LCF: fp(98.457), LCFDirection: types.LCFDirectionFromAP},
+		{Draft: fp(4.667), Displacement: fp(19409.0), TPC: fp(45.3), LCF: fp(98.405), LCFDirection: types.LCFDirectionFromAP},
 	}
 }
 
 func getPolarStarTrimNoListMTCRows() []types.MTCRow {
 	return []types.MTCRow{
-		{Draft: 4.167, MTC: 500.2},
-		{Draft: 5.167, MTC: 526.9},
+		{Draft: fp(4.167), MTC: fp(500.2)},
+		{Draft: fp(5.167), MTC: fp(526.9)},
 	}
 }
 
@@ -65,7 +70,7 @@ func TestPolarStar_TrimNoList_MeanDrafts(t *testing.T) {
 func TestPolarStar_TrimnoList_PPCorrections(t *testing.T) {
 	marks := getPolarStarTrimNoListMarks()
 	vesselData := getPolarStarTrimNoListVessel()
-	got := CalcFullLBPPPCorrections(MeanDrafts(marks), vesselData)
+	got := CalcFullLBPPPCorrections(MeanDrafts(marks), getPolarStarDraft(), vesselData.LBP)
 
 	if got.FwdCorrection != -0.075 {
 		t.Errorf("FWD corr: expected -0.075, got %f", got.FwdCorrection)
@@ -82,8 +87,8 @@ func TestPolarStar_TrimNoList_DraftsWKeel(t *testing.T) {
 	marks := getPolarStarTrimNoListMarks()
 	vesselData := getPolarStarTrimNoListVessel()
 	meanDraft := MeanDrafts(marks)
-	ppCorrections := CalcFullLBPPPCorrections(meanDraft, vesselData)
-	got := CalcDraftsWKeel(meanDraft, ppCorrections, vesselData)
+	ppCorrections := CalcFullLBPPPCorrections(meanDraft, getPolarStarDraft(), vesselData.LBP)
+	got := CalcDraftsWKeel(meanDraft, ppCorrections, getPolarStarDraft())
 
 	if got.FwdDraftWKeel != 3.255 {
 		t.Errorf("FWD wKeel: expected 3.255, got %f", got.FwdDraftWKeel)
@@ -100,8 +105,8 @@ func TestPolarStar_TrimNoList_MMC(t *testing.T) {
 	marks := getPolarStarTrimNoListMarks()
 	vesselData := getPolarStarTrimNoListVessel()
 	meanDraft := MeanDrafts(marks)
-	ppCorrections := CalcFullLBPPPCorrections(meanDraft, vesselData)
-	draftsWKeel := CalcDraftsWKeel(meanDraft, ppCorrections, vesselData)
+	ppCorrections := CalcFullLBPPPCorrections(meanDraft, getPolarStarDraft(), vesselData.LBP)
+	draftsWKeel := CalcDraftsWKeel(meanDraft, ppCorrections, getPolarStarDraft())
 	got := CalcMMC(draftsWKeel, vesselData)
 
 	if got != 4.644 {
@@ -116,8 +121,8 @@ func TestPolarStar_TrimNoListCalcHydrostatics(t *testing.T) {
 	marks := getPolarStarTrimNoListMarks()
 	vesselData := getPolarStarTrimNoListVessel()
 	meanDraft := MeanDrafts(marks)
-	ppCorrections := CalcFullLBPPPCorrections(meanDraft, vesselData)
-	draftsWKeel := CalcDraftsWKeel(meanDraft, ppCorrections, vesselData)
+	ppCorrections := CalcFullLBPPPCorrections(meanDraft, getPolarStarDraft(), vesselData.LBP)
+	draftsWKeel := CalcDraftsWKeel(meanDraft, ppCorrections, getPolarStarDraft())
 	mmc := CalcMMC(draftsWKeel, vesselData)
 	hr := getPolarStarTrimNoListHydrostaticRows()
 
@@ -138,8 +143,8 @@ func TestPolarStar_TrimNoList_FirstTrimCorrection(t *testing.T) {
 	marks := getPolarStarTrimNoListMarks()
 	vesselData := getPolarStarTrimNoListVessel()
 	meanDraft := MeanDrafts(marks)
-	ppCorrections := CalcFullLBPPPCorrections(meanDraft, vesselData)
-	draftsWKeel := CalcDraftsWKeel(meanDraft, ppCorrections, vesselData)
+	ppCorrections := CalcFullLBPPPCorrections(meanDraft, getPolarStarDraft(), vesselData.LBP)
+	draftsWKeel := CalcDraftsWKeel(meanDraft, ppCorrections, getPolarStarDraft())
 	mmc := CalcMMC(draftsWKeel, vesselData)
 	hr := getPolarStarTrimNoListHydrostaticRows()
 	hydrostatics := CalcHydrostatics(mmc, hr, vesselData)
@@ -154,8 +159,8 @@ func TestPolarStar_TrimNoList_SecondTrimCorrection(t *testing.T) {
 	marks := getPolarStarTrimNoListMarks()
 	vesselData := getPolarStarTrimNoListVessel()
 	meanDraft := MeanDrafts(marks)
-	ppCorrections := CalcFullLBPPPCorrections(meanDraft, vesselData)
-	draftsWKeel := CalcDraftsWKeel(meanDraft, ppCorrections, vesselData)
+	ppCorrections := CalcFullLBPPPCorrections(meanDraft, getPolarStarDraft(), vesselData.LBP)
+	draftsWKeel := CalcDraftsWKeel(meanDraft, ppCorrections, getPolarStarDraft())
 	mtcRows := getPolarStarTrimNoListMTCRows()
 	got := CalcSecondTrimCorrection(draftsWKeel, mtcRows, vesselData.LBP)
 
@@ -177,8 +182,8 @@ func TestPolarStar_TrimNoList_DensityCorrection(t *testing.T) {
 	marks := getPolarStarTrimNoListMarks()
 	vesselData := getPolarStarTrimNoListVessel()
 	meanDraft := MeanDrafts(marks)
-	ppCorrections := CalcFullLBPPPCorrections(meanDraft, vesselData)
-	draftsWKeel := CalcDraftsWKeel(meanDraft, ppCorrections, vesselData)
+	ppCorrections := CalcFullLBPPPCorrections(meanDraft, getPolarStarDraft(), vesselData.LBP)
+	draftsWKeel := CalcDraftsWKeel(meanDraft, ppCorrections, getPolarStarDraft())
 	mmc := CalcMMC(draftsWKeel, vesselData)
 	hr := getPolarStarTrimNoListHydrostaticRows()
 	hydrostatics := CalcHydrostatics(mmc, hr, vesselData)
@@ -197,39 +202,30 @@ func TestPolarStar_TrimNoList_DensityCorrection(t *testing.T) {
 
 func getPolarStarTrimListVessel() vessel.VesselData {
 	return vessel.VesselData{
-		LBP:            183.000,
-		DistancePPFwd:  4.800,
-		DistancePPMid:  0.500,
-		DistancePPAft:  1.200,
-		PPFwdDirection: vessel.PPDirectionAft,
-		PPMidDirection: vessel.PPDirectionAft,
-		PPAftDirection: vessel.PPDirectionAft,
-		KeelFwd:        0,
-		KeelMid:        0,
-		KeelAft:        0,
-		VesselType:     vessel.VesselTypeMarine,
+		LBP:        183.000,
+		VesselType: vessel.VesselTypeMarine,
 	}
 }
 
 func getPolarStarTrimListMarks() types.Marks {
 	return types.Marks{
-		FwdPort: types.Mark{Value: 3.39}, FwdStarboard: types.Mark{Value: 3.36},
-		MidPort: types.Mark{Value: 4.64}, MidStarboard: types.Mark{Value: 4.54},
-		AftPort: types.Mark{Value: 6.12}, AftStarboard: types.Mark{Value: 6.12},
+		FwdPort: types.Mark{Value: fp(3.39)}, FwdStarboard: types.Mark{Value: fp(3.36)},
+		MidPort: types.Mark{Value: fp(4.64)}, MidStarboard: types.Mark{Value: fp(4.54)},
+		AftPort: types.Mark{Value: fp(6.12)}, AftStarboard: types.Mark{Value: fp(6.12)},
 	}
 }
 
 func getPolarStarTrimListHydrostaticRows() []types.HydrostaticRow {
 	return []types.HydrostaticRow{
-		{Draft: 4.567, Displacement: 18956.7, TPC: 45.2, LCF: 98.509, LCFDirection: types.LCFDirectionFromAP},
-		{Draft: 4.617, Displacement: 19182.7, TPC: 45.2, LCF: 98.457, LCFDirection: types.LCFDirectionFromAP},
+		{Draft: fp(4.567), Displacement: fp(18956.7), TPC: fp(45.2), LCF: fp(98.509), LCFDirection: types.LCFDirectionFromAP},
+		{Draft: fp(4.617), Displacement: fp(19182.7), TPC: fp(45.2), LCF: fp(98.457), LCFDirection: types.LCFDirectionFromAP},
 	}
 }
 
 func getPolarStarTrimListMTCRows() []types.MTCRow {
 	return []types.MTCRow{
-		{Draft: 4.117, MTC: 498.8},
-		{Draft: 5.117, MTC: 525.7},
+		{Draft: fp(4.117), MTC: fp(498.8)},
+		{Draft: fp(5.117), MTC: fp(525.7)},
 	}
 }
 
@@ -248,7 +244,7 @@ func TestPolarStar_TrimList_MeanDrafts(t *testing.T) {
 
 func TestPolarStar_TrimList_PPCorrections(t *testing.T) {
 	vesselData := getPolarStarTrimListVessel()
-	got := CalcFullLBPPPCorrections(MeanDrafts(getPolarStarTrimListMarks()), vesselData)
+	got := CalcFullLBPPPCorrections(MeanDrafts(getPolarStarTrimListMarks()), getPolarStarDraft(), vesselData.LBP)
 	if got.FwdCorrection != -0.073 {
 		t.Errorf("FWD: expected -0.073, got %f", got.FwdCorrection)
 	}
@@ -263,7 +259,7 @@ func TestPolarStar_TrimList_PPCorrections(t *testing.T) {
 func TestPolarStar_TrimList_DraftsWKeel(t *testing.T) {
 	vesselData := getPolarStarTrimListVessel()
 	meanDraft := MeanDrafts(getPolarStarTrimListMarks())
-	got := CalcDraftsWKeel(meanDraft, CalcFullLBPPPCorrections(meanDraft, vesselData), vesselData)
+	got := CalcDraftsWKeel(meanDraft, CalcFullLBPPPCorrections(meanDraft, getPolarStarDraft(), vesselData.LBP), getPolarStarDraft())
 	if got.FwdDraftWKeel != 3.302 {
 		t.Errorf("FWD wKeel: expected 3.302, got %f", got.FwdDraftWKeel)
 	}
@@ -278,7 +274,7 @@ func TestPolarStar_TrimList_DraftsWKeel(t *testing.T) {
 func TestPolarStar_TrimList_MMC(t *testing.T) {
 	vesselData := getPolarStarTrimListVessel()
 	meanDraft := MeanDrafts(getPolarStarTrimListMarks())
-	draftsWKeel := CalcDraftsWKeel(meanDraft, CalcFullLBPPPCorrections(meanDraft, vesselData), vesselData)
+	draftsWKeel := CalcDraftsWKeel(meanDraft, CalcFullLBPPPCorrections(meanDraft, getPolarStarDraft(), vesselData.LBP), getPolarStarDraft())
 	got := CalcMMC(draftsWKeel, vesselData)
 	if got != 4.612 {
 		t.Errorf("MMC: expected 4.612, got %f", got)
@@ -288,7 +284,7 @@ func TestPolarStar_TrimList_MMC(t *testing.T) {
 func TestPolarStar_TrimList_Hydrostatics(t *testing.T) {
 	vesselData := getPolarStarTrimListVessel()
 	meanDraft := MeanDrafts(getPolarStarTrimListMarks())
-	draftsWKeel := CalcDraftsWKeel(meanDraft, CalcFullLBPPPCorrections(meanDraft, vesselData), vesselData)
+	draftsWKeel := CalcDraftsWKeel(meanDraft, CalcFullLBPPPCorrections(meanDraft, getPolarStarDraft(), vesselData.LBP), getPolarStarDraft())
 	mmc := CalcMMC(draftsWKeel, vesselData)
 	hydrostatics := CalcHydrostatics(mmc, getPolarStarTrimListHydrostaticRows(), vesselData)
 	if hydrostatics.Displacement != 19160.1 {
@@ -305,7 +301,7 @@ func TestPolarStar_TrimList_Hydrostatics(t *testing.T) {
 func TestPolarStar_TrimList_FirstTrimCorrection(t *testing.T) {
 	vesselData := getPolarStarTrimListVessel()
 	meanDraft := MeanDrafts(getPolarStarTrimListMarks())
-	draftsWKeel := CalcDraftsWKeel(meanDraft, CalcFullLBPPPCorrections(meanDraft, vesselData), vesselData)
+	draftsWKeel := CalcDraftsWKeel(meanDraft, CalcFullLBPPPCorrections(meanDraft, getPolarStarDraft(), vesselData.LBP), getPolarStarDraft())
 	mmc := CalcMMC(draftsWKeel, vesselData)
 	hydrostatics := CalcHydrostatics(mmc, getPolarStarTrimListHydrostaticRows(), vesselData)
 	got := CalcFirstTrimCorrection(draftsWKeel, hydrostatics.TPC, hydrostatics.LCF, vesselData.LBP)
@@ -317,7 +313,7 @@ func TestPolarStar_TrimList_FirstTrimCorrection(t *testing.T) {
 func TestPolarStar_TrimList_SecondTrimCorrection(t *testing.T) {
 	vesselData := getPolarStarTrimListVessel()
 	meanDraft := MeanDrafts(getPolarStarTrimListMarks())
-	draftsWKeel := CalcDraftsWKeel(meanDraft, CalcFullLBPPPCorrections(meanDraft, vesselData), vesselData)
+	draftsWKeel := CalcDraftsWKeel(meanDraft, CalcFullLBPPPCorrections(meanDraft, getPolarStarDraft(), vesselData.LBP), getPolarStarDraft())
 	got := CalcSecondTrimCorrection(draftsWKeel, getPolarStarTrimListMTCRows(), vesselData.LBP)
 	if got != 57.622 {
 		t.Errorf("2nd trim: expected 57.622, got %f", got)
@@ -335,7 +331,7 @@ func TestPolarStar_TrimList_DensityCorrection(t *testing.T) {
 	vesselData := getPolarStarTrimListVessel()
 	marks := getPolarStarTrimListMarks()
 	meanDraft := MeanDrafts(marks)
-	draftsWKeel := CalcDraftsWKeel(meanDraft, CalcFullLBPPPCorrections(meanDraft, vesselData), vesselData)
+	draftsWKeel := CalcDraftsWKeel(meanDraft, CalcFullLBPPPCorrections(meanDraft, getPolarStarDraft(), vesselData.LBP), getPolarStarDraft())
 	mmc := CalcMMC(draftsWKeel, vesselData)
 	hydrostatics := CalcHydrostatics(mmc, getPolarStarTrimListHydrostaticRows(), vesselData)
 	firstTrim := CalcFirstTrimCorrection(draftsWKeel, hydrostatics.TPC, hydrostatics.LCF, vesselData.LBP)
