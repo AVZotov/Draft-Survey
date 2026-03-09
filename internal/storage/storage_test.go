@@ -13,11 +13,9 @@ const id = "123-456-789"
 
 func getSurvey() *types.Survey {
 	return &types.Survey{
-		ID:           "123456",
-		InitialDraft: types.InitialDraft{},
-		FinalDraft:   types.FinalDraft{},
+		ID: "123456",
 		Job: types.Job{
-			JobNumber: 123456,
+			JobNumber: "123456",
 			DSNumber:  123456,
 			Principal: "testPrincipal",
 		},
@@ -25,10 +23,8 @@ func getSurvey() *types.Survey {
 			PlaceOfInspection: "testPlace",
 			Destination:       "testDestination",
 			Operation:         "testOperation",
-			Origin:            "testOrigin",
 			Cargo:             "testCargo",
 			Packing:           "testPacking",
-			Port:              "testPort",
 		},
 		VesselData: vessel.VesselData{},
 	}
@@ -55,8 +51,9 @@ func getUser() *types.User {
 func TestJSONStore_SaveAndGet(t *testing.T) {
 	dir := t.TempDir()
 	surveyExpected := getSurvey()
+	surveyExpected.ID = id
 	store := SurveyStore{Path: dir, TempPath: dir}
-	if err := store.Save(id, surveyExpected); err != nil {
+	if err := store.Save(surveyExpected); err != nil {
 		t.Fatal(err)
 	}
 	surveyGot, err := store.Get(id)
@@ -71,8 +68,9 @@ func TestJSONStore_SaveAndGet(t *testing.T) {
 func TestJSONStore_Delete(t *testing.T) {
 	dir := t.TempDir()
 	surveyExpected := getSurvey()
+	surveyExpected.ID = id
 	store := SurveyStore{Path: dir, TempPath: dir}
-	if err := store.Save(id, surveyExpected); err != nil {
+	if err := store.Save(surveyExpected); err != nil {
 		t.Fatal(err)
 	}
 
@@ -92,7 +90,8 @@ func TestJSONStore_GetAll(t *testing.T) {
 	store := SurveyStore{Path: dir, TempPath: dir}
 
 	for i, survey := range surveysExpected {
-		if err := store.Save(id+strconv.Itoa(i), survey); err != nil {
+		survey.ID = id + strconv.Itoa(i)
+		if err := store.Save(survey); err != nil {
 		}
 	}
 
