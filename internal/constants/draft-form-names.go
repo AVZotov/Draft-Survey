@@ -2,12 +2,18 @@ package constants
 
 const (
 	// Marks
-	FwdPort = "fwd_port"
-	MidPort = "mid_port"
-	AftPort = "aft_port"
-	FwdStbd = "fwd_stbd"
-	MidStbd = "mid_stbd"
-	AftStbd = "aft_stbd"
+	FwdPort         = "fwd_port"
+	FwdPortMarkRead = "fwd_port_mr"
+	MidPort         = "mid_port"
+	MidPortMarkRead = "mid_port_mr"
+	AftPort         = "aft_port"
+	AftPortMarkRead = "aft_port_mr"
+	FwdStbd         = "fwd_stbd"
+	FwdStbdMarkRead = "fwd_stbd_mr"
+	MidStbd         = "mid_stbd"
+	MidStbdMarkRead = "mid_stbd_mr"
+	AftStbd         = "aft_stbd"
+	AftStbdMarkRead = "aft_stbd_mr"
 
 	// PP distances
 	DFwd    = "dFwd"

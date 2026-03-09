@@ -40,11 +40,11 @@ func ResultsForm(props components.LayoutProps) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = ResultsDraftCol(props.Survey.Drafts[0], (*props.Results)[0]).Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = ResultsDraftCol(props.Survey.Drafts[0], (*props.Results)[0], props.Survey.VesselData).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = ResultsDraftCol(props.Survey.Drafts[len(props.Survey.Drafts)-1], (*props.Results)[len(*props.Results)-1]).Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = ResultsDraftCol(props.Survey.Drafts[len(props.Survey.Drafts)-1], (*props.Results)[len(*props.Results)-1], props.Survey.VesselData).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

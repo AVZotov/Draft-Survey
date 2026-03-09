@@ -1,11 +1,14 @@
 package widgets
 
 import (
+	"fmt"
 	"github.com/AVZotov/draft-survey/internal/calculation"
+	"github.com/AVZotov/draft-survey/internal/format"
 	"github.com/AVZotov/draft-survey/internal/types"
+	"github.com/AVZotov/draft-survey/internal/vessel"
 )
 
-templ ResultsDraftCol(draft types.Draft, result calculation.DraftResult) {
+templ ResultsDraftCol(draft types.Draft, result calculation.DraftResult, vessel vessel.VesselData) {
 	<div
 		class={ templ.Classes("draft-col", 
       templ.KV("draft-col--ini", draft.Type == types.DraftTypeInitial),
@@ -21,7 +24,7 @@ templ ResultsDraftCol(draft types.Draft, result calculation.DraftResult) {
 					Final Draft
 				}
 			</div>
-			<span class="col-mmc">MMC 6.323 m · (6M/8) Full LBP</span>
+			<span class="col-mmc">MMC { fmt.Sprintf("%.3f", result.MMC) } m · { format.MMCShortFormula(vessel.VesselType) } { format.LBPCorrection(vessel.CorrectionMethod) }</span>
 		</div>
 		<div class="draft-col-body">
 			<!-- Step 1 -->
@@ -33,12 +36,12 @@ templ ResultsDraftCol(draft types.Draft, result calculation.DraftResult) {
 					<svg class="step-chevron" viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"></polyline></svg>
 				</div>
 				<div class="step-body">
-					<div class="vrow"><span class="vrow-label indent">Fwd P / Fwd S</span><span class="vrow-value">10.260 / 10.150 m</span></div>
-					<div class="vrow"><span class="vrow-label indent">Mid P / Mid S</span><span class="vrow-value">10.380 / 9.070 m</span></div>
-					<div class="vrow"><span class="vrow-label indent">Aft P / Aft S</span><span class="vrow-value">10.290 / 10.110 m</span></div>
-					<div class="vrow vrow--sub"><span class="vrow-label">meanF</span><span class="vrow-value">10.205 m</span></div>
-					<div class="vrow vrow--sub"><span class="vrow-label">meanM</span><span class="vrow-value">9.725 m</span></div>
-					<div class="vrow vrow--sub"><span class="vrow-label">meanA</span><span class="vrow-value">10.200 m</span></div>
+					<div class="vrow"><span class="vrow-label indent">Fwd P / Fwd S</span><span class="vrow-value">{ format.Mark(draft.Marks.FwdPort.Value) } / { format.Mark(draft.Marks.FwdStarboard.Value) } m</span></div>
+					<div class="vrow"><span class="vrow-label indent">Mid P / Mid S</span><span class="vrow-value">{ format.Mark(draft.Marks.MidPort.Value) } / { format.Mark(draft.Marks.MidStarboard.Value) } m</span></div>
+					<div class="vrow"><span class="vrow-label indent">Aft P / Aft S</span><span class="vrow-value">{ format.Mark(draft.Marks.AftPort.Value) } / { format.Mark(draft.Marks.AftStarboard.Value) } m</span></div>
+					<div class="vrow vrow--sub"><span class="vrow-label">meanF</span><span class="vrow-value">{ format.Draft(result.MeanDraft.DraftFwdMean) }</span></div>
+					<div class="vrow vrow--sub"><span class="vrow-label">meanM</span><span class="vrow-value">{ format.Draft(result.MeanDraft.DraftMidMean) }</span></div>
+					<div class="vrow vrow--sub"><span class="vrow-label">meanA</span><span class="vrow-value">{ format.Draft(result.MeanDraft.DraftAftMean) }</span></div>
 				</div>
 			</div>
 			<!-- Step 2-3 -->

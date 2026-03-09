@@ -3,13 +3,20 @@ package types
 type ReadingMethod string
 
 const (
-	ReadingMethodDirect    ReadingMethod = "direct"
-	ReadingMethodWaterline ReadingMethod = "waterline"
+	ReadingMethodDirect ReadingMethod = "direct"
+	ReadingMethodCamera ReadingMethod = "camera"
 )
 
 type Mark struct {
 	Value  *float64      `json:"value"`
 	Method ReadingMethod `json:"method"`
+}
+
+func (rm ReadingMethod) Short() string {
+	if len(rm) < 3 {
+		return string(rm)
+	}
+	return string(rm[:3])
 }
 
 type Marks struct {

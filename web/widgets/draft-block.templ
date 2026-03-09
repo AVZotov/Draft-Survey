@@ -116,7 +116,11 @@ templ DraftBlock(props components.DraftBlockProps) {
 					} else {
 						<input class="di" name={ fmt.Sprintf("%s-d%d", constants.FwdPort, props.Index) } type="number" id={ props.Prefix + "-fp" } placeholder="0.000" step="any" disabled?={ props.Draft.Status == types.DraftStatusPending } oninput={ calcDraft(props.Prefix) }/>
 					}
-					<span class="di-badge">Dir</span>
+					<select class="di-badge" name={ fmt.Sprintf("%s-d%d", constants.FwdPortMarkRead, props.Index) } disabled?={ props.Draft.Status == types.DraftStatusPending }>
+						<option value="" selected?={ props.Draft.Marks.FwdPort.Method == types.ReadingMethod("") }>—</option>
+						<option value={ types.ReadingMethodDirect } selected?={ props.Draft.Marks.FwdPort.Method == types.ReadingMethodDirect }>{ types.ReadingMethodDirect.Short() }</option>
+						<option value={ types.ReadingMethodCamera } selected?={ props.Draft.Marks.FwdPort.Method == types.ReadingMethodCamera }>{ types.ReadingMethodCamera.Short() }</option>
+					</select>
 				</div>
 				<div class="dr-row">
 					<span class="dr-lbl">Mid P</span>
@@ -125,7 +129,11 @@ templ DraftBlock(props components.DraftBlockProps) {
 					} else {
 						<input class="di" name={ fmt.Sprintf("%s-d%d", constants.MidPort, props.Index) } type="number" id={ props.Prefix + "-mp" } placeholder="0.000" step="any" disabled?={ props.Draft.Status == types.DraftStatusPending } oninput={ calcDraft(props.Prefix) }/>
 					}
-					<span class="di-badge">Dir</span>
+					<select class="di-badge" name={ fmt.Sprintf("%s-d%d", constants.MidPortMarkRead, props.Index) } disabled?={ props.Draft.Status == types.DraftStatusPending }>
+						<option value="" selected?={ props.Draft.Marks.MidPort.Method == types.ReadingMethod("") }>—</option>
+						<option value={ types.ReadingMethodDirect } selected?={ props.Draft.Marks.MidPort.Method == types.ReadingMethodDirect }>{ types.ReadingMethodDirect.Short() }</option>
+						<option value={ types.ReadingMethodCamera } selected?={ props.Draft.Marks.MidPort.Method == types.ReadingMethodCamera }>{ types.ReadingMethodCamera.Short() }</option>
+					</select>
 				</div>
 				<div class="dr-row" style="margin-bottom:0">
 					<span class="dr-lbl">Aft P</span>
@@ -134,7 +142,11 @@ templ DraftBlock(props components.DraftBlockProps) {
 					} else {
 						<input class="di" name={ fmt.Sprintf("%s-d%d", constants.AftPort, props.Index) } type="number" id={ props.Prefix + "-ap" } placeholder="0.000" step="any" disabled?={ props.Draft.Status == types.DraftStatusPending } oninput={ calcDraft(props.Prefix) }/>
 					}
-					<span class="di-badge">Dir</span>
+					<select class="di-badge" name={ fmt.Sprintf("%s-d%d", constants.AftPortMarkRead, props.Index) } disabled?={ props.Draft.Status == types.DraftStatusPending }>
+						<option value="" selected?={ props.Draft.Marks.AftPort.Method == types.ReadingMethod("") }>—</option>
+						<option value={ types.ReadingMethodDirect } selected?={ props.Draft.Marks.AftPort.Method == types.ReadingMethodDirect }>{ types.ReadingMethodDirect.Short() }</option>
+						<option value={ types.ReadingMethodCamera } selected?={ props.Draft.Marks.AftPort.Method == types.ReadingMethodCamera }>{ types.ReadingMethodCamera.Short() }</option>
+					</select>
 				</div>
 			</div>
 			<div class="col-vessel">
@@ -183,7 +195,11 @@ templ DraftBlock(props components.DraftBlockProps) {
 					} else {
 						<input class="di" name={ fmt.Sprintf("%s-d%d", constants.FwdStbd, props.Index) } type="number" id={ props.Prefix + "-fs" } placeholder="0.000" step="any" disabled?={ props.Draft.Status == types.DraftStatusPending } oninput={ calcDraft(props.Prefix) }/>
 					}
-					<span class="di-badge">Dir</span>
+					<select class="di-badge" name={ fmt.Sprintf("%s-d%d", constants.FwdStbdMarkRead, props.Index) } disabled?={ props.Draft.Status == types.DraftStatusPending }>
+						<option value="" selected?={ props.Draft.Marks.FwdStarboard.Method == types.ReadingMethod("") }>—</option>
+						<option value={ types.ReadingMethodDirect } selected?={ props.Draft.Marks.FwdStarboard.Method == types.ReadingMethodDirect }>{ types.ReadingMethodDirect.Short() }</option>
+						<option value={ types.ReadingMethodCamera } selected?={ props.Draft.Marks.FwdStarboard.Method == types.ReadingMethodCamera }>{ types.ReadingMethodCamera.Short() }</option>
+					</select>
 				</div>
 				<div class="dr-row">
 					<span class="dr-lbl">Mid S</span>
@@ -192,7 +208,11 @@ templ DraftBlock(props components.DraftBlockProps) {
 					} else {
 						<input class="di" name={ fmt.Sprintf("%s-d%d", constants.MidStbd, props.Index) } type="number" id={ props.Prefix + "-ms" } placeholder="0.000" step="any" disabled?={ props.Draft.Status == types.DraftStatusPending } oninput={ calcDraft(props.Prefix) }/>
 					}
-					<span class="di-badge">Dir</span>
+					<select class="di-badge" name={ fmt.Sprintf("%s-d%d", constants.MidStbdMarkRead, props.Index) } disabled?={ props.Draft.Status == types.DraftStatusPending }>
+						<option value="" selected?={ props.Draft.Marks.MidStarboard.Method == types.ReadingMethod("") }>—</option>
+						<option value={ types.ReadingMethodDirect } selected?={ props.Draft.Marks.MidStarboard.Method == types.ReadingMethodDirect }>{ types.ReadingMethodDirect.Short() }</option>
+						<option value={ types.ReadingMethodCamera } selected?={ props.Draft.Marks.MidStarboard.Method == types.ReadingMethodCamera }>{ types.ReadingMethodCamera.Short() }</option>
+					</select>
 				</div>
 				<div class="dr-row" style="margin-bottom:0">
 					<span class="dr-lbl">Aft S</span>
@@ -201,7 +221,11 @@ templ DraftBlock(props components.DraftBlockProps) {
 					} else {
 						<input class="di" name={ fmt.Sprintf("%s-d%d", constants.AftStbd, props.Index) } type="number" id={ props.Prefix + "-as" } placeholder="0.000" step="any" disabled?={ props.Draft.Status == types.DraftStatusPending } oninput={ calcDraft(props.Prefix) }/>
 					}
-					<span class="di-badge">Dir</span>
+					<select class="di-badge" name={ fmt.Sprintf("%s-d%d", constants.AftStbdMarkRead, props.Index) } disabled?={ props.Draft.Status == types.DraftStatusPending }>
+						<option value="" selected?={ props.Draft.Marks.AftStarboard.Method == types.ReadingMethod("") }>—</option>
+						<option value={ types.ReadingMethodDirect } selected?={ props.Draft.Marks.AftStarboard.Method == types.ReadingMethodDirect }>{ types.ReadingMethodDirect.Short() }</option>
+						<option value={ types.ReadingMethodCamera } selected?={ props.Draft.Marks.AftStarboard.Method == types.ReadingMethodCamera }>{ types.ReadingMethodCamera.Short() }</option>
+					</select>
 				</div>
 			</div>
 		</div><!-- /readings-area -->

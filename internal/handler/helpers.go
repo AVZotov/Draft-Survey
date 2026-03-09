@@ -50,27 +50,51 @@ func (h *Handler) parseDraft(c *fiber.Ctx, survey *types.Survey) {
 		//Getting draft marks
 		fwdPort, err := parseFloat(c, fmt.Sprintf("%s-d%d", constants.FwdPort, i))
 		if err == nil {
-			survey.Drafts[i].Marks.FwdPort = types.Mark{Value: fwdPort}
+			survey.Drafts[i].Marks.FwdPort.Value = fwdPort
+		}
+		fwdPortMethod, err := parseString(c, fmt.Sprintf("%s-d%d", constants.FwdPortMarkRead, i))
+		if err == nil {
+			survey.Drafts[i].Marks.FwdPort.Method = types.ReadingMethod(fwdPortMethod)
 		}
 		midPort, err := parseFloat(c, fmt.Sprintf("%s-d%d", constants.MidPort, i))
 		if err == nil {
-			survey.Drafts[i].Marks.MidPort = types.Mark{Value: midPort}
+			survey.Drafts[i].Marks.MidPort.Value = midPort
+		}
+		midPortMethod, err := parseString(c, fmt.Sprintf("%s-d%d", constants.MidPortMarkRead, i))
+		if err == nil {
+			survey.Drafts[i].Marks.MidPort.Method = types.ReadingMethod(midPortMethod)
 		}
 		aftPort, err := parseFloat(c, fmt.Sprintf("%s-d%d", constants.AftPort, i))
 		if err == nil {
-			survey.Drafts[i].Marks.AftPort = types.Mark{Value: aftPort}
+			survey.Drafts[i].Marks.AftPort.Value = aftPort
+		}
+		aftPortMethod, err := parseString(c, fmt.Sprintf("%s-d%d", constants.AftPortMarkRead, i))
+		if err == nil {
+			survey.Drafts[i].Marks.AftPort.Method = types.ReadingMethod(aftPortMethod)
 		}
 		fwdStbd, err := parseFloat(c, fmt.Sprintf("%s-d%d", constants.FwdStbd, i))
 		if err == nil {
-			survey.Drafts[i].Marks.FwdStarboard = types.Mark{Value: fwdStbd}
+			survey.Drafts[i].Marks.FwdStarboard.Value = fwdStbd
+		}
+		fwdStbdMethod, err := parseString(c, fmt.Sprintf("%s-d%d", constants.FwdStbdMarkRead, i))
+		if err == nil {
+			survey.Drafts[i].Marks.FwdStarboard.Method = types.ReadingMethod(fwdStbdMethod)
 		}
 		midStbd, err := parseFloat(c, fmt.Sprintf("%s-d%d", constants.MidStbd, i))
 		if err == nil {
-			survey.Drafts[i].Marks.MidStarboard = types.Mark{Value: midStbd}
+			survey.Drafts[i].Marks.MidStarboard.Value = midStbd
+		}
+		midStbdMethod, err := parseString(c, fmt.Sprintf("%s-d%d", constants.MidStbdMarkRead, i))
+		if err == nil {
+			survey.Drafts[i].Marks.MidStarboard.Method = types.ReadingMethod(midStbdMethod)
 		}
 		aftStbd, err := parseFloat(c, fmt.Sprintf("%s-d%d", constants.AftStbd, i))
 		if err == nil {
-			survey.Drafts[i].Marks.AftStarboard = types.Mark{Value: aftStbd}
+			survey.Drafts[i].Marks.AftStarboard.Value = aftStbd
+		}
+		aftStbdMethod, err := parseString(c, fmt.Sprintf("%s-d%d", constants.AftStbdMarkRead, i))
+		if err == nil {
+			survey.Drafts[i].Marks.AftStarboard.Method = types.ReadingMethod(aftStbdMethod)
 		}
 
 		//Getting sea condition
@@ -128,53 +152,43 @@ func (h *Handler) parseDraft(c *fiber.Ctx, survey *types.Survey) {
 		dirPPFwd, err := parseString(c, fmt.Sprintf("%s-d%d", constants.DFwdDir, i))
 		if err == nil {
 			survey.Drafts[i].PPFwdDirection = dirPPFwd
-
 		}
 		distancePPMid, err := parseFloat(c, fmt.Sprintf("%s-d%d", constants.DMid, i))
 		if err == nil {
 			survey.Drafts[i].DistancePPMid = distancePPMid
-
 		}
 		dirPPMid, err := parseString(c, fmt.Sprintf("%s-d%d", constants.DMidDir, i))
 		if err == nil {
 			survey.Drafts[i].PPMidDirection = dirPPMid
-
 		}
 		distancePPAft, err := parseFloat(c, fmt.Sprintf("%s-d%d", constants.DAft, i))
 		if err == nil {
 			survey.Drafts[i].DistancePPAft = distancePPAft
-
 		}
 		dirPPAft, err := parseString(c, fmt.Sprintf("%s-d%d", constants.DAftDir, i))
 		if err == nil {
 			survey.Drafts[i].PPAftDirection = dirPPAft
-
 		}
 		keelFwd, err := parseFloat(c, fmt.Sprintf("%s-d%d", constants.KeelFwd, i))
 		if err == nil {
 			survey.Drafts[i].KeelFwd = keelFwd
-
 		}
 		keelMid, err := parseFloat(c, fmt.Sprintf("%s-d%d", constants.KeelMid, i))
 		if err == nil {
 			survey.Drafts[i].KeelMid = keelMid
-
 		}
 		keelAft, err := parseFloat(c, fmt.Sprintf("%s-d%d", constants.KeelAft, i))
 		if err == nil {
 			survey.Drafts[i].KeelAft = keelAft
-
 		}
 		constDeclared, err := parseFloat(c, constants.ConstDeclared)
 		if err == nil {
 			survey.Drafts[0].ConstantDeclared = constDeclared
 		}
-
 		cargoDeclared, err := parseFloat(c, constants.CargoDeclared)
 		if err == nil {
 			survey.Drafts[i].CargoDeclared = cargoDeclared
 		}
-
 		//Getting hydrostatics data
 		if len(survey.Drafts[i].HydrostaticRows) == 0 {
 			survey.Drafts[i].HydrostaticRows = make([]types.HydrostaticRow, 2)
@@ -182,7 +196,6 @@ func (h *Handler) parseDraft(c *fiber.Ctx, survey *types.Survey) {
 		if len(survey.Drafts[i].MTCRows) == 0 {
 			survey.Drafts[i].MTCRows = make([]types.MTCRow, 2)
 		}
-
 		uDraft, err := parseFloat(c, fmt.Sprintf("%s-d%d", constants.UDraft, i))
 		if err == nil {
 			survey.Drafts[i].HydrostaticRows[0].Draft = uDraft

@@ -40,8 +40,8 @@ templ ResultsForm(props components.LayoutProps) {
 		<!-- ── DRAFT COLUMN ── -->
 		if props.Survey != nil && len(props.Survey.Drafts) >= 2 && props.Results != nil {
 			<div class="results-grid">
-				@ResultsDraftCol(props.Survey.Drafts[0], (*props.Results)[0])
-				@ResultsDraftCol(props.Survey.Drafts[len(props.Survey.Drafts)-1], (*props.Results)[len(*props.Results)-1])
+				@ResultsDraftCol(props.Survey.Drafts[0], (*props.Results)[0], props.Survey.VesselData)
+				@ResultsDraftCol(props.Survey.Drafts[len(props.Survey.Drafts)-1], (*props.Results)[len(*props.Results)-1], props.Survey.VesselData)
 			</div><!-- /results-grid -->
 		}
 		<!-- ── CARGO RESULT ─────────────────────────────────────────── -->
