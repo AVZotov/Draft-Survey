@@ -119,7 +119,7 @@ func DraftForm(survey *types.Survey) templ.Component {
 				Draft:  draft,
 				Index:  i,
 				Prefix: draftPrefix(i, len(survey.Drafts)),
-			}).Render(ctx, templ_7745c5c3_Buffer)
+			}, survey.VesselData).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

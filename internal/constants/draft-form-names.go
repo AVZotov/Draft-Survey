@@ -33,10 +33,12 @@ const (
 	UDisp   = "uDisp"
 	UTpc    = "uTpc"
 	ULcfLca = "uLcfLca"
+	ULcfDir = "uLcfDir"
 	LDraft  = "lDraft"
 	LDisp   = "lDisp"
 	LTpc    = "lTpc"
 	LLcfLca = "lLcfLca"
+	LLcfDir = "lLcfDir"
 
 	// MTC
 	PMtcDraft = "pMtcDraft"

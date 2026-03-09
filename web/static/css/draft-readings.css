@@ -449,7 +449,7 @@ input.di::placeholder {
 }
 
 .di-badge {
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 600;
   padding: 2px 4px;
   border: 1px solid var(--border);
@@ -459,6 +459,7 @@ input.di::placeholder {
   text-transform: uppercase;
   letter-spacing: 0.04em;
   text-align: center;
+  height: 100%;
 }
 
 /* ─── SVG vessel diagram ──────────────────────────────────────── */
@@ -764,6 +765,13 @@ select.dir-sel {
 
 .hydro-table td input:focus {
   border-color: var(--border-focus);
+}
+
+.lcf-field {
+  display: grid;
+  grid-template-columns: 1fr 36px;
+  gap: var(--space-xs);
+  align-items: center;
 }
 
 /* MTC grid */

@@ -1,6 +1,10 @@
 function toggleSeaGroup(group, prefix) {
     const other = group === 'wave' ? 'ice' : 'wave';
 
+    // Checkbox sync
+    document.getElementById(prefix + '-' + group + '-enabled').checked = true;
+    document.getElementById(prefix + '-' + other + '-enabled').checked = false;
+
     // switch on selected
     document.getElementById(prefix + '-' + group + '-group').classList.remove('sea-selects--disabled');
     document.getElementById(group === 'wave' ? prefix + '-sea-condition' : prefix + '-ice-condition').disabled = false;
@@ -20,15 +24,15 @@ const SEA_MAP = {
     rough: { label: 'Rough', cls: 'rough' },
 };
 
-function updateSeaBadge(p, pos) {
-    const sel = document.getElementById(p + '-sea-' + pos);
-    const badge = document.getElementById(p + '-sea-' + pos + '-badge');
-    if (!sel || !badge) return;
-    const v = sel.value;
-    const info = SEA_MAP[v] || SEA_MAP.calm;
-    badge.className = 'sea-badge ' + info.cls;
-    badge.innerHTML = '<span class="sea-badge-dot"></span>' + info.label;
-}
+// function updateSeaBadge(p, pos) {
+//     const sel = document.getElementById(p + '-sea-' + pos);
+//     const badge = document.getElementById(p + '-sea-' + pos + '-badge');
+//     if (!sel || !badge) return;
+//     const v = sel.value;
+//     const info = SEA_MAP[v] || SEA_MAP.calm;
+//     badge.className = 'sea-badge ' + info.cls;
+//     badge.innerHTML = '<span class="sea-badge-dot"></span>' + info.label;
+// }
 
 function g(id) { const v = parseFloat(document.getElementById(id)?.value); return isNaN(v) ? null : v; }
 

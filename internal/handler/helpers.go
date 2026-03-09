@@ -212,6 +212,10 @@ func (h *Handler) parseDraft(c *fiber.Ctx, survey *types.Survey) {
 		if err == nil {
 			survey.Drafts[i].HydrostaticRows[0].LCF = uLcfLca
 		}
+		uLcfDir, err := parseString(c, fmt.Sprintf("%s-d%d", constants.ULcfDir, i))
+		if err == nil {
+			survey.Drafts[i].HydrostaticRows[0].LCFDirection = types.LCFDirection(uLcfDir)
+		}
 		lDraft, err := parseFloat(c, fmt.Sprintf("%s-d%d", constants.LDraft, i))
 		if err == nil {
 			survey.Drafts[i].HydrostaticRows[1].Draft = lDraft
@@ -227,6 +231,10 @@ func (h *Handler) parseDraft(c *fiber.Ctx, survey *types.Survey) {
 		lLcfLca, err := parseFloat(c, fmt.Sprintf("%s-d%d", constants.LLcfLca, i))
 		if err == nil {
 			survey.Drafts[i].HydrostaticRows[1].LCF = lLcfLca
+		}
+		lLcfDir, err := parseString(c, fmt.Sprintf("%s-d%d", constants.LLcfDir, i))
+		if err == nil {
+			survey.Drafts[i].HydrostaticRows[1].LCFDirection = types.LCFDirection(lLcfDir)
 		}
 		pMtcDraft, err := parseFloat(c, fmt.Sprintf("%s-d%d", constants.PMtcDraft, i))
 		if err == nil {
