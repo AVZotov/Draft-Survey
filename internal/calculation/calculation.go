@@ -194,9 +194,9 @@ func CalcListCorrection(marks types.Marks, tpcListPort, tpcListStarboard float64
 	return round3(6 * math.Abs(markVal(marks.MidPort.Value)-markVal(marks.MidStarboard.Value)) * math.Abs(tpcListPort-tpcListStarboard))
 }
 
-func CalcDensityCorrection(displacement float64, firstTrim float64, secondTrim float64, listCorrection float64, density float64) float64 {
+func CalcDensityCorrection(displacement float64, firstTrim float64, secondTrim float64, listCorrection float64, dockwaterDensity float64, tableDensity float64) float64 {
 	displacementCorrected := round3(displacement + firstTrim + secondTrim + listCorrection)
-	return round3(displacementCorrected * (density - 1.025) / 1.025)
+	return round3(displacementCorrected * (dockwaterDensity - tableDensity) / tableDensity)
 }
 
 func CalcTotalDeductibles(bwt []types.BallastWaterTank, fwt []types.FreshWaterTank, d types.Deductibles) float64 {

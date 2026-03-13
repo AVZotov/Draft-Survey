@@ -59,6 +59,7 @@ func CalcDraft(draft types.Draft, v vessel.VesselData) DraftResult {
 			secondTrimCorrection,
 			listCorrection,
 			*draft.Density,
+			*v.TableDensity,
 		)
 	}
 	totalDeductibles = CalcTotalDeductibles(draft.BallastWaterTanks, draft.FreshWaterTanks, draft.Deductibles)

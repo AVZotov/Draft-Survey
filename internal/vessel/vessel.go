@@ -46,4 +46,5 @@ type VesselData struct {
 	KeelAft          float64          `json:"keel_aft"`
 	VesselType       VesselType       `json:"vessel_type"`
 	CorrectionMethod CorrectionMethod `json:"correction_method"`
+	TableDensity     *float64         `json:"table_density"`
 }
