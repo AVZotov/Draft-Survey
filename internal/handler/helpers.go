@@ -255,12 +255,15 @@ func (h *Handler) parseDraft(c *fiber.Ctx, survey *types.Survey) {
 	}
 }
 
-func draftPrefix(i, total int) string {
-	if i == 0 {
-		return "i"
+func (h *Handler) parseNewTankName(c *fiber.Ctx, typeSelector, nameSelector string) (string, error) {
+	wtType, err := parseString(c, typeSelector)
+	if err != nil {
+		return "", err
 	}
-	if i == total-1 {
-		return "f"
+	wtName, err := parseString(c, nameSelector)
+	if err != nil {
+		return "", err
 	}
-	return fmt.Sprintf("m%d", i)
+
+	return fmt.Sprintf("%s %s", wtType, wtName), nil
 }

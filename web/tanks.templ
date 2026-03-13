@@ -1,13 +1,14 @@
 package web
 
+import "github.com/AVZotov/draft-survey/web/components"
 import "github.com/AVZotov/draft-survey/web/layouts"
 import "github.com/AVZotov/draft-survey/web/widgets"
 
-templ Tanks() {
-	@layouts.Layout(ProfilePageProps) {
-		@widgets.HeaderUser(ProfilePageProps.User)
-		@widgets.TanksForm()
-		@widgets.TanksActionBar()
+templ Tanks(props components.LayoutProps, draftIndex string) {
+	@layouts.Layout(props) {
+		@widgets.HeaderUser(props.User)
+		@widgets.TanksForm(props.Survey, draftIndex)
+		//@widgets.TanksActionBar()
 		@widgets.Footer()
 	}
 }

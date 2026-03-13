@@ -50,6 +50,17 @@ func ResultsPageProps(user *types.User, survey *types.Survey, results *[]calcula
 	}
 }
 
+func TanksPageProps(user *types.User, survey *types.Survey) components.LayoutProps {
+	return components.LayoutProps{
+		Title:           "Tanks Reading",
+		MetaDescription: "Vessel tanks reading",
+		ExtraCSS:        []string{"/static/css/tanks.css"},
+		ExtraJS:         []string{"/static/js/tanks.js"},
+		User:            user,
+		Survey:          survey,
+	}
+}
+
 var ProfilePageProps = components.LayoutProps{
 	Title:           "Surveyor Profile",
 	MetaDescription: "Set up your surveyor profile",

@@ -39,3 +39,20 @@ type BannerProps struct {
 	Message string
 	Details string
 }
+
+type ModalLevel string
+
+const (
+	ModalInfo    ModalLevel = "Information"
+	ModalWarning ModalLevel = "Warning"
+	ModalError   ModalLevel = "Danger"
+)
+
+type ModalProps struct {
+	Level      ModalLevel
+	DialogID   string
+	Title      string
+	Message    string
+	ConfirmBtn string
+	CancelBtn  string // Do not rendered if prop is empty
+}

@@ -3,6 +3,7 @@ package calculation
 import (
 	"math"
 
+	"github.com/AVZotov/draft-survey/internal/constants"
 	"github.com/AVZotov/draft-survey/internal/types"
 	"github.com/AVZotov/draft-survey/internal/vessel"
 )
@@ -220,4 +221,170 @@ func CalcConstant(netDisplacementIni float64, lightship float64) float64 {
 
 func CalcCurrentDWT(displCorrToDensity float64, lightship float64) float64 {
 	return round3(displCorrToDensity - lightship)
+}
+
+func CalcVolume(volumeCorrectionData types.VolumeCorrectionData, sounding, trim, list float64) float64 {
+	switch volumeCorrectionData.TableType {
+	case constants.VolumeCalibrationType2:
+		return calcVolumeType2(sounding, trim, list, volumeCorrectionData, volumeCorrectionData.VolumeRows)
+	case constants.VolumeCalibrationType3:
+		return calcVolumeType3(sounding, trim, list, volumeCorrectionData, volumeCorrectionData.VolumeRows)
+	default:
+		return calcVolumeType1(sounding, trim, list, volumeCorrectionData)
+	}
+}
+
+/*
+CalcVolumeByRows performs bilinear interpolation of tank volume.
+Used as a base for all calibration table types (trim or list correction).
+First interpolates by trim/list angle, then by sounding.
+Parameters:
+
+	sounding — actual tank sounding (measured by tape), m
+	trimOrList — actual trim (meanA - meanF) or list value, m
+	rows — two calibration rows bracketing the actual sounding
+	tableLow — lower trim/list value from calibration table (TTL)
+	tableHigh — upper trim/list value from calibration table (TTU)
+
+If trimOrList == 0, interpolation is performed by sounding only (1D).
+*/
+func calcVolumeByRows(sounding, trimOrList float64, rows []types.CalibrationRow, tableLow, tableHigh float64) float64 {
+	// Sort rows by sounding — ensure lower is always rows[0]
+	var lower, upper types.CalibrationRow
+	if markVal(rows[0].Sounding) < markVal(rows[1].Sounding) {
+		lower = rows[0]
+		upper = rows[1]
+	} else {
+		lower = rows[1]
+		upper = rows[0]
+	}
+
+	// If no trim/list — interpolate by sounding only (1D interpolation)
+	if trimOrList == 0 {
+		return Interpolate(sounding,
+			markVal(lower.Sounding), markVal(lower.VolumeTrimLow),
+			markVal(upper.Sounding), markVal(upper.VolumeTrimLow))
+	}
+
+	// Step 1: interpolate by trim/list at lower sounding level → AB1
+	ab1 := Interpolate(trimOrList,
+		tableLow, markVal(lower.VolumeTrimLow),
+		tableHigh, markVal(lower.VolumeTrimUpper))
+
+	// Step 2: interpolate by trim/list at upper sounding level → AB2
+	ab2 := Interpolate(trimOrList,
+		tableLow, markVal(upper.VolumeTrimLow),
+		tableHigh, markVal(upper.VolumeTrimUpper))
+
+	// Step 3: final interpolation by sounding → AB
+	return Interpolate(sounding, markVal(lower.Sounding), ab1, markVal(upper.Sounding), ab2)
+}
+
+/*
+	 CalcVolumeType1 calculates tank volume using Type 1 calibration table.
+	 Type 1 (most common): table contains Volume directly for each
+	 (sounding × trim) combination. List correction is optional.
+
+	 Parameters:
+
+		sounding — actual tank sounding, m
+		trim     — observed vessel trim (meanA - meanF), m
+		list     — observed vessel list (midPort - midStbd), m
+		data     — tank calibration data
+*/
+func calcVolumeType1(sounding, trim, list float64, data types.VolumeCorrectionData) float64 {
+	ttl := markVal(data.TableTrimLow)
+	ttu := markVal(data.TableTrimUpper)
+
+	// Base volume: interpolated by sounding and trim
+	volume := calcVolumeByRows(sounding, trim, data.TrimRows, ttl, ttu)
+
+	// List correction: added if ListRows are provided
+	if len(data.ListRows) > 0 {
+		volume += calcVolumeByRows(sounding, list, data.ListRows, ttl, ttu)
+	}
+
+	return round3(volume)
+}
+
+/*
+		CalcVolumeType2 calculates tank volume using Type 2 calibration table.
+
+	 Type 2 (rare): two separate tables —
+
+		Table 1: sounding correction by trim/list
+		Table 2: volume at corrected sounding (trim = 0)
+
+	 Workflow:
+	  1. Interpolate sounding correction from Table 1 (trim rows)
+	  2. Apply list correction from Table 1 (list rows) if available
+	  3. Correct actual sounding by found corrections
+	  4. Interpolate final volume from Table 2 at corrected sounding
+
+	 Parameters:
+
+		sounding — actual tank sounding, m
+		trim     — observed vessel trim, m
+		list     — observed vessel list, m
+		data     — Table 1 calibration data (sounding corrections)
+		volumeRows — Table 2 rows (volume at corrected sounding, trim = 0)
+*/
+func calcVolumeType2(sounding, trim, list float64, data types.VolumeCorrectionData, volumeRows []types.CalibrationRow) float64 {
+	ttl := markVal(data.TableTrimLow)
+	ttu := markVal(data.TableTrimUpper)
+
+	// Step 1: interpolate sounding correction by trim
+	soundingCorr := calcVolumeByRows(sounding, trim, data.TrimRows, ttl, ttu)
+
+	// Step 2: add list correction to sounding if ListRows provided
+	if len(data.ListRows) > 0 {
+		soundingCorr += calcVolumeByRows(sounding, list, data.ListRows, ttl, ttu)
+	}
+
+	// Step 3: apply corrections to actual sounding
+	correctedSounding := sounding + soundingCorr
+
+	// Step 4: interpolate volume at corrected sounding (1D — no trim in Table 2)
+	return calcVolumeByRows(correctedSounding, 0, volumeRows, ttl, ttu)
+}
+
+/*
+CalcVolumeType3 calculates tank volume using Type 3 calibration table.
+Type 3 (rare): two separate tables —
+
+	Table 1: volume correction by trim/list
+	Table 2: base volume at actual sounding, trim = 0
+
+Workflow:
+ 1. Get base volume from Table 2 at actual sounding (no trim)
+ 2. Interpolate volume correction from Table 1 by trim
+ 3. Add list correction from Table 1 if available
+ 4. Sum: base volume + trim correction + list correction
+
+Parameters:
+
+	sounding   — actual tank sounding, m
+	trim       — observed vessel trim, m
+	list       — observed vessel list, m
+	data       — Table 1 calibration data (volume corrections)
+	volumeRows — Table 2 rows (base volume at zero trim)
+*/
+func calcVolumeType3(sounding, trim, list float64, data types.VolumeCorrectionData, volumeRows []types.CalibrationRow) float64 {
+	ttl := markVal(data.TableTrimLow)
+	ttu := markVal(data.TableTrimUpper)
+
+	// Step 1: base volume at actual sounding, trim = 0 (1D interpolation)
+	baseVolume := calcVolumeByRows(sounding, 0, volumeRows, ttl, ttu)
+
+	// Step 2: volume correction by trim
+	trimCorr := calcVolumeByRows(sounding, trim, data.TrimRows, ttl, ttu)
+
+	// Step 3: volume correction by list (if available)
+	listCorr := 0.0
+	if len(data.ListRows) > 0 {
+		listCorr = calcVolumeByRows(sounding, list, data.ListRows, ttl, ttu)
+	}
+
+	// Step 4: final volume = base + trim correction + list correction
+	return round3(baseVolume + trimCorr + listCorr)
 }

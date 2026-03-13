@@ -1,11 +1,100 @@
-/* ================================================================
-   tanks.css — page /survey/:id/tanks (BW / FW tanks)
-   Depends on: styles.css (tokens, reset, header with survey-pill,
-                footer, back-link, page-title, action-bar, buttons)
-================================================================ */
+/* ═══════════════════════════════════════════════════════════════
+   tanks.css — page-specific styles for BW / FW Tanks page
+   Depends on: styles.css (tokens, reset, .btn-*, .action-bar,
+   .app-header, .app-footer, .survey-pill, .op-badge,
+   .back-link, .page-title, .page-meta)
+   ═══════════════════════════════════════════════════════════════ */
 
-/* ─── Page layout ─────────────────────────────────────────────── */
-.page-main {
+/* ── Header local aliases ───────────────────────────────────── */
+.hdr-left {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.hdr-right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+}
+
+.hdiv {
+  width: 1px;
+  height: 20px;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.huser {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.hav {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.hname {
+  font-size: 13px;
+  font-weight: 500;
+  color: #fff;
+}
+
+.hrole {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.hver {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.25);
+}
+
+.logo-mark {
+  width: 30px;
+  height: 30px;
+  background: var(--accent);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo-mark svg {
+  width: 17px;
+  height: 17px;
+  stroke: #fff;
+  fill: none;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.logo-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.logo-tag {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.4);
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+/* ── Page layout ────────────────────────────────────────────── */
+.page-main__tanks {
   flex: 1;
   padding: var(--space-lg) var(--space-md);
   display: flex;
@@ -21,7 +110,7 @@
   margin-bottom: var(--space-lg);
 }
 
-/* ─── Density bar ─────────────────────────────────────────────── */
+/* ── Density bar ────────────────────────────────────────────── */
 .density-bar {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -38,7 +127,7 @@
   font-weight: 600;
   color: var(--text-secondary);
   text-transform: uppercase;
-  letter-spacing: 0.07em;
+  letter-spacing: .07em;
   white-space: nowrap;
 }
 
@@ -63,13 +152,13 @@
 }
 
 .dg--ini .dg-lbl {
-  background: var(--ini-light);
-  color: var(--ini-accent);
+  background: var(--ini-l, #EFF6FF);
+  color: var(--ini, #2563EB);
 }
 
 .dg--fin .dg-lbl {
-  background: var(--fin-light);
-  color: var(--fin-accent);
+  background: var(--fin-l, #F0FDF4);
+  color: var(--fin, #15803D);
 }
 
 input.den-in {
@@ -86,7 +175,7 @@ input.den-in {
   width: 88px;
   appearance: none;
   -moz-appearance: textfield;
-  transition: border-color 0.15s, box-shadow 0.15s;
+  transition: border-color .15s, box-shadow .15s;
 }
 
 input.den-in::-webkit-inner-spin-button,
@@ -95,8 +184,8 @@ input.den-in::-webkit-outer-spin-button {
 }
 
 input.den-in:focus {
-  border-color: var(--border-focus);
-  box-shadow: 0 0 0 3px rgba(232, 99, 10, 0.12);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(232, 99, 10, .12);
 }
 
 .den-hint {
@@ -109,7 +198,7 @@ input.den-in:focus {
   color: var(--text-dim);
 }
 
-/* ─── Tank block (BW / FW) ────────────────────────────────────── */
+/* ── Tank block ─────────────────────────────────────────────── */
 .tank-block {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -137,16 +226,6 @@ input.den-in:focus {
   border-bottom-color: var(--fw-border, #A5F3FC);
 }
 
-/* BW/FW tokens (локальные для этой страницы) */
-.tank-block {
-  --bw-accent: #2563EB;
-  --bw-light: #EFF6FF;
-  --bw-border: #BFDBFE;
-  --fw-accent: #0891B2;
-  --fw-light: #ECFEFF;
-  --fw-border: #A5F3FC;
-}
-
 .blk-label {
   display: flex;
   align-items: center;
@@ -162,19 +241,19 @@ input.den-in:focus {
 }
 
 .tank-block--bw .blk-label {
-  color: #2563EB;
+  color: var(--bw-accent, #2563EB);
 }
 
 .tank-block--bw .blk-dot {
-  background: #2563EB;
+  background: var(--bw-accent, #2563EB);
 }
 
 .tank-block--fw .blk-label {
-  color: #0891B2;
+  color: var(--fw-accent, #0891B2);
 }
 
 .tank-block--fw .blk-dot {
-  background: #0891B2;
+  background: var(--fw-accent, #0891B2);
 }
 
 .blk-totals {
@@ -194,7 +273,7 @@ input.den-in:focus {
   font-size: 10px;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: .06em;
 }
 
 .total-chip-val {
@@ -205,18 +284,18 @@ input.den-in:focus {
 }
 
 .tc--ini .total-chip-lbl {
-  color: var(--ini-accent);
+  color: var(--ini, #2563EB);
 }
 
 .tc--fin .total-chip-lbl {
-  color: var(--fin-accent);
+  color: var(--fin, #15803D);
 }
 
-/* Correction banner */
+/* ── Correction banner ──────────────────────────────────────── */
 .corr-banner {
   margin: var(--space-sm) var(--space-lg);
   padding: var(--space-sm) var(--space-md);
-  background: var(--accent-light);
+  background: var(--accent-light, #FEF3EB);
   border: 1px solid #FED7AA;
   border-radius: var(--radius-md);
   font-size: 11px;
@@ -235,7 +314,7 @@ input.den-in:focus {
   flex-shrink: 0;
 }
 
-/* ─── Tank table ──────────────────────────────────────────────── */
+/* ── Tank table ─────────────────────────────────────────────── */
 .ttbl-wrap {
   overflow-x: auto;
 }
@@ -253,7 +332,7 @@ table.ttbl {
   font-weight: 600;
   color: var(--text-dim);
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: .06em;
   background: var(--bg);
   border-bottom: 1px solid var(--border);
   white-space: nowrap;
@@ -267,25 +346,29 @@ table.ttbl {
 }
 
 .ttbl thead tr.tr-grp .th-ini {
-  background: var(--ini-light);
-  color: var(--ini-accent);
+  background: var(--ini-l, #EFF6FF);
+  color: var(--ini, #2563EB);
 }
 
 .ttbl thead tr.tr-grp .th-fin {
-  background: var(--fin-light);
-  color: var(--fin-accent);
+  background: var(--fin-l, #F0FDF4);
+  color: var(--fin, #15803D);
 }
 
 .ttbl thead tr.tr-grp .th-ph {
   background: var(--bg);
 }
 
+.ttbl thead tr.tr-sub th {
+  font-size: 10px;
+}
+
 .ttbl thead tr.tr-sub .ts-ini {
-  background: color-mix(in srgb, var(--ini-light) 35%, var(--bg));
+  background: color-mix(in srgb, var(--ini-l, #EFF6FF) 35%, var(--bg));
 }
 
 .ttbl thead tr.tr-sub .ts-fin {
-  background: color-mix(in srgb, var(--fin-light) 35%, var(--bg));
+  background: color-mix(in srgb, var(--fin-l, #F0FDF4) 35%, var(--bg));
 }
 
 .th-name {
@@ -310,6 +393,7 @@ table.ttbl {
   background: var(--border);
 }
 
+/* Body rows */
 tbody.t-row tr td {
   padding: 5px var(--space-sm);
   border-top: 4px solid var(--bg);
@@ -321,6 +405,7 @@ tbody.t-row tr td:first-child {
   padding-left: var(--space-lg);
 }
 
+/* Tank name select */
 select.t-sel {
   font-family: var(--font-sans);
   font-size: 12px;
@@ -334,13 +419,14 @@ select.t-sel {
   cursor: pointer;
   width: 100%;
   appearance: none;
-  transition: border-color 0.15s;
+  transition: border-color .15s;
 }
 
 select.t-sel:focus {
-  border-color: var(--border-focus);
+  border-color: var(--accent);
 }
 
+/* Number inputs */
 input.ti {
   font-family: var(--font-mono);
   font-size: 12px;
@@ -354,7 +440,7 @@ input.ti {
   width: 100%;
   appearance: none;
   -moz-appearance: textfield;
-  transition: border-color 0.15s;
+  transition: border-color .15s;
 }
 
 input.ti::-webkit-inner-spin-button,
@@ -363,14 +449,15 @@ input.ti::-webkit-outer-spin-button {
 }
 
 input.ti:focus {
-  border-color: var(--border-focus);
-  box-shadow: 0 0 0 2px rgba(232, 99, 10, 0.1);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(232, 99, 10, .1);
 }
 
 input.ti::placeholder {
   color: var(--text-dim);
 }
 
+/* MT result cell */
 .td-mt {
   font-family: var(--font-mono);
   font-size: 12px;
@@ -398,7 +485,7 @@ input.ti::placeholder {
   white-space: nowrap;
 }
 
-/* Row +/- buttons */
+/* +/- buttons */
 .rbtn {
   display: inline-flex;
   align-items: center;
@@ -413,37 +500,48 @@ input.ti::placeholder {
   font-weight: 600;
   line-height: 1;
   color: var(--text-secondary);
-  transition: background 0.12s, color 0.12s, border-color 0.12s;
+  transition: background .12s, color .12s, border-color .12s;
   user-select: none;
 }
 
 .rbtn.add {
-  color: var(--ini-accent);
-  border-color: var(--ini-border);
-  background: var(--ini-light);
+  color: var(--ini, #2563EB);
+  border-color: var(--ini-b, #BFDBFE);
+  background: var(--ini-l, #EFF6FF);
 }
 
 .rbtn.add:hover {
   background: #DBEAFE;
-  border-color: var(--ini-accent);
+  border-color: var(--ini, #2563EB);
 }
 
 .rbtn.remove {
-  color: var(--danger);
+  color: var(--danger, #DC2626);
   border-color: #FECACA;
   background: #FEF2F2;
 }
 
 .rbtn.remove:hover {
   background: #FEE2E2;
-  border-color: var(--danger);
+  border-color: var(--danger, #DC2626);
 }
 
-/* Table footer total row */
+.rbtn.calc {
+  color: var(--fin-accent);
+  border-color: var(--fin-border);
+  background: var(--fin-light, #F0FDF4);
+}
+
+.rbtn.calc:hover {
+  background: #DCFCE7;
+  border-color: var(--fin-accent, #15803D);
+}
+
+/* Footer total row */
 tfoot.ttbl-foot tr td {
   border-top: 2px solid var(--border) !important;
   background: var(--bg) !important;
-  padding: var(--space-sm) var(--space-sm);
+  padding: var(--space-sm);
 }
 
 .td-tot-lbl {
@@ -451,7 +549,7 @@ tfoot.ttbl-foot tr td {
   font-weight: 700;
   color: var(--text-secondary);
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: .05em;
   padding-left: var(--space-lg) !important;
 }
 
@@ -464,18 +562,116 @@ tfoot.ttbl-foot tr td {
   padding-right: var(--space-sm) !important;
 }
 
-/* Add tank row */
-
+/* ── Add tank row ───────────────────────────────────────────── */
 .add-row {
   display: flex;
   align-items: center;
-  padding: var(--space-sm) var(--space-lg) var(--space-md);
+  justify-content: space-between;
+  padding: var(--space-sm) var(--space-lg) var(--space-sm);
+  gap: var(--space-md);
 }
 
+.add-row-fields {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  flex: 1;
+}
+
+.add-field {
+  display: flex;
+  gap: 6px;
+}
+
+.add-field--name {
+  flex: 1;
+  max-width: 200px;
+}
+
+.add-field-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  margin-bottom: 0;
+  align-content: center;
+}
+
+.add-select-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.add-sel {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-primary);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  outline: none;
+  appearance: none;
+  cursor: pointer;
+  transition: border-color .15s;
+  min-width: 90px;
+}
+
+.add-sel:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(232, 99, 10, .1);
+}
+
+.add-sel-arrow {
+  position: absolute;
+  right: 7px;
+  width: 13px;
+  height: 13px;
+  stroke: var(--text-dim);
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  pointer-events: none;
+}
+
+/* Name input */
+.add-inp {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-primary);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 5px var(--space-sm);
+  outline: none;
+  width: 100%;
+  transition: border-color .15s;
+}
+
+.add-inp:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(232, 99, 10, .1);
+}
+
+.add-inp::placeholder {
+  color: var(--text-dim);
+}
+
+.add-row-sep {
+  width: 1px;
+  height: 28px;
+  background: var(--border);
+  margin-bottom: 1px;
+}
+
+/* Add button */
 .add-btn {
   display: inline-flex;
   align-items: center;
   gap: var(--space-xs);
+  font-family: var(--font-sans);
   font-size: 12px;
   font-weight: 500;
   color: var(--ini-accent);
@@ -484,11 +680,19 @@ tfoot.ttbl-foot tr td {
   border-radius: var(--radius-md);
   padding: 6px var(--space-md);
   cursor: pointer;
-  transition: background 0.15s;
+  transition: background .15s, opacity .15s;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
-.add-btn:hover {
+.add-btn:hover:not(:disabled) {
   background: #DBEAFE;
+}
+
+.add-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  border-style: dashed;
 }
 
 .add-btn svg {
@@ -497,29 +701,4 @@ tfoot.ttbl-foot tr td {
   stroke: currentColor;
   fill: none;
   stroke-width: 2.5;
-}
-
-/* Domestic water separator */
-
-.domestic-sep {
-  border-top: 1px solid var(--border);
-  padding: var(--space-md) var(--space-lg) var(--space-sm);
-}
-
-.domestic-title {
-  font-size: 10px;
-  font-weight: 700;
-  color: var(--text-dim);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  display: flex;
-  align-items: center;
-  gap: var(--space-sm);
-}
-
-.domestic-title::after {
-  content: '';
-  flex: 1;
-  height: 1px;
-  background: var(--border);
 }

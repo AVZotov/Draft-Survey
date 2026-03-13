@@ -133,6 +133,7 @@ func (h *Handler) addFinalDraft(c *fiber.Ctx) error {
 }
 
 func (h *Handler) saveDraft(c *fiber.Ctx) error {
+	redirect := c.Query("redirect")
 	id := c.Params("id")
 	survey, err := h.surveyRepository.Get(id)
 	if err != nil {
@@ -145,5 +146,8 @@ func (h *Handler) saveDraft(c *fiber.Ctx) error {
 		return err
 	}
 
+	if redirect != "" {
+		c.Set("HX-Redirect", redirect)
+	}
 	return c.SendStatus(http.StatusOK)
 }

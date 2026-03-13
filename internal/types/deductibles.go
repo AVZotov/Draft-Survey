@@ -6,9 +6,11 @@ type OtherDeductibles struct {
 }
 
 type FreshWaterTank struct {
-	Name     string   `json:"name"`
-	Sounding *float64 `json:"sounding"`
-	Volume   *float64 `json:"volume"`
+	Name       string                `json:"tank_name"`
+	ID         string                `json:"tank_id"`
+	Sounding   *float64              `json:"tank_sounding"`
+	Volume     *float64              `json:"tank_volume"`
+	Correction *VolumeCorrectionData `json:"correction"`
 }
 
 func (fwt FreshWaterTank) GetWeight() float64 {
@@ -20,10 +22,12 @@ func (fwt FreshWaterTank) GetWeight() float64 {
 }
 
 type BallastWaterTank struct {
-	Name     string   `json:"name"`
-	Sounding *float64 `json:"sounding"`
-	Volume   *float64 `json:"volume"`
-	Density  *float64 `json:"density"`
+	Name       string                `json:"tank_name"`
+	ID         string                `json:"tank_id"`
+	Sounding   *float64              `json:"tank_sounding"`
+	Volume     *float64              `json:"tank_volume"`
+	Density    *float64              `json:"tank_density"`
+	Correction *VolumeCorrectionData `json:"correction"`
 }
 
 func (bwt BallastWaterTank) GetWeight() float64 {

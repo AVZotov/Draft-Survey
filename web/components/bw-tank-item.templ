@@ -1,0 +1,38 @@
+package components
+
+import "github.com/AVZotov/draft-survey/internal/types"
+
+templ BwTankItem(tank types.BallastWaterTank) {
+	<tr>
+		<td class="td-act">
+			<button class="rbtn calc" type="button" title="Calculate volume">
+				<svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+					<rect x="4" y="2" width="16" height="20" rx="2"></rect>
+					<line x1="8" y1="8" x2="16" y2="8"></line>
+					<line x1="8" y1="12" x2="16" y2="12"></line>
+					<line x1="8" y1="16" x2="12" y2="16"></line>
+				</svg>
+			</button>
+		</td>
+		<td class="td-name">
+			<span class="t-name-label">FPT</span>
+		</td>
+		<td class="td-div"></td>
+		<td>
+			<input class="ti" type="number" name="bw-1-ini-snd" placeholder="0.000" step="any"/>
+		</td>
+		<td>
+			<input class="ti" type="text" readonly id="r1_ini_vol" placeholder="Calculated"/>
+		</td>
+		<td>
+			<input class="ti" type="number" name="bw-1-ini-den" placeholder="global" step="any"/>
+		</td>
+		<td>
+			<input class="ti" type="text" readonly id="r1_ini_mt" placeholder="Calculated"/>
+		</td>
+		<td class="td-div"></td>
+		<td class="td-act">
+			<button class="rbtn remove" type="button" title="Remove">−</button>
+		</td>
+	</tr>
+}

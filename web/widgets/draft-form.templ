@@ -30,7 +30,7 @@ templ DraftForm(survey *types.Survey) {
 						Draft:  draft,
 						Index:  i,
 						Prefix: draftPrefix(i, len(survey.Drafts)),
-					}, survey.VesselData)
+					}, survey.VesselData, survey.ID)
 				}
 			</div>
 		</form>
