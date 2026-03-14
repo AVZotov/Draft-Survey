@@ -1,6 +1,9 @@
 package handler
 
 import (
+	"errors"
+	"net/http"
+	"slices"
 	"strconv"
 
 	"github.com/AVZotov/draft-survey/internal/constants"
@@ -19,21 +22,29 @@ func (h *Handler) tanks(c *fiber.Ctx) error {
 		return err
 	}
 
-	draftIndex := c.Params("draftIndex")
+	draftIndexStr := c.Params("draftIndex")
+	draftIndex, err := strconv.Atoi(draftIndexStr)
+	if err != nil {
+		return err
+	}
 
 	user, err := h.userRepository.Get()
 	if err != nil {
 		return err
 	}
 
+	bwTanks := survey.Drafts[draftIndex].BallastWaterTanks
+	fwTanks := survey.Drafts[draftIndex].FreshWaterTanks
+
 	props := web.TanksPageProps(user, survey)
-	return tadaptor.Render(c, web.Tanks(props, draftIndex))
+	return tadaptor.Render(c, web.Tanks(props, draftIndexStr, bwTanks, fwTanks))
 }
 
-func (h *Handler) addNewBwTank(c *fiber.Ctx) error {
+func (h *Handler) newBwTank(c *fiber.Ctx) error {
 	tankID := uuid.New().String()
 	id := c.Params("id")
-	draftIndex, err := strconv.Atoi(c.Params("draftIndex"))
+	draftIndexStr := c.Params("draftIndex")
+	draftIndex, err := strconv.Atoi(draftIndexStr)
 	if err != nil {
 		return err
 	}
@@ -59,5 +70,36 @@ func (h *Handler) addNewBwTank(c *fiber.Ctx) error {
 		return err
 	}
 
-	return tadaptor.Render(c, components.BwTankItem(bwt))
+	return tadaptor.Render(c, components.BwTankItem(survey.ID, draftIndexStr, bwt))
+}
+
+func (h *Handler) deleteBwTank(c *fiber.Ctx) error {
+	id := c.Params("id")
+	survey, err := h.surveyRepository.Get(id)
+	if err != nil {
+		return err
+	}
+	draftIndexStr := c.Params("draftIndex")
+	draftIndex, err := strconv.Atoi(draftIndexStr)
+	if err != nil {
+		return err
+	}
+	tankID := c.Params("tankID")
+	bwTanks := survey.Drafts[draftIndex].BallastWaterTanks
+
+	i := slices.IndexFunc(bwTanks, func(tank types.BallastWaterTank) bool {
+		return tank.ID == tankID
+	})
+	if i == -1 {
+		return errors.New("tank not found")
+	}
+	bwTanks = slices.Delete(bwTanks, i, i+1)
+
+	survey.Drafts[draftIndex].BallastWaterTanks = bwTanks
+	if err := h.surveyRepository.Save(survey); err != nil {
+		return err
+	}
+
+	c.Status(http.StatusOK)
+	return c.SendString("")
 }

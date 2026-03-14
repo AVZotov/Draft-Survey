@@ -3,11 +3,12 @@ package web
 import "github.com/AVZotov/draft-survey/web/components"
 import "github.com/AVZotov/draft-survey/web/layouts"
 import "github.com/AVZotov/draft-survey/web/widgets"
+import "github.com/AVZotov/draft-survey/internal/types"
 
-templ Tanks(props components.LayoutProps, draftIndex string) {
+templ Tanks(props components.LayoutProps, draftIndex string, bwTanks []types.BallastWaterTank, fwTanks []types.FreshWaterTank) {
 	@layouts.Layout(props) {
 		@widgets.HeaderUser(props.User)
-		@widgets.TanksForm(props.Survey, draftIndex)
+		@widgets.TanksForm(props.Survey, draftIndex, bwTanks, fwTanks)
 		//@widgets.TanksActionBar()
 		@widgets.Footer()
 	}

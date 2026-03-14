@@ -14,6 +14,8 @@ const (
 	TankDensity  = "tank_density"  // sea water density, t/m³ (BWT only)
 	// Tank volume — calculated or entered manually
 	TankVolume = "tank_volume" // m³
+	//Tank Water weight - calculated
+	TankWeight = "tank_weight" //MT
 	// Calibration table type selector
 	TankCalibTableType = "tank_calib_table_type"
 	// Calibration table boundaries — entered from vessel's calibration tables

@@ -7,7 +7,7 @@ import (
 	"github.com/AVZotov/draft-survey/internal/types"
 )
 
-templ TanksForm(survey *types.Survey, draftIndex string) {
+templ TanksForm(survey *types.Survey, draftIndex string, bwTanks []types.BallastWaterTank, fwTanks []types.FreshWaterTank) {
 	<main class="page-main__tanks">
 		<div class="tanks-wrap">
 			<div class="page-top">
@@ -25,7 +25,7 @@ templ TanksForm(survey *types.Survey, draftIndex string) {
 						<span class="den-hint">t/m³</span>
 					</div>
 				</div>
-				<span class="density-bar-note">Applied to BW tanks with empty density. Override per-tank if needed.</span>
+				<span class="density-bar-note">WARING! NOT IMPLEMENTED! Applied to BW tanks with empty density. Override per-tank if needed.</span>
 			</div>
 			<!-- ═══ BALLAST WATER ══════════════════════════════════════════ -->
 			<div class="tank-block tank-block--bw">
@@ -44,7 +44,7 @@ templ TanksForm(survey *types.Survey, draftIndex string) {
 					</svg>
 					Volumes corrected for Trim (2.437 m Aft) and List (0.053° Stbd). Correction method: Trim + List.
 				</div>
-				@TanksBlock()
+				@TanksBwBlock(survey, draftIndex, bwTanks)
 				<div class="add-row">
 					<div class="add-row-fields">
 						<div class="add-field">
@@ -82,7 +82,7 @@ templ TanksForm(survey *types.Survey, draftIndex string) {
   					inp.value = '';
   					inp.dispatchEvent(new Event('input'));
 						}"
-						hx-post={ fmt.Sprintf("/api/v1/survey/%s/tanks/%s/add-bw-tank", survey.ID, draftIndex) }
+						hx-post={ fmt.Sprintf("/api/v1/survey/%s/tanks/%s/bw-tank", survey.ID, draftIndex) }
 						hx-target="#bw-tanks-items"
 						hx-include="closest .add-row"
 						hx-swap="beforeend"

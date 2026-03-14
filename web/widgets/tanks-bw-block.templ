@@ -1,6 +1,9 @@
 package widgets
 
-templ TanksBlock() {
+import "github.com/AVZotov/draft-survey/internal/types"
+import "github.com/AVZotov/draft-survey/web/components"
+
+templ TanksBwBlock(survey *types.Survey, draftIndex string, tanks []types.BallastWaterTank) {
 	<div class="ttbl-wrap">
 		<div id="density-warning"></div>
 		<table class="ttbl" id="bw-tbl">
@@ -21,7 +24,11 @@ templ TanksBlock() {
 				</tr>
 			</thead>
 			<tbody id="bw-tanks-items" class="t-row" data-id="r1" data-type="bw">
-				{ children... }
+				if tanks != nil {
+					for _, tank := range tanks {
+						@components.BwTankItem(survey.ID, draftIndex, tank)
+					}
+				}
 			</tbody>
 			<tfoot class="ttbl-foot">
 				<tr>

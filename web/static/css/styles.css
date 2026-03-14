@@ -1104,23 +1104,6 @@ textarea {
   border: 1px solid var(--fin-border);
 }
 
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  font-family: var(--font-sans);
-  background: var(--bg);
-  display: flex;
-  gap: 16px;
-  padding: 40px;
-  flex-wrap: wrap;
-}
-
 /* ── Backdrop ───────────────────────────────────────────── */
 dialog::backdrop {
   background: rgba(15, 23, 32, 0.45);

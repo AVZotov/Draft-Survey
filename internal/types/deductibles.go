@@ -1,8 +1,10 @@
 package types
 
-type OtherDeductibles struct {
-	Others     *float64 `json:"others"`
-	OthersName string   `json:"others_name"`
+var _ Tank = (*BallastWaterTank)(nil)
+var _ Tank = (*FreshWaterTank)(nil)
+
+type Tank interface {
+	GetWeight() float64
 }
 
 type FreshWaterTank struct {
@@ -11,6 +13,7 @@ type FreshWaterTank struct {
 	Sounding   *float64              `json:"tank_sounding"`
 	Volume     *float64              `json:"tank_volume"`
 	Correction *VolumeCorrectionData `json:"correction"`
+	Weight     float64               `json:"tank_weight"`
 }
 
 func (fwt FreshWaterTank) GetWeight() float64 {
@@ -28,6 +31,7 @@ type BallastWaterTank struct {
 	Volume     *float64              `json:"tank_volume"`
 	Density    *float64              `json:"tank_density"`
 	Correction *VolumeCorrectionData `json:"correction"`
+	Weight     float64               `json:"tank_weight"`
 }
 
 func (bwt BallastWaterTank) GetWeight() float64 {
@@ -38,6 +42,10 @@ func (bwt BallastWaterTank) GetWeight() float64 {
 	return *bwt.Volume * *bwt.Density
 }
 
+type OtherDeductibles struct {
+	Others     *float64 `json:"others"`
+	OthersName string   `json:"others_name"`
+}
 type Deductibles struct {
 	HFO         *float64 `json:"hfo"`
 	MDO         *float64 `json:"mdo"`

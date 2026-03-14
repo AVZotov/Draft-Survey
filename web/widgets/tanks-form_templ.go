@@ -15,7 +15,7 @@ import (
 	"github.com/AVZotov/draft-survey/internal/types"
 )
 
-func TanksForm(survey *types.Survey, draftIndex string) templ.Component {
+func TanksForm(survey *types.Survey, draftIndex string, bwTanks []types.BallastWaterTank, fwTanks []types.FreshWaterTank) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -36,11 +36,11 @@ func TanksForm(survey *types.Survey, draftIndex string) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<main class=\"page-main__tanks\"><div class=\"tanks-wrap\"><div class=\"page-top\"><a href=\"#\" class=\"back-link\"><svg viewBox=\"0 0 24 24\"><path d=\"M19 12H5M12 19l-7-7 7-7\"></path></svg>Back to Draft Readings</a><h1 class=\"page-title\">BW / FW Tanks</h1><p class=\"page-meta\">OCEAN CHEERS · IMO 9233387 · Loading · Vanino, Russia</p></div><!-- DENSITY BAR --><div class=\"density-bar\"><span class=\"density-bar-label\">BW Density</span><div class=\"density-groups\"><div class=\"dg dg--ini\"><span class=\"dg-lbl\">Initial</span> <input class=\"den-in\" type=\"number\" id=\"den-ini\" placeholder=\"1.025\" step=\"any\" value=\"1.025\"> <span class=\"den-hint\">t/m³</span></div></div><span class=\"density-bar-note\">Applied to BW tanks with empty density. Override per-tank if needed.</span></div><!-- ═══ BALLAST WATER ══════════════════════════════════════════ --><div class=\"tank-block tank-block--bw\"><div class=\"tank-block-header\"><div class=\"blk-label\"><span class=\"blk-dot\"></span>Ballast Water Tanks</div><div class=\"blk-totals\"><div class=\"total-chip tc--ini\"><span class=\"total-chip-lbl\">Initial</span> <span class=\"total-chip-val\" id=\"bw-ini-hdr\">— MT</span></div></div></div><div class=\"corr-banner\"><svg viewBox=\"0 0 24 24\"><circle cx=\"12\" cy=\"12\" r=\"10\"></circle><path d=\"M12 16v-4M12 8h.01\"></path></svg> Volumes corrected for Trim (2.437 m Aft) and List (0.053° Stbd). Correction method: Trim + List.</div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<main class=\"page-main__tanks\"><div class=\"tanks-wrap\"><div class=\"page-top\"><a href=\"#\" class=\"back-link\"><svg viewBox=\"0 0 24 24\"><path d=\"M19 12H5M12 19l-7-7 7-7\"></path></svg>Back to Draft Readings</a><h1 class=\"page-title\">BW / FW Tanks</h1><p class=\"page-meta\">OCEAN CHEERS · IMO 9233387 · Loading · Vanino, Russia</p></div><!-- DENSITY BAR --><div class=\"density-bar\"><span class=\"density-bar-label\">BW Density</span><div class=\"density-groups\"><div class=\"dg dg--ini\"><span class=\"dg-lbl\">Initial</span> <input class=\"den-in\" type=\"number\" id=\"den-ini\" placeholder=\"1.025\" step=\"any\" value=\"1.025\"> <span class=\"den-hint\">t/m³</span></div></div><span class=\"density-bar-note\">WARING! NOT IMPLEMENTED! Applied to BW tanks with empty density. Override per-tank if needed.</span></div><!-- ═══ BALLAST WATER ══════════════════════════════════════════ --><div class=\"tank-block tank-block--bw\"><div class=\"tank-block-header\"><div class=\"blk-label\"><span class=\"blk-dot\"></span>Ballast Water Tanks</div><div class=\"blk-totals\"><div class=\"total-chip tc--ini\"><span class=\"total-chip-lbl\">Initial</span> <span class=\"total-chip-val\" id=\"bw-ini-hdr\">— MT</span></div></div></div><div class=\"corr-banner\"><svg viewBox=\"0 0 24 24\"><circle cx=\"12\" cy=\"12\" r=\"10\"></circle><path d=\"M12 16v-4M12 8h.01\"></path></svg> Volumes corrected for Trim (2.437 m Aft) and List (0.053° Stbd). Correction method: Trim + List.</div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = TanksBlock().Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = TanksBwBlock(survey, draftIndex, bwTanks).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -111,9 +111,9 @@ func TanksForm(survey *types.Survey, draftIndex string) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var6 string
-		templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("/api/v1/survey/%s/tanks/%s/add-bw-tank", survey.ID, draftIndex))
+		templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("/api/v1/survey/%s/tanks/%s/bw-tank", survey.ID, draftIndex))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks-form.templ`, Line: 85, Col: 92}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks-form.templ`, Line: 85, Col: 88}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 		if templ_7745c5c3_Err != nil {

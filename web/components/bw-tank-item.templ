@@ -1,8 +1,13 @@
 package components
 
-import "github.com/AVZotov/draft-survey/internal/types"
+import (
+	"fmt"
+	"github.com/AVZotov/draft-survey/internal/constants"
+	"github.com/AVZotov/draft-survey/internal/format"
+	"github.com/AVZotov/draft-survey/internal/types"
+)
 
-templ BwTankItem(tank types.BallastWaterTank) {
+templ BwTankItem(surveyID, draftIndex string, tank types.BallastWaterTank) {
 	<tr>
 		<td class="td-act">
 			<button class="rbtn calc" type="button" title="Calculate volume">
@@ -15,24 +20,32 @@ templ BwTankItem(tank types.BallastWaterTank) {
 			</button>
 		</td>
 		<td class="td-name">
-			<span class="t-name-label">FPT</span>
+			<span class="t-name-label">{ tank.Name }</span>
 		</td>
 		<td class="td-div"></td>
 		<td>
-			<input class="ti" type="number" name="bw-1-ini-snd" placeholder="0.000" step="any"/>
+			<input class="ti" type="number" name={ fmt.Sprintf("%s-%s", constants.TankSounding, tank.ID) } value={ format.FloatOrEmpty(tank.Sounding) } placeholder="0.000" step="any"/>
 		</td>
 		<td>
-			<input class="ti" type="text" readonly id="r1_ini_vol" placeholder="Calculated"/>
+			<input class="ti" type="text" name={ fmt.Sprintf("%s-%s", constants.TankVolume, tank.ID) } value={ format.FloatOrEmpty(tank.Volume) } placeholder="Calculated"/>
 		</td>
 		<td>
-			<input class="ti" type="number" name="bw-1-ini-den" placeholder="global" step="any"/>
+			<input class="ti" type="number" name={ fmt.Sprintf("%s-%s", constants.TankDensity, tank.ID) } value={ format.FloatOrEmpty(tank.Density) } placeholder="0.000" step="any"/>
 		</td>
 		<td>
-			<input class="ti" type="text" readonly id="r1_ini_mt" placeholder="Calculated"/>
+			<input class="ti" type="text" readonly name={ fmt.Sprintf("%s-%s", constants.TankWeight, tank.ID) } value={ fmt.Sprintf("%g", tank.Weight) } placeholder="Calculated"/>
 		</td>
 		<td class="td-div"></td>
 		<td class="td-act">
-			<button class="rbtn remove" type="button" title="Remove">−</button>
+			<button
+				hx-confirm="This operation can't be undone"
+				hx-delete={ fmt.Sprintf("/api/v1/survey/%s/tanks/%s/bw-tank/%s", surveyID, draftIndex, tank.ID) }
+				hx-target="closest tr"
+				hx-swap="outerHTML swap:500ms"
+				class="rbtn remove"
+				type="button"
+				title="Remove"
+			>-</button>
 		</td>
 	</tr>
 }

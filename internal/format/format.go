@@ -13,6 +13,13 @@ func Mark(p *float64) string {
 	return fmt.Sprintf("%.3f", *p)
 }
 
+func FloatOrEmpty(v *float64) string {
+	if v == nil {
+		return ""
+	}
+	return fmt.Sprintf("%g", *v)
+}
+
 func Weight(v float64) string {
 	return fmt.Sprintf("%.3f MT", v)
 }

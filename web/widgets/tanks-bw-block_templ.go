@@ -8,7 +8,10 @@ package widgets
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
-func TanksBlock() templ.Component {
+import "github.com/AVZotov/draft-survey/internal/types"
+import "github.com/AVZotov/draft-survey/web/components"
+
+func TanksBwBlock(survey *types.Survey, draftIndex string, tanks []types.BallastWaterTank) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -33,9 +36,13 @@ func TanksBlock() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templ_7745c5c3_Var1.Render(ctx, templ_7745c5c3_Buffer)
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
+		if tanks != nil {
+			for _, tank := range tanks {
+				templ_7745c5c3_Err = components.BwTankItem(survey.ID, draftIndex, tank).Render(ctx, templ_7745c5c3_Buffer)
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+			}
 		}
 		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</tbody><tfoot class=\"ttbl-foot\"><tr><td class=\"td-tot-lbl\">Total</td><td class=\"td-div\"></td><td colspan=\"4\"></td><td class=\"td-tot-mt\" id=\"bw-ini-foot\">— MT</td><td class=\"td-div\"></td><td></td></tr></tfoot></table></div>")
 		if templ_7745c5c3_Err != nil {
