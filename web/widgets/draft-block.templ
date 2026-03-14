@@ -60,15 +60,14 @@ templ DraftBlock(props components.DraftBlockProps, vessel vessel.VesselData, sur
 					<div class="sea-select-wrap">
 						<select class="sea-sel" id={ props.Prefix + "-sea-condition" } name={ fmt.Sprintf("%s-d%d", constants.SeaConditionWave, props.Index) } disabled?={ props.Draft.Status == types.DraftStatusPending }>
 							<option value="&lt; 0.1m" selected?={ props.Draft.SeaCondition.Wave == "< 0.1m" }>Calm — &lt; 0.1m</option>
-							<option value="0.1-0.5m" selected?={ props.Draft.SeaCondition.Wave == "0.1-0.5m" }>Smooth — 0.1–0.5m</option>
-							<option value="0.5-1.25m" selected?={ props.Draft.SeaCondition.Wave == "0.5-1.25m" }>Slight — 0.5–1.25m</option>
-							<option value="1.25-2.5m" selected?={ props.Draft.SeaCondition.Wave == "1.25-2.5m" }>Moderate — 1.25–2.5m</option>
-							<option value="2.5-4.0m" selected?={ props.Draft.SeaCondition.Wave == "2.5-4.0m" }>Rough — 2.5–4.0m</option>
+							<option value="0.1-0.5m" selected?={ props.Draft.SeaCondition.Wave == "0.1-0.5m" }>Smooth — 0.1-0.5m</option>
+							<option value="0.5-1.25m" selected?={ props.Draft.SeaCondition.Wave == "0.5-1.25m" }>Slight — 0.5-1.25m</option>
+							<option value="1.25-2.5m" selected?={ props.Draft.SeaCondition.Wave == "1.25-2.5m" }>Moderate — 1.25-2.5m</option>
+							<option value="2.5-4.0m" selected?={ props.Draft.SeaCondition.Wave == "2.5-4.0m" }>Rough — 2.5-4.0m</option>
 						</select>
 					</div>
 				</div>
 			</div>
-			<!-- <label class="sea-bar-label">&#8592; Sea Condition &#8594;</label> -->
 			<!-- Ice toggle -->
 			<div class="sea-toggle-group">
 				<label class="sea-toggle-label">
@@ -95,12 +94,12 @@ templ DraftBlock(props components.DraftBlockProps, vessel vessel.VesselData, sur
 							disabled?={ props.Draft.SeaCondition.Type != types.SeaConditionTypeIce || props.Draft.Status == types.DraftStatusPending }
 						>
 							<option value="&lt;0.05m around" selected?={ props.Draft.SeaCondition.Ice == "<0.05m around" }>&lt; 0.05m around</option>
-							<option value="0.05-0.1m around" selected?={ props.Draft.SeaCondition.Ice == "0.05-0.1m around" }>0.05–0.1m around</option>
-							<option value="0.1-0.15m around" selected?={ props.Draft.SeaCondition.Ice == "0.1-0.15m around" }>0.1–0.15m around</option>
-							<option value="0.15-0.2m around" selected?={ props.Draft.SeaCondition.Ice == "0.15-0.2m around" }>0.15–0.2m around</option>
-							<option value="0.2-0.3m around" selected?={ props.Draft.SeaCondition.Ice == "0.2-0.3m around" }>0.2–0.3m around</option>
-							<option value="0.3-0.4m around" selected?={ props.Draft.SeaCondition.Ice == "0.3-0.4m around" }>0.3–0.4m around</option>
-							<option value="0.4-0.6m around" selected?={ props.Draft.SeaCondition.Ice == "0.4-0.6m around" }>0.4–0.6m around</option>
+							<option value="0.05-0.1m around" selected?={ props.Draft.SeaCondition.Ice == "0.05-0.1m around" }>0.05-0.1m around</option>
+							<option value="0.1-0.15m around" selected?={ props.Draft.SeaCondition.Ice == "0.1-0.15m around" }>0.1-0.15m around</option>
+							<option value="0.15-0.2m around" selected?={ props.Draft.SeaCondition.Ice == "0.15-0.2m around" }>0.15-0.2m around</option>
+							<option value="0.2-0.3m around" selected?={ props.Draft.SeaCondition.Ice == "0.2-0.3m around" }>0.2-0.3m around</option>
+							<option value="0.3-0.4m around" selected?={ props.Draft.SeaCondition.Ice == "0.3-0.4m around" }>0.3-0.4m around</option>
+							<option value="0.4-0.6m around" selected?={ props.Draft.SeaCondition.Ice == "0.4-0.6m around" }>0.4-0.6m around</option>
 							<option value="&gt;0.6m around" selected?={ props.Draft.SeaCondition.Ice == "&gt;0.6m around" }>&gt; 0.6m around</option>
 						</select>
 					</div>
@@ -453,16 +452,16 @@ templ DraftBlock(props components.DraftBlockProps, vessel vessel.VesselData, sur
 				}
 			</div>
 		</div>
-		<!-- Deductibles -->
+		<!-- Deductibles and Table density-->
 		<div class="deduct-section">
 			<div class="sec-title">Deductibles &amp; Density</div>
 			<div class="density-row">
 				<div class="df">
 					<label>Table Density</label>
-					if props.Draft.Density != nil {
-						<input type="number" name={ fmt.Sprintf("%s-d%d", constants.TableDensity, props.Index) } placeholder="1.025" step="any" value={ fmt.Sprintf("%g", *props.Draft.Density) } disabled?={ props.Draft.Status == types.DraftStatusPending }/>
+					if vessel.TableDensity != nil {
+						<input type="number" name={ constants.TableDensity } placeholder="1.025" step="any" value={ fmt.Sprintf("%g", *vessel.TableDensity) } disabled?={ props.Draft.Status == types.DraftStatusPending }/>
 					} else {
-						<input type="number" name={ fmt.Sprintf("%s-d%d", constants.TableDensity, props.Index) } placeholder="1.025" step="any" disabled?={ props.Draft.Status == types.DraftStatusPending }/>
+						<input type="number" name={ constants.TableDensity } placeholder="1.025" step="any" disabled?={ props.Draft.Status == types.DraftStatusPending }/>
 					}
 				</div>
 				<div class="df">

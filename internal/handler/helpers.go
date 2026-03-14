@@ -46,6 +46,10 @@ func parseString(c *fiber.Ctx, field string) (string, error) {
 }
 
 func (h *Handler) parseDraft(c *fiber.Ctx, survey *types.Survey) {
+	tableDensity, err := parseFloat(c, constants.TableDensity)
+	if err == nil {
+		survey.VesselData.TableDensity = tableDensity
+	}
 	for i := range survey.Drafts {
 		//Getting draft marks
 		fwdPort, err := parseFloat(c, fmt.Sprintf("%s-d%d", constants.FwdPort, i))
