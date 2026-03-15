@@ -11,6 +11,7 @@ import templruntime "github.com/a-h/templ/runtime"
 import "github.com/AVZotov/draft-survey/web/components"
 import "github.com/AVZotov/draft-survey/web/layouts"
 import "github.com/AVZotov/draft-survey/web/widgets"
+import "github.com/AVZotov/draft-survey/web/widgets/tanks"
 import "github.com/AVZotov/draft-survey/internal/types"
 
 func Tanks(props components.LayoutProps, draftIndex string, bwTanks []types.BallastWaterTank, fwTanks []types.FreshWaterTank) templ.Component {
@@ -54,7 +55,7 @@ func Tanks(props components.LayoutProps, draftIndex string, bwTanks []types.Ball
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = widgets.TanksForm(props.Survey, draftIndex, bwTanks, fwTanks).Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = tanks.TanksForm(props.Survey, draftIndex, bwTanks, fwTanks).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

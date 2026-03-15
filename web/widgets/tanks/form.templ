@@ -1,11 +1,6 @@
-package widgets
+package tanks
 
-import (
-	"fmt"
-	"github.com/AVZotov/draft-survey/data/dictionaries"
-	"github.com/AVZotov/draft-survey/internal/constants"
-	"github.com/AVZotov/draft-survey/internal/types"
-)
+import "github.com/AVZotov/draft-survey/internal/types"
 
 templ TanksForm(survey *types.Survey, draftIndex string, bwTanks []types.BallastWaterTank, fwTanks []types.FreshWaterTank) {
 	<main class="page-main__tanks">
@@ -45,52 +40,6 @@ templ TanksForm(survey *types.Survey, draftIndex string, bwTanks []types.Ballast
 					Volumes corrected for Trim (2.437 m Aft) and List (0.053° Stbd). Correction method: Trim + List.
 				</div>
 				@TanksBwBlock(survey, draftIndex, bwTanks)
-				<div class="add-row">
-					<div class="add-row-fields">
-						<div class="add-field">
-							<label class="add-field-label">Type</label>
-							<div class="add-select-wrap">
-								<select class="add-sel" name={ constants.NewBwtType } id="new-tank-type">
-									for _, bwtType := range dictionaries.BallastWaterTankTypes {
-										<option value={ bwtType }>{ bwtType }</option>
-									}
-								</select>
-								<svg class="add-sel-arrow" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"></path></svg>
-							</div>
-						</div>
-						<div class="add-row-sep"></div>
-						<div class="add-field add-field--name">
-							<label class="add-field-label">Name</label>
-							<input
-								class="add-inp"
-								type="text"
-								name={ constants.NewBWTName }
-								id="new-bw-tank-name"
-								placeholder="e.g. 1S, 2P, Centre…"
-								autocomplete="off"
-								oninput="document.getElementById('add-bw-btn').disabled = this.value.trim() === ''"
-							/>
-						</div>
-					</div>
-					<button
-						class="add-btn"
-						id="add-bw-btn"
-						type="button"
-						disabled
-						hx-on::after-request="if(event.detail.successful) {
-  					const inp = document.getElementById('new-bw-tank-name');
-  					inp.value = '';
-  					inp.dispatchEvent(new Event('input'));
-						}"
-						hx-post={ fmt.Sprintf("/api/v1/survey/%s/tanks/%s/bw-tank", survey.ID, draftIndex) }
-						hx-target="#bw-tanks-items"
-						hx-include="closest .add-row"
-						hx-swap="beforeend"
-					>
-						<svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"></path></svg>
-						Add BW tank
-					</button>
-				</div>
 			</div>
 			<!-- ═══ FRESH WATER ════════════════════════════════════════════ -->
 			<div class="tank-block tank-block--fw">
