@@ -11,6 +11,8 @@ import (
 	"github.com/AVZotov/draft-survey/internal/types"
 	"github.com/AVZotov/draft-survey/web"
 	"github.com/AVZotov/draft-survey/web/components"
+	"github.com/AVZotov/draft-survey/web/widgets/tanks"
+	"github.com/a-h/templ"
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
 )
@@ -69,8 +71,11 @@ func (h *Handler) newBwTank(c *fiber.Ctx) error {
 	if err = h.surveyRepository.Save(survey); err != nil {
 		return err
 	}
+	components.BwTankItem(survey.ID, draftIndexStr, bwt)
 
-	return tadaptor.Render(c, components.BwTankItem(survey.ID, draftIndexStr, bwt))
+	return tadaptor.Render(c, templ.Join(
+		components.BwTankItem(survey.ID, draftIndexStr, bwt),
+		tanks.BwAddRowForm(survey.ID, draftIndexStr, true)))
 }
 
 func (h *Handler) deleteBwTank(c *fiber.Ctx) error {

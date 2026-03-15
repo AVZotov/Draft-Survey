@@ -6,8 +6,14 @@ import (
 	"github.com/AVZotov/draft-survey/internal/constants"
 )
 
-templ BwAddRowForm(surveyID, draftIndex string) {
-	<div id="add-bw-row" class="add-row">
+templ BwAddRowForm(surveyID, draftIndex string, isOOB bool) {
+	<div
+		id="add-bw-row"
+		class="add-row"
+		if isOOB {
+			hx-swap-oob="true"
+		}
+	>
 		<div class="add-row-fields">
 			<div class="add-field">
 				<label class="add-field-label">Type</label>
@@ -30,6 +36,7 @@ templ BwAddRowForm(surveyID, draftIndex string) {
 					name={ constants.NewBWTName }
 					placeholder="e.g. 1S, 2P, Centre…"
 					autocomplete="off"
+					oninput="document.getElementById('add-bw-row-btn').disabled = this.value.trim() === ''"
 				/>
 			</div>
 		</div>
