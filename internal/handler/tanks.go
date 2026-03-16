@@ -58,17 +58,6 @@ func (h *Handler) newBwTank(c *fiber.Ctx) error {
 	bwt.ID = tankID
 	h.parseBwTank(c, bwt)
 
-	// tankName, err := h.parseNewTankName(c, constants.NewBwtType, constants.NewBWTName)
-	// if err != nil {
-	// 	return err
-	// }
-
-	// bwt := types.BallastWaterTank{
-	// 	Type
-	// 	ID:   tankID,
-	// 	Name: tankName,
-	// }
-
 	survey.Drafts[draftIndex].BallastWaterTanks =
 		append(survey.Drafts[draftIndex].BallastWaterTanks, *bwt)
 
