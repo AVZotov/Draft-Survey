@@ -40,7 +40,7 @@ func BwAddRowForm(surveyID, draftIndex string, isOOB bool) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		if isOOB {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, " hx-swap-oob=\"true\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, " hx-swap-oob=\"outerHTML\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

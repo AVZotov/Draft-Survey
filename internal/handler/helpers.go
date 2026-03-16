@@ -259,19 +259,6 @@ func (h *Handler) parseDraft(c *fiber.Ctx, survey *types.Survey) {
 	}
 }
 
-// func (h *Handler) parseNewTankName(c *fiber.Ctx, typeSelector, nameSelector string) (string, error) {
-// 	wtType, err := parseString(c, typeSelector)
-// 	if err != nil {
-// 		return "", err
-// 	}
-// 	wtName, err := parseString(c, nameSelector)
-// 	if err != nil {
-// 		return "", err
-// 	}
-
-// 	return fmt.Sprintf("%s %s", wtType, wtName), nil
-// }
-
 func (h *Handler) parseBwTank(c *fiber.Ctx, tank *types.BallastWaterTank) {
 	tName, err := parseString(c, constants.WtankName)
 	if err == nil {

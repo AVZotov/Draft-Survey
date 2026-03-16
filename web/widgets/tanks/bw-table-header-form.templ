@@ -1,0 +1,24 @@
+package tanks
+
+templ BwTableHeaderForm(totalWeight, draftType string, isOOB bool) {
+	<div
+		id="bw-table-header"
+		class="tank-block-header"
+		if isOOB {
+			hx-swap-oob="outerHTML"
+		}
+	>
+		<div class="blk-label">
+			<span class="blk-dot"></span>Ballast Water Tanks
+		</div>
+		<div class="blk-totals">
+			<div class="total-chip tc--ini">
+				<span class="total-chip-lbl">{ draftType }</span>
+				<span
+					id="bw-total-weight"
+					class="total-chip-val"
+				>{ totalWeight } MT</span>
+			</div>
+		</div>
+	</div>
+}

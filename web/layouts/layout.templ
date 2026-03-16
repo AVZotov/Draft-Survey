@@ -20,11 +20,13 @@ templ Layout(props components.LayoutProps) {
 				<link rel="stylesheet" href={ css }/>
 			}
 			<script src="/static/js/htmx.min.js"></script>
-			<script src="/static/js/idiomorph-ext.min.js"></script>
+			<script src="/static/js/idiomorph-ext.js"></script>
 			<title>{ props.Title }</title>
 			<meta name="Draft-Survey calculator" content={ props.MetaDescription }/>
 		</head>
-		<body>
+		<body
+			hx-ext="morph"
+		>
 			@widgets.Banner()
 			{ children... }
 			for _, js := range props.ExtraJS {

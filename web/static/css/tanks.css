@@ -569,6 +569,8 @@ tfoot.ttbl-foot tr td {
   justify-content: space-between;
   padding: var(--space-sm) var(--space-lg) var(--space-sm);
   gap: var(--space-md);
+  border-top: 2px solid var(--border);
+  background: var(--bg);
 }
 
 .add-row-fields {

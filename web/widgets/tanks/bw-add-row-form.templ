@@ -11,7 +11,7 @@ templ BwAddRowForm(surveyID, draftIndex string, isOOB bool) {
 		id="add-bw-row"
 		class="add-row"
 		if isOOB {
-			hx-swap-oob="true"
+			hx-swap-oob="outerHTML"
 		}
 	>
 		<div class="add-row-fields">

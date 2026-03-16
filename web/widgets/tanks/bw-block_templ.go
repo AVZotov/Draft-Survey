@@ -44,7 +44,7 @@ func TanksBwBlock(survey *types.Survey, draftIndex string, tanks []types.Ballast
 				}
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</tbody><tfoot class=\"ttbl-foot\"><tr><td class=\"td-tot-lbl\">Total</td><td class=\"td-div\"></td><td colspan=\"4\"></td><td class=\"td-tot-mt\" id=\"bw-ini-foot\">— MT</td><td class=\"td-div\"></td><td></td></tr></tfoot></table></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</tbody></table></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

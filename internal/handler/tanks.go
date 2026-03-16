@@ -2,10 +2,12 @@ package handler
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
 	"slices"
 	"strconv"
 
+	"github.com/AVZotov/draft-survey/internal/calculation"
 	"github.com/AVZotov/draft-survey/internal/handler/tadaptor"
 	"github.com/AVZotov/draft-survey/internal/types"
 	"github.com/AVZotov/draft-survey/web"
@@ -97,8 +99,11 @@ func (h *Handler) deleteBwTank(c *fiber.Ctx) error {
 		return err
 	}
 
+	totalWeight := fmt.Sprintf("%g", calculation.TotalBallastWater(survey.Drafts[draftIndex].BallastWaterTanks))
+
 	c.Status(http.StatusOK)
-	return c.SendString("")
+	return tadaptor.Render(c, tanks.BwTableHeaderForm(
+		totalWeight, string(survey.Drafts[draftIndex].Type), true))
 }
 
 func (h *Handler) updateBwTank(c *fiber.Ctx) error {

@@ -1,8 +1,13 @@
 package tanks
 
 import "github.com/AVZotov/draft-survey/internal/types"
+import "strconv"
 
 templ TanksForm(survey *types.Survey, draftIndex string, bwTanks []types.BallastWaterTank, fwTanks []types.FreshWaterTank) {
+	{{
+		index, _ := strconv.Atoi(draftIndex)
+		draftType := string(survey.Drafts[index].Type)
+	}}
 	<main class="page-main__tanks">
 		<div class="tanks-wrap">
 			<div class="page-top">
@@ -24,15 +29,7 @@ templ TanksForm(survey *types.Survey, draftIndex string, bwTanks []types.Ballast
 			</div>
 			<!-- ═══ BALLAST WATER ══════════════════════════════════════════ -->
 			<div class="tank-block tank-block--bw">
-				<div class="tank-block-header">
-					<div class="blk-label"><span class="blk-dot"></span>Ballast Water Tanks</div>
-					<div class="blk-totals">
-						<div class="total-chip tc--ini">
-							<span class="total-chip-lbl">Initial</span>
-							<span class="total-chip-val" id="bw-ini-hdr">— MT</span>
-						</div>
-					</div>
-				</div>
+				@BwTableHeaderForm("-", draftType, false)
 				<div class="corr-banner">
 					<svg viewBox="0 0 24 24">
 						<circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4M12 8h.01"></path>
