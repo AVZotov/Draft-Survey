@@ -8,7 +8,13 @@ import (
 )
 
 templ BwTankItem(surveyID, draftIndex string, tank types.BallastWaterTank) {
-	<tr>
+	<tr
+		hx-target="this"
+		hx-trigger="change changed target:input delay:500ms"
+		hx-include="this"
+		hx-swap="outerHTML"
+		hx-put={ fmt.Sprintf("/api/v1/survey/%s/tanks/%s/bw-tank/%s", surveyID, draftIndex, tank.ID) }
+	>
 		<td class="td-act">
 			<button class="rbtn calc" type="button" title="Calculate volume">
 				<svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -20,7 +26,7 @@ templ BwTankItem(surveyID, draftIndex string, tank types.BallastWaterTank) {
 			</button>
 		</td>
 		<td class="td-name">
-			<span class="t-name-label">{ tank.Name }</span>
+			<span class="t-name-label">{ tank.Type } { tank.Name }</span>
 		</td>
 		<td class="td-div"></td>
 		<td>

@@ -50,9 +50,9 @@ func BwAddRowForm(surveyID, draftIndex string, isOOB bool) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var2 string
-		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(constants.NewBwtType)
+		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(constants.WtankType)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/bw-add-row-form.templ`, Line: 21, Col: 56}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/bw-add-row-form.templ`, Line: 21, Col: 55}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
@@ -99,9 +99,9 @@ func BwAddRowForm(surveyID, draftIndex string, isOOB bool) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var5 string
-		templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(constants.NewBWTName)
+		templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(constants.WtankName)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/bw-add-row-form.templ`, Line: 36, Col: 32}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/bw-add-row-form.templ`, Line: 36, Col: 31}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 		if templ_7745c5c3_Err != nil {

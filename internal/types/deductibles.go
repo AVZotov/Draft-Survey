@@ -8,6 +8,7 @@ type Tank interface {
 }
 
 type FreshWaterTank struct {
+	Type       string                `json:"tank_type"`
 	Name       string                `json:"tank_name"`
 	ID         string                `json:"tank_id"`
 	Sounding   *float64              `json:"tank_sounding"`
@@ -25,6 +26,7 @@ func (fwt FreshWaterTank) GetWeight() float64 {
 }
 
 type BallastWaterTank struct {
+	Type       string                `json:"tank_type"`
 	Name       string                `json:"tank_name"`
 	ID         string                `json:"tank_id"`
 	Sounding   *float64              `json:"tank_sounding"`

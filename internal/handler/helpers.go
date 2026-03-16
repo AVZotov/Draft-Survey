@@ -259,15 +259,42 @@ func (h *Handler) parseDraft(c *fiber.Ctx, survey *types.Survey) {
 	}
 }
 
-func (h *Handler) parseNewTankName(c *fiber.Ctx, typeSelector, nameSelector string) (string, error) {
-	wtType, err := parseString(c, typeSelector)
-	if err != nil {
-		return "", err
-	}
-	wtName, err := parseString(c, nameSelector)
-	if err != nil {
-		return "", err
+// func (h *Handler) parseNewTankName(c *fiber.Ctx, typeSelector, nameSelector string) (string, error) {
+// 	wtType, err := parseString(c, typeSelector)
+// 	if err != nil {
+// 		return "", err
+// 	}
+// 	wtName, err := parseString(c, nameSelector)
+// 	if err != nil {
+// 		return "", err
+// 	}
+
+// 	return fmt.Sprintf("%s %s", wtType, wtName), nil
+// }
+
+func (h *Handler) parseBwTank(c *fiber.Ctx, tank *types.BallastWaterTank) {
+	tName, err := parseString(c, constants.WtankName)
+	if err == nil {
+		tank.Name = tName
 	}
 
-	return fmt.Sprintf("%s %s", wtType, wtName), nil
+	tType, err := parseString(c, constants.WtankType)
+	if err == nil {
+		tank.Type = tType
+	}
+
+	sounding, err := parseFloat(c, fmt.Sprintf("%s-%s", constants.TankSounding, tank.ID))
+	if err == nil {
+		tank.Sounding = sounding
+	}
+
+	volume, err := parseFloat(c, fmt.Sprintf("%s-%s", constants.TankVolume, tank.ID))
+	if err == nil {
+		tank.Volume = volume
+	}
+
+	density, err := parseFloat(c, fmt.Sprintf("%s-%s", constants.TankDensity, tank.ID))
+	if err == nil {
+		tank.Density = density
+	}
 }

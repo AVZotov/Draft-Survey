@@ -6,7 +6,6 @@ import (
 	"slices"
 	"strconv"
 
-	"github.com/AVZotov/draft-survey/internal/constants"
 	"github.com/AVZotov/draft-survey/internal/handler/tadaptor"
 	"github.com/AVZotov/draft-survey/internal/types"
 	"github.com/AVZotov/draft-survey/web"
@@ -55,26 +54,30 @@ func (h *Handler) newBwTank(c *fiber.Ctx) error {
 		return err
 	}
 
-	tankName, err := h.parseNewTankName(c, constants.NewBwtType, constants.NewBWTName)
-	if err != nil {
-		return err
-	}
+	bwt := new(types.BallastWaterTank)
+	bwt.ID = tankID
+	h.parseBwTank(c, bwt)
 
-	bwt := types.BallastWaterTank{
-		ID:   tankID,
-		Name: tankName,
-	}
+	// tankName, err := h.parseNewTankName(c, constants.NewBwtType, constants.NewBWTName)
+	// if err != nil {
+	// 	return err
+	// }
+
+	// bwt := types.BallastWaterTank{
+	// 	Type
+	// 	ID:   tankID,
+	// 	Name: tankName,
+	// }
 
 	survey.Drafts[draftIndex].BallastWaterTanks =
-		append(survey.Drafts[draftIndex].BallastWaterTanks, bwt)
+		append(survey.Drafts[draftIndex].BallastWaterTanks, *bwt)
 
 	if err = h.surveyRepository.Save(survey); err != nil {
 		return err
 	}
-	components.BwTankItem(survey.ID, draftIndexStr, bwt)
 
 	return tadaptor.Render(c, templ.Join(
-		components.BwTankItem(survey.ID, draftIndexStr, bwt),
+		components.BwTankItem(survey.ID, draftIndexStr, *bwt),
 		tanks.BwAddRowForm(survey.ID, draftIndexStr, true)))
 }
 
@@ -107,4 +110,42 @@ func (h *Handler) deleteBwTank(c *fiber.Ctx) error {
 
 	c.Status(http.StatusOK)
 	return c.SendString("")
+}
+
+func (h *Handler) updateBwTank(c *fiber.Ctx) error {
+	id := c.Params("id")
+	survey, err := h.surveyRepository.Get(id)
+	if err != nil {
+		return err
+	}
+	draftIndexStr := c.Params("draftIndex")
+	draftIndex, err := strconv.Atoi(draftIndexStr)
+	if err != nil {
+		return err
+	}
+	tankID := c.Params("tankID")
+	bwTanks := survey.Drafts[draftIndex].BallastWaterTanks
+	tankIndex := slices.IndexFunc(bwTanks, func(tank types.BallastWaterTank) bool {
+		return tank.ID == tankID
+	})
+	if tankIndex == -1 {
+		return errors.New("tank not found")
+	}
+
+	bwt := bwTanks[tankIndex]
+
+	h.parseBwTank(c, &bwt)
+
+	if bwt.Volume != nil && bwt.Density != nil {
+		bwt.Weight = bwt.GetWeight()
+	}
+
+	survey.Drafts[draftIndex].BallastWaterTanks[tankIndex] = bwt
+
+	if err := h.surveyRepository.Save(survey); err != nil {
+		return err
+	}
+
+	c.Status(http.StatusOK)
+	return tadaptor.Render(c, components.BwTankItem(survey.ID, draftIndexStr, bwt))
 }

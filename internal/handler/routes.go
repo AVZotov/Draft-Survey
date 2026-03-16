@@ -23,4 +23,5 @@ func SetupRoutes(app *fiber.App, h *Handler) {
 	api.Post("/survey/:id/draft/save", h.saveDraft)
 	api.Post("/survey/:id/tanks/:draftIndex/bw-tank", h.newBwTank)
 	api.Delete("/survey/:id/tanks/:draftIndex/bw-tank/:tankID", h.deleteBwTank)
+	api.Put("/survey/:id/tanks/:draftIndex/bw-tank/:tankID", h.updateBwTank)
 }

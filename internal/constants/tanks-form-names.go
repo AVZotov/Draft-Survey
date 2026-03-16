@@ -1,11 +1,11 @@
 package constants
 
 const (
-	NewBwtType             = "new_bwt_type"
-	NewBWTName             = "new_bwt_name"
-	VolumeCalibrationType1 = "Standard (Volume by Trim)"
-	VolumeCalibrationType2 = "Sounding Correction"
-	VolumeCalibrationType3 = "Volume Correction"
+	WtankType              = "w_tank_type"
+	WtankName              = "w_tank_name"
+	VolumeCalibrationType1 = "standard_volume_by_trim" //common aproach at most marine vessels
+	VolumeCalibrationType2 = "sounding_correction"
+	VolumeCalibrationType3 = "volume_correction"
 	// Tank identification
 	TankName = "tank_name"
 	TankID   = "tank_id"
