@@ -2,12 +2,12 @@ package handler
 
 import (
 	"errors"
-	"fmt"
 	"net/http"
 	"slices"
 	"strconv"
 
 	"github.com/AVZotov/draft-survey/internal/calculation"
+	"github.com/AVZotov/draft-survey/internal/format"
 	"github.com/AVZotov/draft-survey/internal/handler/tadaptor"
 	"github.com/AVZotov/draft-survey/internal/types"
 	"github.com/AVZotov/draft-survey/web"
@@ -36,11 +36,18 @@ func (h *Handler) tanks(c *fiber.Ctx) error {
 		return err
 	}
 
+	var totalBwWeight, totalFwWeight string
 	bwTanks := survey.Drafts[draftIndex].BallastWaterTanks
+	if bwTanks != nil {
+		totalBwWeight = format.WeightFormatted(calculation.TotalBallastWater(bwTanks))
+	}
 	fwTanks := survey.Drafts[draftIndex].FreshWaterTanks
+	if fwTanks != nil {
+		totalFwWeight = format.WeightFormatted(calculation.TotalFreshWater(fwTanks))
+	}
 
-	props := web.TanksPageProps(user, survey)
-	return tadaptor.Render(c, web.Tanks(props, draftIndexStr, bwTanks, fwTanks))
+	props := web.TanksPageProps(user, survey, draftIndexStr, string(survey.Drafts[draftIndex].Type), totalBwWeight, totalFwWeight)
+	return tadaptor.Render(c, web.Tanks(props, bwTanks, fwTanks))
 }
 
 func (h *Handler) newBwTank(c *fiber.Ctx) error {
@@ -99,11 +106,11 @@ func (h *Handler) deleteBwTank(c *fiber.Ctx) error {
 		return err
 	}
 
-	totalWeight := fmt.Sprintf("%g", calculation.TotalBallastWater(survey.Drafts[draftIndex].BallastWaterTanks))
+	totalWeight := format.WeightFormatted(calculation.TotalBallastWater(survey.Drafts[draftIndex].BallastWaterTanks))
 
 	c.Status(http.StatusOK)
 	return tadaptor.Render(c, tanks.BwTableHeaderForm(
-		totalWeight, string(survey.Drafts[draftIndex].Type), true))
+		string(survey.Drafts[draftIndex].Type), totalWeight, true))
 }
 
 func (h *Handler) updateBwTank(c *fiber.Ctx) error {
@@ -140,6 +147,10 @@ func (h *Handler) updateBwTank(c *fiber.Ctx) error {
 		return err
 	}
 
+	totalWeight := format.WeightFormatted(calculation.TotalBallastWater(survey.Drafts[draftIndex].BallastWaterTanks))
+
 	c.Status(http.StatusOK)
-	return tadaptor.Render(c, components.BwTankItem(survey.ID, draftIndexStr, bwt))
+	return tadaptor.Render(c, templ.Join(
+		components.BwTankItem(survey.ID, draftIndexStr, bwt),
+		tanks.BwTableHeaderForm(string(survey.Drafts[draftIndex].Type), totalWeight, true)))
 }

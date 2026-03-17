@@ -8,7 +8,7 @@ package tanks
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
-func BwTableHeaderForm(totalWeight, draftType string, isOOB bool) templ.Component {
+func BwTableHeaderForm(draftType, totalWeight string, isOOB bool) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -34,7 +34,7 @@ func BwTableHeaderForm(totalWeight, draftType string, isOOB bool) templ.Componen
 			return templ_7745c5c3_Err
 		}
 		if isOOB {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, " hx-swap-oob=\"outerHTML\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, " hx-swap-oob=\"true\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

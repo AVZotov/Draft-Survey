@@ -3,7 +3,7 @@ package tanks
 import "github.com/AVZotov/draft-survey/internal/types"
 import "github.com/AVZotov/draft-survey/web/components"
 
-templ TanksBwBlock(survey *types.Survey, draftIndex string, tanks []types.BallastWaterTank) {
+templ BwBlock(props components.LayoutProps, tanks []types.BallastWaterTank) {
 	<div class="ttbl-wrap">
 		<div id="density-warning"></div>
 		<table class="ttbl" id="bw-tbl">
@@ -26,7 +26,7 @@ templ TanksBwBlock(survey *types.Survey, draftIndex string, tanks []types.Ballas
 			<tbody id="bw-tanks-items" class="t-row" data-id="r1" data-type="bw">
 				if tanks != nil {
 					for _, tank := range tanks {
-						@components.BwTankItem(survey.ID, draftIndex, tank)
+						@components.BwTankItem(props.MetaData.SurveyID, props.MetaData.DraftIndex, tank)
 					}
 				}
 			</tbody>

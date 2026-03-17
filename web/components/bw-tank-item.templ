@@ -46,7 +46,7 @@ templ BwTankItem(surveyID, draftIndex string, tank types.BallastWaterTank) {
 			<input id={ field("bw-density") } class="ti" type="number" name={ field(constants.TankDensity) } value={ format.FloatOrEmpty(tank.Density) } placeholder="0.000" step="any"/>
 		</td>
 		<td>
-			<input id={ field("bw-weight") } class="ti" type="number" readonly name={ field(constants.TankWeight) } value={ fmt.Sprintf("%g", tank.Weight) } placeholder="Calculated"/>
+			<input id={ field("bw-weight") } class="ti" type="text" readonly name={ field(constants.TankWeight) } value={ format.WeightFormatted(tank.Weight) } placeholder="Calculated"/>
 		</td>
 		<td class="td-div"></td>
 		<td class="td-act">

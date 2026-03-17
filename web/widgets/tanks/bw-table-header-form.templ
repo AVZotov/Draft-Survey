@@ -1,11 +1,11 @@
 package tanks
 
-templ BwTableHeaderForm(totalWeight, draftType string, isOOB bool) {
+templ BwTableHeaderForm(draftType, totalWeight string, isOOB bool) {
 	<div
 		id="bw-table-header"
 		class="tank-block-header"
 		if isOOB {
-			hx-swap-oob="outerHTML"
+			hx-swap-oob="true"
 		}
 	>
 		<div class="blk-label">

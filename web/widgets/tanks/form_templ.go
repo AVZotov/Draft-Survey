@@ -9,9 +9,10 @@ import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
 import "github.com/AVZotov/draft-survey/internal/types"
-import "strconv"
 
-func TanksForm(survey *types.Survey, draftIndex string, bwTanks []types.BallastWaterTank, fwTanks []types.FreshWaterTank) templ.Component {
+import "github.com/AVZotov/draft-survey/web/components"
+
+func Form(props components.LayoutProps, bwTanks []types.BallastWaterTank, fwTanks []types.FreshWaterTank) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -32,13 +33,11 @@ func TanksForm(survey *types.Survey, draftIndex string, bwTanks []types.BallastW
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		index, _ := strconv.Atoi(draftIndex)
-		draftType := string(survey.Drafts[index].Type)
 		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<main class=\"page-main__tanks\"><div class=\"tanks-wrap\"><div class=\"page-top\"><a href=\"#\" class=\"back-link\"><svg viewBox=\"0 0 24 24\"><path d=\"M19 12H5M12 19l-7-7 7-7\"></path></svg>Back to Draft Readings</a><h1 class=\"page-title\">BW / FW Tanks</h1><p class=\"page-meta\">OCEAN CHEERS · IMO 9233387 · Loading · Vanino, Russia</p></div><!-- DENSITY BAR --><div class=\"density-bar\"><span class=\"density-bar-label\">BW Density</span><div class=\"density-groups\"><div class=\"dg dg--ini\"><span class=\"dg-lbl\">Initial</span> <input class=\"den-in\" type=\"number\" id=\"den-ini\" placeholder=\"1.025\" step=\"any\" value=\"1.025\"> <span class=\"den-hint\">t/m³</span></div></div><span class=\"density-bar-note\">WARING! NOT IMPLEMENTED! Applied to BW tanks with empty density. Override per-tank if needed.</span></div><!-- ═══ BALLAST WATER ══════════════════════════════════════════ --><div class=\"tank-block tank-block--bw\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = BwTableHeaderForm("-", draftType, false).Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = BwTableHeaderForm(props.MetaData.DratType, props.MetaData.TotalBwWeight, false).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -46,11 +45,11 @@ func TanksForm(survey *types.Survey, draftIndex string, bwTanks []types.BallastW
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = TanksBwBlock(survey, draftIndex, bwTanks).Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = BwBlock(props, bwTanks).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = BwAddRowForm(survey.ID, draftIndex, false).Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = BwAddRowForm(props.MetaData.SurveyID, props.MetaData.DraftIndex, false).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

@@ -5,6 +5,14 @@ import (
 	"github.com/AVZotov/draft-survey/internal/types"
 )
 
+type MetaData struct {
+	SurveyID      string
+	DraftIndex    string
+	DratType      string
+	TotalBwWeight string
+	TotalFwWeight string
+}
+
 type LayoutProps struct {
 	Title           string
 	MetaDescription string
@@ -13,6 +21,7 @@ type LayoutProps struct {
 	Results         *[]calculation.DraftResult
 	ExtraCSS        []string
 	ExtraJS         []string
+	MetaData        *MetaData
 }
 
 type Version struct {

@@ -221,14 +221,14 @@ func BwTankItem(surveyID, draftIndex string, tank types.BallastWaterTank) templ.
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 15, "\" class=\"ti\" type=\"number\" readonly name=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 15, "\" class=\"ti\" type=\"text\" readonly name=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var16 string
 		templ_7745c5c3_Var16, templ_7745c5c3_Err = templ.JoinStringErrs(field(constants.TankWeight))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/components/bw-tank-item.templ`, Line: 49, Col: 104}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/components/bw-tank-item.templ`, Line: 49, Col: 102}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var16))
 		if templ_7745c5c3_Err != nil {
@@ -239,9 +239,9 @@ func BwTankItem(surveyID, draftIndex string, tank types.BallastWaterTank) templ.
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var17 string
-		templ_7745c5c3_Var17, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%g", tank.Weight))
+		templ_7745c5c3_Var17, templ_7745c5c3_Err = templ.JoinStringErrs(format.WeightFormatted(tank.Weight))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/components/bw-tank-item.templ`, Line: 49, Col: 145}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/components/bw-tank-item.templ`, Line: 49, Col: 148}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var17))
 		if templ_7745c5c3_Err != nil {

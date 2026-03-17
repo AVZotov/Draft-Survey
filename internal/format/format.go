@@ -2,6 +2,9 @@ package format
 
 import (
 	"fmt"
+	"math"
+	"slices"
+	"strconv"
 
 	"github.com/AVZotov/draft-survey/internal/vessel"
 )
@@ -21,7 +24,41 @@ func FloatOrEmpty(v *float64) string {
 }
 
 func Weight(v float64) string {
-	return fmt.Sprintf("%.3f MT", v)
+	return fmt.Sprintf("%.3f", v)
+}
+
+func WeightFormatted(v float64) string {
+	negative := v < 0
+	v = math.Abs(v)
+	v = math.Round(v*1000) / 1000
+	sep := 1000
+	var str string
+	whole := int(math.Trunc(v))
+	var rem int
+	fractional := int(math.Trunc((v - float64(whole)) * 1000))
+	var data []int
+
+	for {
+		rem = whole % sep
+		data = slices.Insert(data, 0, rem)
+
+		if whole/sep == 0 {
+			for i, v := range data {
+				if i == 0 {
+					str += strconv.Itoa(v)
+					continue
+				}
+				str += fmt.Sprintf(" %03d", v)
+			}
+			break
+		}
+		whole = whole / sep
+	}
+	str += fmt.Sprintf(".%03d", fractional)
+	if negative {
+		str = fmt.Sprintf("-%s", str)
+	}
+	return str
 }
 
 func Draft(v float64) string {

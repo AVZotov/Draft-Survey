@@ -50,14 +50,22 @@ func ResultsPageProps(user *types.User, survey *types.Survey, results *[]calcula
 	}
 }
 
-func TanksPageProps(user *types.User, survey *types.Survey) components.LayoutProps {
+func TanksPageProps(user *types.User, survey *types.Survey, draftIndex, draftType, totalBwWeight, totalFwWeight string) components.LayoutProps {
+	meta := &components.MetaData{
+		SurveyID:      survey.ID,
+		DraftIndex:    draftIndex,
+		DratType:      draftType,
+		TotalBwWeight: totalBwWeight,
+		TotalFwWeight: totalFwWeight,
+	}
 	return components.LayoutProps{
 		Title:           "Tanks Reading",
 		MetaDescription: "Vessel tanks reading",
-		ExtraCSS:        []string{"/static/css/tanks.css"},
-		ExtraJS:         []string{"/static/js/tanks.js"},
 		User:            user,
 		Survey:          survey,
+		ExtraCSS:        []string{"/static/css/tanks.css"},
+		ExtraJS:         []string{"/static/js/tanks.js"},
+		MetaData:        meta,
 	}
 }
 

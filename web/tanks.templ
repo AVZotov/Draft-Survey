@@ -6,10 +6,10 @@ import "github.com/AVZotov/draft-survey/web/widgets"
 import "github.com/AVZotov/draft-survey/web/widgets/tanks"
 import "github.com/AVZotov/draft-survey/internal/types"
 
-templ Tanks(props components.LayoutProps, draftIndex string, bwTanks []types.BallastWaterTank, fwTanks []types.FreshWaterTank) {
+templ Tanks(props components.LayoutProps, bwTanks []types.BallastWaterTank, fwTanks []types.FreshWaterTank) {
 	@layouts.Layout(props) {
 		@widgets.HeaderUser(props.User)
-		@tanks.TanksForm(props.Survey, draftIndex, bwTanks, fwTanks)
+		@tanks.Form(props, bwTanks, fwTanks)
 		//@tanks.TanksActionBar()
 		@widgets.Footer()
 	}
