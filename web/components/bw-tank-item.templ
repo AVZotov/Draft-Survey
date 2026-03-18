@@ -23,7 +23,14 @@ templ BwTankItem(surveyID, draftIndex string, tank types.BallastWaterTank) {
 		hx-put={ fmt.Sprintf("/api/v1/survey/%s/tanks/%s/bw-tank/%s", surveyID, draftIndex, tank.ID) }
 	>
 		<td class="td-act">
-			<button class="rbtn calc" type="button" title="Calculate volume">
+			<button
+				hx-get={ fmt.Sprintf("/survey/%s/tanks/%s/bw-tank/%s/corrections", surveyID, draftIndex, tank.ID) }
+				hx-target="#app-modal-content"
+				hx-on::after-request="document.getElementById('app-modal').showModal()"
+				class="rbtn calc"
+				type="button"
+				title="Calculate volume"
+			>
 				<svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 					<rect x="4" y="2" width="16" height="20" rx="2"></rect>
 					<line x1="8" y1="8" x2="16" y2="8"></line>

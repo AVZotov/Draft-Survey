@@ -1,10 +1,8 @@
 package layouts
 
-import (
-	"github.com/AVZotov/draft-survey/web/components"
-	"github.com/AVZotov/draft-survey/web/widgets"
-)
+import "github.com/AVZotov/draft-survey/web/components"
 
+//"github.com/AVZotov/draft-survey/web/widgets"
 templ Layout(props components.LayoutProps) {
 	<!DOCTYPE html>
 	<html lang="en">
@@ -15,6 +13,7 @@ templ Layout(props components.LayoutProps) {
 			<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 			<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 			<link rel="stylesheet" href="/static/css/styles.css"/>
+			<link rel="stylesheet" href="/static/css/tank-calc-modal.css"/>
 			<link rel="stylesheet" href="/static/css/banner.css"/>
 			for _, css := range props.ExtraCSS {
 				<link rel="stylesheet" href={ css }/>
@@ -27,8 +26,17 @@ templ Layout(props components.LayoutProps) {
 		<body
 			hx-ext="morph"
 		>
-			@widgets.Banner()
+			//@widgets.Banner()
 			{ children... }
+			<!-- Universl modal dialog -->
+			<dialog id="app-modal" hx-preserve>
+				<div id="app-modal-content"></div>
+			</dialog>
+			<!-- Universl toast/notification -->
+			<dialog id="app-toast" hx-preserve>
+				<div id="app-toast-content"></div>
+			</dialog>
+			<script>"/static/js/tank-calc.js"</script>
 			for _, js := range props.ExtraJS {
 				<script src={ js }></script>
 			}

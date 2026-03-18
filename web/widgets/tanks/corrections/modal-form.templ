@@ -1,0 +1,328 @@
+package corrections
+
+import "github.com/AVZotov/draft-survey/web/components"
+
+templ ModalForm(props components.LayoutProps) {
+	<form
+		method="dialog"
+		id="app-modal-content"
+	>
+		<!-- ── Header ─────────────────────────────────────────── -->
+		<div class="tcm-header">
+			<div class="tcm-header-left">
+				<div class="tcm-icon">
+					<svg viewBox="0 0 24 24">
+						<rect x="4" y="2" width="16" height="20" rx="2"></rect>
+						<line x1="8" y1="8" x2="16" y2="8"></line>
+						<line x1="8" y1="12" x2="16" y2="12"></line>
+						<line x1="8" y1="16" x2="12" y2="16"></line>
+					</svg>
+				</div>
+				<div>
+					<div class="tcm-title">Volume Calculation</div>
+					<div class="tcm-tank-id">FPT · Ballast Water Tank</div>
+				</div>
+			</div>
+			<div class="tcm-context">
+				<div class="tcm-ctx-item">
+					<span class="tcm-ctx-label">Trim</span>
+					<span class="tcm-ctx-val">2.437 m Aft</span>
+				</div>
+				<div class="tcm-ctx-item">
+					<span class="tcm-ctx-label">List</span>
+					<span class="tcm-ctx-val">0.053° Stbd</span>
+				</div>
+			</div>
+		</div>
+		<!-- ── Body ───────────────────────────────────────────── -->
+		<div class="tcm-body">
+			<!-- Tank info -->
+			<div class="tcm-section">
+				<div class="tcm-section-title">Tank</div>
+				<div class="tcm-field-row tcm-field-row--2">
+					<div class="tcm-field">
+						<label class="tcm-label">Type</label>
+						<div class="tcm-select-wrap">
+							<select class="tcm-select" name="tank_type">
+								<option>FPT</option>
+								<option>WBT</option>
+								<option>DBT</option>
+								<option>APT</option>
+								<option>TST</option>
+								<option>Other</option>
+							</select>
+							<svg class="tcm-select-arrow" viewBox="0 0 24 24">
+								<path d="M6 9l6 6 6-6"></path>
+							</svg>
+						</div>
+					</div>
+					<div class="tcm-field">
+						<label class="tcm-label">Name</label>
+						<input class="tcm-input" type="text" name="tank_name" placeholder="e.g. 1S, Centre…" value="FPT"/>
+					</div>
+				</div>
+			</div>
+			<!-- Measurements -->
+			<div class="tcm-section">
+				<div class="tcm-section-title">Measurements</div>
+				<div class="tcm-field-row tcm-field-row--3">
+					<div class="tcm-field">
+						<label class="tcm-label">Sounding <span class="tcm-label-unit">m</span></label>
+						<input class="tcm-input" type="number" name="tank_sounding" placeholder="0.000" step="any"/>
+					</div>
+					<div class="tcm-field">
+						<label class="tcm-label">Volume <span class="tcm-label-unit">m³</span></label>
+						<input
+							class="tcm-input tcm-input--readonly"
+							type="number"
+							name="tank_volume"
+							placeholder="calculated"
+							readonly
+							tabindex="-1"
+						/>
+					</div>
+					<div class="tcm-field">
+						<label class="tcm-label">Density <span class="tcm-label-unit">t/m³</span></label>
+						<input class="tcm-input" type="number" name="tank_density" placeholder="global" step="any"/>
+					</div>
+				</div>
+			</div>
+			<!-- Calibration table type -->
+			<div class="tcm-section">
+				<div class="tcm-section-title">Calibration Table</div>
+				<div class="tcm-type-tabs">
+					<button type="button" class="tcm-type-tab active" onclick="setType(0)">Standard (Vol by Trim)</button>
+					<button type="button" class="tcm-type-tab" onclick="setType(1)">Sounding Correction</button>
+					<button type="button" class="tcm-type-tab" onclick="setType(2)">Volume Correction</button>
+				</div>
+				<input type="hidden" name="tank_calib_table_type" id="calib-type-val" value="Standard (Volume by Trim)"/>
+			</div>
+			<!-- Trim bounds -->
+			<div class="tcm-section">
+				<div class="tcm-section-title">Trim Boundaries</div>
+				<div class="tcm-field-row tcm-field-row--2">
+					<div class="tcm-field">
+						<label class="tcm-label">TTL — Lower trim <span class="tcm-label-unit">m</span></label>
+						<input class="tcm-input" type="number" name="calib_ttl" placeholder="e.g. −1.000" step="any"/>
+					</div>
+					<div class="tcm-field">
+						<label class="tcm-label">TTU — Upper trim <span class="tcm-label-unit">m</span></label>
+						<input class="tcm-input" type="number" name="calib_ttu" placeholder="e.g. +3.000" step="any"/>
+					</div>
+				</div>
+			</div>
+			<!-- ── TRIM ROWS — всегда видимы, метка зависит от типа -->
+			<div class="tcm-section" id="section-trim">
+				<div class="tcm-section-title" id="trim-rows-title">Trim Rows</div>
+				<div class="tcm-calib-block">
+					<table class="tcm-calib-table">
+						<thead>
+							<tr>
+								<th style="text-align:left;">Row</th>
+								<th style="text-align:left;">Sounding, m</th>
+								<th>Vol @ TTL, m³</th>
+								<th>Vol @ TTU, m³</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td><span class="tcm-row-label">TSL</span></td>
+								<td>
+									<input class="tcm-ti" type="number" name="calib_row_sounding" placeholder="0.000" step="any"/>
+								</td>
+								<td>
+									<input
+										class="tcm-ti"
+										type="number"
+										name="calib_row_vol_trim_low"
+										placeholder="0.000"
+										step="any"
+									/>
+								</td>
+								<td>
+									<input
+										class="tcm-ti"
+										type="number"
+										name="calib_row_vol_trim_upper"
+										placeholder="0.000"
+										step="any"
+									/>
+								</td>
+							</tr>
+							<tr>
+								<td><span class="tcm-row-label">TSU</span></td>
+								<td>
+									<input class="tcm-ti" type="number" name="calib_row_sounding" placeholder="0.000" step="any"/>
+								</td>
+								<td>
+									<input
+										class="tcm-ti"
+										type="number"
+										name="calib_row_vol_trim_low"
+										placeholder="0.000"
+										step="any"
+									/>
+								</td>
+								<td>
+									<input
+										class="tcm-ti"
+										type="number"
+										name="calib_row_vol_trim_upper"
+										placeholder="0.000"
+										step="any"
+									/>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<!-- ── VOLUME ROWS — Type 2 & 3 только -->
+			<div class="tcm-section tcm-collapsible" id="section-volume">
+				<div class="tcm-section-title" id="volume-rows-title">Volume Table (trim = 0)</div>
+				<div class="tcm-calib-block">
+					<table class="tcm-calib-table">
+						<thead>
+							<tr>
+								<th style="text-align:left;">Row</th>
+								<th style="text-align:left;">Sounding, m</th>
+								<th>Vol @ TTL, m³</th>
+								<th>Vol @ TTU, m³</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td><span class="tcm-row-label">TSL</span></td>
+								<td><input class="tcm-ti" type="number" name="vol_row_sounding" placeholder="0.000" step="any"/></td>
+								<td>
+									<input class="tcm-ti" type="number" name="vol_row_vol_trim_low" placeholder="0.000" step="any"/>
+								</td>
+								<td>
+									<input
+										class="tcm-ti"
+										type="number"
+										name="vol_row_vol_trim_upper"
+										placeholder="0.000"
+										step="any"
+									/>
+								</td>
+							</tr>
+							<tr>
+								<td><span class="tcm-row-label">TSU</span></td>
+								<td><input class="tcm-ti" type="number" name="vol_row_sounding" placeholder="0.000" step="any"/></td>
+								<td>
+									<input class="tcm-ti" type="number" name="vol_row_vol_trim_low" placeholder="0.000" step="any"/>
+								</td>
+								<td>
+									<input
+										class="tcm-ti"
+										type="number"
+										name="vol_row_vol_trim_upper"
+										placeholder="0.000"
+										step="any"
+									/>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<!-- ── LIST ROWS toggle + секция -->
+			<div class="tcm-section">
+				<div class="tcm-toggle-row">
+					<label class="tcm-toggle">
+						<input type="checkbox" id="list-toggle" onchange="toggleList(this)"/>
+						<span class="tcm-toggle-slider"></span>
+					</label>
+					<span class="tcm-toggle-label">Has list correction table</span>
+				</div>
+				<div class="tcm-collapsible" id="section-list">
+					<div class="tcm-calib-block">
+						<div class="tcm-calib-block-title">List Rows</div>
+						<table class="tcm-calib-table">
+							<thead>
+								<tr>
+									<th style="text-align:left;">Row</th>
+									<th style="text-align:left;">Sounding, m</th>
+									<th>Vol @ TTL, m³</th>
+									<th>Vol @ TTU, m³</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td><span class="tcm-row-label">TSL</span></td>
+									<td>
+										<input class="tcm-ti" type="number" name="list_row_sounding" placeholder="0.000" step="any"/>
+									</td>
+									<td>
+										<input
+											class="tcm-ti"
+											type="number"
+											name="list_row_vol_trim_low"
+											placeholder="0.000"
+											step="any"
+										/>
+									</td>
+									<td>
+										<input
+											class="tcm-ti"
+											type="number"
+											name="list_row_vol_trim_upper"
+											placeholder="0.000"
+											step="any"
+										/>
+									</td>
+								</tr>
+								<tr>
+									<td><span class="tcm-row-label">TSU</span></td>
+									<td>
+										<input class="tcm-ti" type="number" name="list_row_sounding" placeholder="0.000" step="any"/>
+									</td>
+									<td>
+										<input
+											class="tcm-ti"
+											type="number"
+											name="list_row_vol_trim_low"
+											placeholder="0.000"
+											step="any"
+										/>
+									</td>
+									<td>
+										<input
+											class="tcm-ti"
+											type="number"
+											name="list_row_vol_trim_upper"
+											placeholder="0.000"
+											step="any"
+										/>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+			<!-- Result -->
+			<div class="tcm-result">
+				<span class="tcm-result-label">Calculated Volume</span>
+				<span>
+					<span class="tcm-result-val" id="calc-vol">—</span>
+					<span class="tcm-result-unit">m³</span>
+				</span>
+			</div>
+		</div>
+		<!-- ── Footer ─────────────────────────────────────────── -->
+		<div class="tcm-footer">
+			<span class="tcm-footer-hint">Trim and List applied from draft readings</span>
+			<div class="tcm-footer-btns">
+				<button class="tcm-btn tcm-btn--cancel" value="cancel">Cancel</button>
+				<button class="tcm-btn tcm-btn--confirm" value="ok">
+					<svg viewBox="0 0 24 24">
+						<path d="M20 6L9 17l-5-5"></path>
+					</svg>
+					Apply
+				</button>
+			</div>
+		</div>
+	</form>
+}

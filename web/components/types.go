@@ -13,6 +13,12 @@ type MetaData struct {
 	TotalFwWeight string
 }
 
+type BwTankCorrections struct {
+	Tank *types.BallastWaterTank
+	Trim *float64
+	List *float64
+}
+
 type LayoutProps struct {
 	Title           string
 	MetaDescription string
@@ -22,6 +28,7 @@ type LayoutProps struct {
 	ExtraCSS        []string
 	ExtraJS         []string
 	MetaData        *MetaData
+	*BwTankCorrections
 }
 
 type Version struct {

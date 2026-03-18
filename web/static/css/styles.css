@@ -1105,12 +1105,9 @@ textarea {
 }
 
 /* ── Backdrop ───────────────────────────────────────────── */
-dialog::backdrop {
-  background: rgba(15, 23, 32, 0.45);
-  backdrop-filter: blur(2px);
-}
 
-/* ── Base dialog ────────────────────────────────────────── */
+/* Modal dialog and alerts styles */
+
 dialog.app-modal {
   font-family: var(--font-sans);
   background: var(--surface);
@@ -1118,20 +1115,22 @@ dialog.app-modal {
   border-radius: var(--radius-xl);
   padding: 0;
   width: 100%;
-  max-width: 400px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, .18), 0 4px 16px rgba(0, 0, 0, .08);
+  max-width: 580px;
+  max-height: 90vh;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, .20), 0 4px 16px rgba(0, 0, 0, .08);
   outline: none;
+  display: flex;
+  flex-direction: column;
 }
 
-/* Animation */
 dialog.app-modal[open] {
-  animation: modal-in .18s ease;
+  animation: tcm-in .18s ease;
 }
 
-@keyframes modal-in {
+@keyframes tcm-in {
   from {
     opacity: 0;
-    transform: translateY(-8px) scale(.97);
+    transform: translateY(-10px) scale(.97);
   }
 
   to {
@@ -1140,166 +1139,7 @@ dialog.app-modal[open] {
   }
 }
 
-/* ── Header ───────────────────────────── */
-.modal-header {
-  display: flex;
-  align-items: center;
-  gap: var(--space-sm);
-  padding: var(--space-md) var(--space-lg);
-  border-bottom: 1px solid var(--border);
-  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
-}
-
-.modal--info .modal-header {
-  background: var(--info-light);
-  border-bottom-color: var(--info-border);
-}
-
-.modal--warning .modal-header {
-  background: var(--warning-light);
-  border-bottom-color: var(--warning-border);
-}
-
-.modal--danger .modal-header {
-  background: var(--danger-light);
-  border-bottom-color: var(--danger-border);
-}
-
-.modal-icon {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.modal--info .modal-icon {
-  background: var(--info-border);
-}
-
-.modal--warning .modal-icon {
-  background: var(--warning-border);
-}
-
-.modal--danger .modal-icon {
-  background: var(--danger-border);
-}
-
-.modal-icon svg {
-  width: 16px;
-  height: 16px;
-  fill: none;
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-.modal--info .modal-icon svg {
-  stroke: var(--info-accent);
-}
-
-.modal--warning .modal-icon svg {
-  stroke: var(--warning-accent);
-}
-
-.modal--danger .modal-icon svg {
-  stroke: var(--danger-accent);
-}
-
-.modal-title {
-  font-size: 13px;
-  font-weight: 600;
-}
-
-.modal--info .modal-title {
-  color: var(--info-accent);
-}
-
-.modal--warning .modal-title {
-  color: var(--warning-accent);
-}
-
-.modal--danger .modal-title {
-  color: var(--danger-accent);
-}
-
-/* ── Body ───────────────────────────────────────────────── */
-.modal-body {
-  padding: var(--space-lg);
-}
-
-.modal-message {
-  font-size: 13px;
-  color: var(--text-secondary);
-  line-height: 1.55;
-}
-
-.modal-message strong {
-  display: block;
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--text-primary);
-  margin-bottom: var(--space-xs);
-}
-
-/* ── Footer ──────────────────────────────────── */
-.modal-footer {
-  display: flex;
-  justify-content: flex-end;
-  gap: var(--space-sm);
-  padding: var(--space-sm) var(--space-lg) var(--space-md);
-}
-
-.modal-btn {
-  display: inline-flex;
-  align-items: center;
-  font-family: var(--font-sans);
-  font-size: 13px;
-  font-weight: 500;
-  padding: 7px var(--space-md);
-  border-radius: var(--radius-md);
-  border: 1px solid var(--border);
-  cursor: pointer;
-  transition: background .12s;
-}
-
-.modal-btn--cancel {
-  background: var(--bg);
-  color: var(--text-secondary);
-}
-
-.modal-btn--cancel:hover {
-  background: #E5E7EB;
-}
-
-.modal-btn--confirm-info {
-  background: var(--info-accent);
-  color: #fff;
-  border-color: var(--info-accent);
-}
-
-.modal-btn--confirm-info:hover {
-  background: #1D4ED8;
-}
-
-.modal-btn--confirm-warning {
-  background: var(--warning-accent);
-  color: #fff;
-  border-color: var(--warning-accent);
-}
-
-.modal-btn--confirm-warning:hover {
-  background: #B45309;
-}
-
-.modal-btn--confirm-danger {
-  background: var(--danger-accent);
-  color: #fff;
-  border-color: var(--danger-accent);
-}
-
-.modal-btn--confirm-danger:hover {
-  background: #B91C1C;
+dialog.app-modal::backdrop {
+  background: rgba(15, 23, 32, 0.5);
+  backdrop-filter: blur(3px);
 }

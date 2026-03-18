@@ -69,6 +69,20 @@ func TanksPageProps(user *types.User, survey *types.Survey, draftIndex, draftTyp
 	}
 }
 
+func TanksCorrProps(survey *types.Survey, tank *types.BallastWaterTank, trim, list *float64) components.LayoutProps {
+	bwtCorrections := &components.BwTankCorrections{
+		Tank: tank,
+		Trim: trim,
+		List: list,
+	}
+	return components.LayoutProps{
+		Title:             "Corrections",
+		MetaDescription:   "Tank corrections hydrostatic data",
+		Survey:            survey,
+		BwTankCorrections: bwtCorrections,
+	}
+}
+
 var ProfilePageProps = components.LayoutProps{
 	Title:           "Surveyor Profile",
 	MetaDescription: "Set up your surveyor profile",

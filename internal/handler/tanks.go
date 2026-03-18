@@ -13,6 +13,7 @@ import (
 	"github.com/AVZotov/draft-survey/web"
 	"github.com/AVZotov/draft-survey/web/components"
 	"github.com/AVZotov/draft-survey/web/widgets/tanks"
+	"github.com/AVZotov/draft-survey/web/widgets/tanks/corrections"
 	"github.com/a-h/templ"
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
@@ -153,4 +154,36 @@ func (h *Handler) updateBwTank(c *fiber.Ctx) error {
 	return tadaptor.Render(c, templ.Join(
 		components.BwTankItem(survey.ID, draftIndexStr, bwt),
 		tanks.BwTableHeaderForm(string(survey.Drafts[draftIndex].Type), totalWeight, true)))
+}
+
+func (h *Handler) bwTanksCorrections(c *fiber.Ctx) error {
+	id := c.Params("id")
+	survey, err := h.surveyRepository.Get(id)
+	if err != nil {
+		return err
+	}
+
+	draftIndexStr := c.Params("draftIndex")
+	draftIndex, err := strconv.Atoi(draftIndexStr)
+	if err != nil {
+		return err
+	}
+
+	tankID := c.Params("tankID")
+	bwTanks := survey.Drafts[draftIndex].BallastWaterTanks
+	tankIndex := slices.IndexFunc(bwTanks, func(tank types.BallastWaterTank) bool {
+		return tank.ID == tankID
+	})
+	if tankIndex == -1 {
+		return errors.New("tank not found")
+	}
+
+	bwt := bwTanks[tankIndex]
+	if bwt.Correction != nil {
+		//TODO: Implement loading logic with corrections struct parsing
+	}
+	//TODO: Pass List and Trim to props using calculation module
+
+	c.Status(http.StatusOK)
+	return tadaptor.Render(c, corrections.ModalForm(web.TanksCorrProps(survey, &bwt, nil, nil)))
 }
