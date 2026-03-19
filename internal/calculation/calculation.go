@@ -1,6 +1,7 @@
 package calculation
 
 import (
+	"errors"
 	"math"
 
 	"github.com/AVZotov/draft-survey/internal/constants"
@@ -387,4 +388,24 @@ func calcVolumeType3(sounding, trim, list float64, data types.VolumeCorrectionDa
 
 	// Step 4: final volume = base + trim correction + list correction
 	return round3(baseVolume + trimCorr + listCorr)
+}
+
+// Wrapper on true volume caclulations
+func CalcBwTankVolume(trim, listDegrees float64, tank types.BallastWaterTank) (float64, error) {
+	tableType := tank.Correction.TableType
+	if tableType == "" {
+		return 0, errors.New("no calibration table type selected")
+	}
+	if tank.Sounding == nil || tank.Density == nil {
+		return 0, errors.New("no sounding or density in measurements")
+	}
+
+	switch tableType {
+	case constants.VolumeCalibrationType2:
+		return calcVolumeType2(*tank.Sounding, trim, listDegrees, tank.Correction, tank.Correction.VolumeRows), nil
+	case constants.VolumeCalibrationType3:
+		return calcVolumeType3(*tank.Sounding, trim, listDegrees, tank.Correction, tank.Correction.VolumeRows), nil
+	default:
+		return calcVolumeType1(*tank.Sounding, trim, listDegrees, tank.Correction), nil
+	}
 }

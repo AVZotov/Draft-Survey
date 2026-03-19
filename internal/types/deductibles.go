@@ -8,13 +8,13 @@ type Tank interface {
 }
 
 type FreshWaterTank struct {
-	Type       string                `json:"tank_type"`
-	Name       string                `json:"tank_name"`
-	ID         string                `json:"tank_id"`
-	Sounding   *float64              `json:"tank_sounding"`
-	Volume     *float64              `json:"tank_volume"`
-	Correction *VolumeCorrectionData `json:"correction"`
-	Weight     float64               `json:"tank_weight"`
+	Type       string               `json:"tank_type"`
+	Name       string               `json:"tank_name"`
+	ID         string               `json:"tank_id"`
+	Sounding   *float64             `json:"tank_sounding"`
+	Volume     *float64             `json:"tank_volume"`
+	Correction VolumeCorrectionData `json:"correction"`
+	Weight     float64              `json:"tank_weight"`
 }
 
 func (fwt FreshWaterTank) GetWeight() float64 {
@@ -26,14 +26,14 @@ func (fwt FreshWaterTank) GetWeight() float64 {
 }
 
 type BallastWaterTank struct {
-	Type       string                `json:"tank_type"`
-	Name       string                `json:"tank_name"`
-	ID         string                `json:"tank_id"`
-	Sounding   *float64              `json:"tank_sounding"`
-	Volume     *float64              `json:"tank_volume"`
-	Density    *float64              `json:"tank_density"`
-	Correction *VolumeCorrectionData `json:"correction"`
-	Weight     float64               `json:"tank_weight"`
+	Type       string               `json:"tank_type"`
+	Name       string               `json:"tank_name"`
+	ID         string               `json:"tank_id"`
+	Sounding   *float64             `json:"tank_sounding"`
+	Volume     *float64             `json:"tank_volume"`
+	Density    *float64             `json:"tank_density"`
+	Correction VolumeCorrectionData `json:"correction"`
+	Weight     float64              `json:"tank_weight"`
 }
 
 func (bwt BallastWaterTank) GetWeight() float64 {

@@ -1,6 +1,9 @@
 package layouts
 
-import "github.com/AVZotov/draft-survey/web/components"
+import (
+	"github.com/AVZotov/draft-survey/web/components"
+	"github.com/AVZotov/draft-survey/web/widgets"
+)
 
 //"github.com/AVZotov/draft-survey/web/widgets"
 templ Layout(props components.LayoutProps) {
@@ -13,20 +16,23 @@ templ Layout(props components.LayoutProps) {
 			<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 			<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 			<link rel="stylesheet" href="/static/css/styles.css"/>
-			<link rel="stylesheet" href="/static/css/tank-calc-modal.css"/>
 			<link rel="stylesheet" href="/static/css/banner.css"/>
+			<!--Modals CSS section -->
+			<link rel="stylesheet" href="/static/css/tank-calc-modal.css"/>
 			for _, css := range props.ExtraCSS {
 				<link rel="stylesheet" href={ css }/>
 			}
 			<script src="/static/js/htmx.min.js"></script>
 			<script src="/static/js/idiomorph-ext.js"></script>
+			<!--Modals scripts section -->
+			<script src="/static/js/tank-calc-modal.js"></script>
 			<title>{ props.Title }</title>
 			<meta name="Draft-Survey calculator" content={ props.MetaDescription }/>
 		</head>
 		<body
 			hx-ext="morph"
 		>
-			//@widgets.Banner()
+			@widgets.Banner()
 			{ children... }
 			<!-- Universl modal dialog -->
 			<dialog id="app-modal" hx-preserve>
@@ -36,7 +42,6 @@ templ Layout(props components.LayoutProps) {
 			<dialog id="app-toast" hx-preserve>
 				<div id="app-toast-content"></div>
 			</dialog>
-			<script>"/static/js/tank-calc.js"</script>
 			for _, js := range props.ExtraJS {
 				<script src={ js }></script>
 			}

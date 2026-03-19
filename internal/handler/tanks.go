@@ -179,9 +179,7 @@ func (h *Handler) bwTanksCorrections(c *fiber.Ctx) error {
 	}
 
 	bwt := bwTanks[tankIndex]
-	if bwt.Correction != nil {
-		//TODO: Implement loading logic with corrections struct parsing
-	}
+	//TODO: Implement loading logic with corrections struct parsing
 	//TODO: Pass List and Trim to props using calculation module
 
 	c.Status(http.StatusOK)
