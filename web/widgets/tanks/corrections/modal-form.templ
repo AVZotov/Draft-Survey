@@ -1,11 +1,17 @@
 package corrections
 
-import "github.com/AVZotov/draft-survey/web/components"
+import (
+	"fmt"
+	"github.com/AVZotov/draft-survey/data/dictionaries"
+	"github.com/AVZotov/draft-survey/internal/constants"
+	"github.com/AVZotov/draft-survey/internal/format"
+	"github.com/AVZotov/draft-survey/web/components"
+)
 
 templ ModalForm(props components.LayoutProps) {
 	<form
-		method="dialog"
 		id="app-modal-content"
+		x-on:change="dirty = true"
 	>
 		<!-- ── Header ─────────────────────────────────────────── -->
 		<div class="tcm-header">
@@ -20,17 +26,17 @@ templ ModalForm(props components.LayoutProps) {
 				</div>
 				<div>
 					<div class="tcm-title">Volume Calculation</div>
-					<div class="tcm-tank-id">FPT · Ballast Water Tank</div>
+					<div class="tcm-tank-id">{ props.BwTankCorrections.Tank.Type } { props.BwTankCorrections.Tank.Name }</div>
 				</div>
 			</div>
 			<div class="tcm-context">
 				<div class="tcm-ctx-item">
 					<span class="tcm-ctx-label">Trim</span>
-					<span class="tcm-ctx-val">2.437 m Aft</span>
+					<span class="tcm-ctx-val">{ format.FloatOrEmpty(props.BwTankCorrections.Trim) }m { format.TrimDirection(props.BwTankCorrections.Trim) }</span>
 				</div>
 				<div class="tcm-ctx-item">
 					<span class="tcm-ctx-label">List</span>
-					<span class="tcm-ctx-val">0.053° Stbd</span>
+					<span class="tcm-ctx-val">{ format.FloatOrEmpty(props.BwTankCorrections.List) }° { format.ListDirection(props.BwTankCorrections.List) }</span>
 				</div>
 			</div>
 		</div>
@@ -43,13 +49,14 @@ templ ModalForm(props components.LayoutProps) {
 					<div class="tcm-field">
 						<label class="tcm-label">Type</label>
 						<div class="tcm-select-wrap">
-							<select class="tcm-select" name="tank_type">
-								<option>FPT</option>
-								<option>WBT</option>
-								<option>DBT</option>
-								<option>APT</option>
-								<option>TST</option>
-								<option>Other</option>
+							<select class="tcm-select" name={ constants.WtankType }>
+								for _, bwtType := range dictionaries.BallastWaterTankTypes {
+									if bwtType == props.BwTankCorrections.Tank.Type {
+										<option value={ bwtType } selected>{ bwtType }</option>
+									} else {
+										<option value={ bwtType }>{ bwtType }</option>
+									}
+								}
 							</select>
 							<svg class="tcm-select-arrow" viewBox="0 0 24 24">
 								<path d="M6 9l6 6 6-6"></path>
@@ -57,8 +64,8 @@ templ ModalForm(props components.LayoutProps) {
 						</div>
 					</div>
 					<div class="tcm-field">
-						<label class="tcm-label">Name</label>
-						<input class="tcm-input" type="text" name="tank_name" placeholder="e.g. 1S, Centre…" value="FPT"/>
+						<label class="tcm-label">NAME</label>
+						<input class="tcm-input" type="text" name="tank_name" placeholder="e.g. 1S, Centre…" value={ props.BwTankCorrections.Tank.Name }/>
 					</div>
 				</div>
 			</div>
@@ -68,7 +75,14 @@ templ ModalForm(props components.LayoutProps) {
 				<div class="tcm-field-row tcm-field-row--3">
 					<div class="tcm-field">
 						<label class="tcm-label">Sounding <span class="tcm-label-unit">m</span></label>
-						<input class="tcm-input" type="number" name="tank_sounding" placeholder="0.000" step="any"/>
+						<input
+							class="tcm-input"
+							type="number"
+							name="tank_sounding"
+							value={ format.FloatOrEmpty(props.BwTankCorrections.Tank.Sounding) }
+							placeholder="0.000"
+							step="any"
+						/>
 					</div>
 					<div class="tcm-field">
 						<label class="tcm-label">Volume <span class="tcm-label-unit">m³</span></label>
@@ -76,6 +90,7 @@ templ ModalForm(props components.LayoutProps) {
 							class="tcm-input tcm-input--readonly"
 							type="number"
 							name="tank_volume"
+							value={ format.FloatOrEmpty(props.BwTankCorrections.Tank.Volume) }
 							placeholder="calculated"
 							readonly
 							tabindex="-1"
@@ -83,7 +98,14 @@ templ ModalForm(props components.LayoutProps) {
 					</div>
 					<div class="tcm-field">
 						<label class="tcm-label">Density <span class="tcm-label-unit">t/m³</span></label>
-						<input class="tcm-input" type="number" name="tank_density" placeholder="global" step="any"/>
+						<input
+							class="tcm-input"
+							type="number"
+							name="tank_density"
+							value={ format.FloatOrEmpty(props.BwTankCorrections.Tank.Density) }
+							placeholder="global"
+							step="any"
+						/>
 					</div>
 				</div>
 			</div>
@@ -103,11 +125,25 @@ templ ModalForm(props components.LayoutProps) {
 				<div class="tcm-field-row tcm-field-row--2">
 					<div class="tcm-field">
 						<label class="tcm-label">TTL — Lower trim <span class="tcm-label-unit">m</span></label>
-						<input class="tcm-input" type="number" name="calib_ttl" placeholder="e.g. −1.000" step="any"/>
+						<input
+							class="tcm-input"
+							type="number"
+							name="calib_ttl"
+							value={ format.FloatOrEmpty(props.BwTankCorrections.Tank.Correction.TableTrimLow) }
+							placeholder="e.g. -1.000"
+							step="any"
+						/>
 					</div>
 					<div class="tcm-field">
 						<label class="tcm-label">TTU — Upper trim <span class="tcm-label-unit">m</span></label>
-						<input class="tcm-input" type="number" name="calib_ttu" placeholder="e.g. +3.000" step="any"/>
+						<input
+							class="tcm-input"
+							type="number"
+							name="calib_ttu"
+							value={ format.FloatOrEmpty(props.BwTankCorrections.Tank.Correction.TableTrimUpper) }
+							placeholder="e.g. +3.000"
+							step="any"
+						/>
 					</div>
 				</div>
 			</div>
@@ -128,7 +164,13 @@ templ ModalForm(props components.LayoutProps) {
 							<tr>
 								<td><span class="tcm-row-label">TSL</span></td>
 								<td>
-									<input class="tcm-ti" type="number" name="calib_row_sounding" placeholder="0.000" step="any"/>
+									<input
+										class="tcm-ti"
+										type="number"
+										name="calib_row_sounding"
+										placeholder="0.000"
+										step="any"
+									/>
 								</td>
 								<td>
 									<input
@@ -152,7 +194,13 @@ templ ModalForm(props components.LayoutProps) {
 							<tr>
 								<td><span class="tcm-row-label">TSU</span></td>
 								<td>
-									<input class="tcm-ti" type="number" name="calib_row_sounding" placeholder="0.000" step="any"/>
+									<input
+										class="tcm-ti"
+										type="number"
+										name="calib_row_sounding"
+										placeholder="0.000"
+										step="any"
+									/>
 								</td>
 								<td>
 									<input
@@ -315,8 +363,20 @@ templ ModalForm(props components.LayoutProps) {
 		<div class="tcm-footer">
 			<span class="tcm-footer-hint">Trim and List applied from draft readings</span>
 			<div class="tcm-footer-btns">
-				<button class="tcm-btn tcm-btn--cancel" value="cancel">Cancel</button>
-				<button class="tcm-btn tcm-btn--confirm" value="ok">
+				<button
+					class="tcm-btn tcm-btn--cancel"
+					onclick="document.getElementById('app-modal').close();"
+					value="cancel"
+				>Cancel</button>
+				<button
+					class="tcm-btn tcm-btn--confirm"
+					value="ok"
+					hx-put={ fmt.Sprintf("/survey/%s/tanks/%d/bw-tank/%s", props.Survey.ID, props.BwTankCorrections.DraftIndex, props.BwTankCorrections.Tank.ID) }
+					hx-target={ fmt.Sprintf("#bw-row-%s", props.BwTankCorrections.Tank.ID) }
+					hx-swap="morph:outerHTML"
+					hx-include="closest form"
+					onclick="document.getElementById('app-modal').close();"
+				>
 					<svg viewBox="0 0 24 24">
 						<path d="M20 6L9 17l-5-5"></path>
 					</svg>

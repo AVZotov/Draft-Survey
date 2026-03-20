@@ -69,11 +69,12 @@ func TanksPageProps(user *types.User, survey *types.Survey, draftIndex, draftTyp
 	}
 }
 
-func TanksCorrProps(survey *types.Survey, tank *types.BallastWaterTank, trim, list *float64) components.LayoutProps {
+func TanksCorrProps(survey *types.Survey, tank *types.BallastWaterTank, draftIndex int, trim, list *float64) components.LayoutProps {
 	bwtCorrections := &components.BwTankCorrections{
-		Tank: tank,
-		Trim: trim,
-		List: list,
+		DraftIndex: draftIndex,
+		Tank:       tank,
+		Trim:       trim,
+		List:       list,
 	}
 	return components.LayoutProps{
 		Title:             "Corrections",

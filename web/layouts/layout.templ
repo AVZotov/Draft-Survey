@@ -22,10 +22,12 @@ templ Layout(props components.LayoutProps) {
 			for _, css := range props.ExtraCSS {
 				<link rel="stylesheet" href={ css }/>
 			}
+			<script src="/static/js/main.js"></script>
 			<script src="/static/js/htmx.min.js"></script>
 			<script src="/static/js/idiomorph-ext.js"></script>
+			<script defer src="/static/js/alpine.min.js"></script>
 			<!--Modals scripts section -->
-			<script src="/static/js/tank-calc-modal.js"></script>
+			<script defer src="/static/js/tank-calc-modal.js"></script>
 			<title>{ props.Title }</title>
 			<meta name="Draft-Survey calculator" content={ props.MetaDescription }/>
 		</head>
@@ -35,11 +37,20 @@ templ Layout(props components.LayoutProps) {
 			@widgets.Banner()
 			{ children... }
 			<!-- Universl modal dialog -->
-			<dialog id="app-modal" hx-preserve>
+			<dialog
+				id="app-modal"
+				hx-preserve="true"
+				x-data="{dirty: false}"
+				x-on:close="dirty = false"
+				x-on:cancel.prevent="
+				if (!dirty) {$el.closest('dialog').close() }
+				if (confirm('Unsaved changes. Close anyway?')) { $el.close() }
+				"
+			>
 				<div id="app-modal-content"></div>
 			</dialog>
 			<!-- Universl toast/notification -->
-			<dialog id="app-toast" hx-preserve>
+			<dialog id="app-toast" hx-preserve="true">
 				<div id="app-toast-content"></div>
 			</dialog>
 			for _, js := range props.ExtraJS {

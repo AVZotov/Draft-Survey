@@ -14,9 +14,10 @@ type MetaData struct {
 }
 
 type BwTankCorrections struct {
-	Tank *types.BallastWaterTank
-	Trim *float64
-	List *float64
+	DraftIndex int
+	Tank       *types.BallastWaterTank
+	Trim       *float64
+	List       *float64
 }
 
 type LayoutProps struct {

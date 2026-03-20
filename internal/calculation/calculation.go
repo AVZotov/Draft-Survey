@@ -396,8 +396,11 @@ func CalcBwTankVolume(trim, listDegrees float64, tank types.BallastWaterTank) (f
 	if tableType == "" {
 		return 0, errors.New("no calibration table type selected")
 	}
-	if tank.Sounding == nil || tank.Density == nil {
-		return 0, errors.New("no sounding or density in measurements")
+	if tank.Sounding == nil {
+		return 0, errors.New("no sounding in measurements")
+	}
+	if tank.Correction.TableTrimLow == nil || tank.Correction.TableTrimUpper == nil {
+		return 0, errors.New("no trim table data inputed")
 	}
 
 	switch tableType {

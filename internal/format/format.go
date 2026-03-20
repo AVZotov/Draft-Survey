@@ -88,11 +88,14 @@ func MMCShortFormula(vesselType vessel.VesselType) string {
 
 // TrimDirection returns the trim direction as a string.
 // Positive trim = stern deeper = "Aft", negative = bow deeper = "Fwd"
-func TrimDirection(trim float64) string {
+func TrimDirection(trim *float64) string {
+	if trim == nil {
+		return ""
+	}
 	switch {
-	case trim > 0:
+	case *trim > 0:
 		return "Aft"
-	case trim < 0:
+	case *trim < 0:
 		return "Fwd"
 	default:
 		return "Even keel"
@@ -101,11 +104,14 @@ func TrimDirection(trim float64) string {
 
 // ListDirection returns the list direction as a string.
 // Positive list = port side deeper = "Port", negative = starboard deeper = "Stbd"
-func ListDirection(list float64) string {
+func ListDirection(list *float64) string {
+	if list == nil {
+		return ""
+	}
 	switch {
-	case list > 0:
+	case *list > 0:
 		return "Port"
-	case list < 0:
+	case *list < 0:
 		return "Stbd"
 	default:
 		return ""

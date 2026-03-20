@@ -180,8 +180,8 @@ func (h *Handler) bwTanksCorrections(c *fiber.Ctx) error {
 
 	bwt := bwTanks[tankIndex]
 	//TODO: Implement loading logic with corrections struct parsing
-	//TODO: Pass List and Trim to props using calculation module
+	draftCalcs := calculation.CalcDraft(survey.Drafts[draftIndex], survey.VesselData)
 
 	c.Status(http.StatusOK)
-	return tadaptor.Render(c, corrections.ModalForm(web.TanksCorrProps(survey, &bwt, nil, nil)))
+	return tadaptor.Render(c, corrections.ModalForm(web.TanksCorrProps(survey, &bwt, draftIndex, &draftCalcs.ObservedTrim, &draftCalcs.ListDegrees)))
 }
