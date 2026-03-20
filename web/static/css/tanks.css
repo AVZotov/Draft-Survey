@@ -305,7 +305,29 @@ input.den-in:focus {
   gap: var(--space-sm);
 }
 
+.corr-banner_warn {
+  margin: var(--space-sm) var(--space-lg);
+  padding: var(--space-sm) var(--space-md);
+  background: var(--danger-light, #FEF2F2);
+  border: 1px solid var(--danger-border, #FECACA);
+  border-radius: var(--radius-md);
+  font-size: 11px;
+  color: var(--danger-accent, #DC2626);
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
 .corr-banner svg {
+  width: 13px;
+  height: 13px;
+  stroke: var(--accent);
+  fill: none;
+  stroke-width: 2;
+  flex-shrink: 0;
+}
+
+.corr-banner_warn svg {
   width: 13px;
   height: 13px;
   stroke: var(--accent);

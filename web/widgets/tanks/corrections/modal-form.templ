@@ -5,10 +5,11 @@ import (
 	"github.com/AVZotov/draft-survey/data/dictionaries"
 	"github.com/AVZotov/draft-survey/internal/constants"
 	"github.com/AVZotov/draft-survey/internal/format"
+	"github.com/AVZotov/draft-survey/internal/types"
 	"github.com/AVZotov/draft-survey/web/components"
 )
 
-templ ModalForm(tp components.TanksPageProps, cp components.CalibrationPageProps) {
+templ ModalForm(tank types.Tank, tp components.TanksPageProps) {
 	<form
 		id="app-modal-content"
 		x-on:change="dirty = true"
@@ -26,17 +27,17 @@ templ ModalForm(tp components.TanksPageProps, cp components.CalibrationPageProps
 				</div>
 				<div>
 					<div class="tcm-title">Volume Calculation</div>
-					<div class="tcm-tank-id">{ cp.Tank.Type } { cp.Tank.Type }</div>
+					<div class="tcm-tank-id">{ tank.Type } { tank.Type }</div>
 				</div>
 			</div>
 			<div class="tcm-context">
 				<div class="tcm-ctx-item">
 					<span class="tcm-ctx-label">Trim</span>
-					<span class="tcm-ctx-val">{ format.WeightFormatted(cp.Trim) }m { format.TrimDirection(cp.Trim) }</span>
+					<span class="tcm-ctx-val">{ format.FloatOrEmpty(tp.Trim) }m { tp.TrimDir }</span>
 				</div>
 				<div class="tcm-ctx-item">
 					<span class="tcm-ctx-label">List</span>
-					<span class="tcm-ctx-val">{ cp.List }° { format.ListDirection(cp.List) }</span>
+					<span class="tcm-ctx-val">{ format.FloatOrEmpty(tp.List) }° { tp.ListDir }</span>
 				</div>
 			</div>
 		</div>
@@ -51,7 +52,7 @@ templ ModalForm(tp components.TanksPageProps, cp components.CalibrationPageProps
 						<div class="tcm-select-wrap">
 							<select class="tcm-select" name={ constants.WtankType }>
 								for _, bwtType := range dictionaries.BallastWaterTankTypes {
-									if bwtType == cp.Tank.Type {
+									if bwtType == tank.Type {
 										<option value={ bwtType } selected>{ bwtType }</option>
 									} else {
 										<option value={ bwtType }>{ bwtType }</option>
@@ -65,7 +66,7 @@ templ ModalForm(tp components.TanksPageProps, cp components.CalibrationPageProps
 					</div>
 					<div class="tcm-field">
 						<label class="tcm-label">NAME</label>
-						<input class="tcm-input" type="text" name="tank_name" placeholder="e.g. 1S, Centre…" value={ cp.Tank.Name }/>
+						<input class="tcm-input" type="text" name="tank_name" placeholder="e.g. 1S, Centre…" value={ tank.Name }/>
 					</div>
 				</div>
 			</div>
@@ -79,7 +80,7 @@ templ ModalForm(tp components.TanksPageProps, cp components.CalibrationPageProps
 							class="tcm-input"
 							type="number"
 							name="tank_sounding"
-							value={ format.FloatOrEmpty(cp.Tank.Sounding) }
+							value={ format.FloatOrEmpty(tank.Sounding) }
 							placeholder="0.000"
 							step="any"
 						/>
@@ -90,7 +91,7 @@ templ ModalForm(tp components.TanksPageProps, cp components.CalibrationPageProps
 							class="tcm-input tcm-input--readonly"
 							type="number"
 							name="tank_volume"
-							value={ format.FloatOrEmpty(cp.Tank.Volume) }
+							value={ format.FloatOrEmpty(tank.Volume) }
 							placeholder="calculated"
 							readonly
 							tabindex="-1"
@@ -102,7 +103,7 @@ templ ModalForm(tp components.TanksPageProps, cp components.CalibrationPageProps
 							class="tcm-input"
 							type="number"
 							name="tank_density"
-							value={ format.FloatOrEmpty(cp.Tank.Density) }
+							value={ format.FloatOrEmpty(tank.Density) }
 							placeholder="global"
 							step="any"
 						/>
@@ -129,7 +130,7 @@ templ ModalForm(tp components.TanksPageProps, cp components.CalibrationPageProps
 							class="tcm-input"
 							type="number"
 							name="calib_ttl"
-							value={ format.FloatOrEmpty(cp.Tank.Correction.TableTrimLow) }
+							value={ format.FloatOrEmpty(tank.Correction.TableTrimLow) }
 							placeholder="e.g. -1.000"
 							step="any"
 						/>
@@ -140,7 +141,7 @@ templ ModalForm(tp components.TanksPageProps, cp components.CalibrationPageProps
 							class="tcm-input"
 							type="number"
 							name="calib_ttu"
-							value={ format.FloatOrEmpty(cp.Tank.Correction.TableTrimUpper) }
+							value={ format.FloatOrEmpty(tank.Correction.TableTrimUpper) }
 							placeholder="e.g. +3.000"
 							step="any"
 						/>
@@ -375,8 +376,8 @@ templ ModalForm(tp components.TanksPageProps, cp components.CalibrationPageProps
 				<button
 					class="tcm-btn tcm-btn--confirm"
 					value="ok"
-					hx-put={ fmt.Sprintf("api/v1/survey/%s/tanks/%d/bw-tank/%s", tp.Survey.ID, tp.DraftIndex, cp.Tank.ID) }
-					hx-target={ fmt.Sprintf("#bw-row-%s", cp.Tank.ID) }
+					hx-put={ fmt.Sprintf("api/v1/survey/%s/tanks/%d/bw-tank/%s", tp.Survey.ID, tp.DraftIndex, tank.ID) }
+					hx-target={ fmt.Sprintf("#bw-row-%s", tank.ID) }
 					hx-swap="morph:outerHTML"
 					hx-include="closest form"
 					hx-on::after-request="document.getElementById('app-modal').close();"

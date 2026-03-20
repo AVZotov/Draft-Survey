@@ -5,15 +5,13 @@ import (
 	"github.com/AVZotov/draft-survey/internal/types"
 )
 
-type CalibrationPageProps struct {
-	Tank types.Tank
-	Trim float64
-	List float64
-}
-
 type TanksPageProps struct {
 	Survey     types.Survey
 	DraftIndex int
+	Trim       *float64
+	TrimDir    string
+	List       *float64
+	ListDir    string
 }
 
 type LayoutProps struct {

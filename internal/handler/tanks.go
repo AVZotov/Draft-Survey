@@ -7,6 +7,7 @@ import (
 	"strconv"
 
 	"github.com/AVZotov/draft-survey/internal/calculation"
+	"github.com/AVZotov/draft-survey/internal/format"
 	"github.com/AVZotov/draft-survey/internal/handler/tadaptor"
 	"github.com/AVZotov/draft-survey/internal/types"
 	"github.com/AVZotov/draft-survey/web"
@@ -27,18 +28,22 @@ type props struct {
 	tankID     string
 	tankIndex  int
 	tanks      []types.Tank
+	trim       *float64
+	trimDir    string
+	list       *float64
+	listDir    string
 }
 
 func (h *Handler) tanks(c *fiber.Ctx) error {
-	props, err := getProps(h, c)
+	p, err := getProps(h, c)
 	if err != nil {
 		return err
 	}
 
-	tanksLayoutProps := web.TanksLayoutProps(props.user)
-	tanksPageProps := web.TanksPageProps(*props.survey, props.draftIndex)
+	tanksLayoutProps := web.TanksLayoutProps(p.user)
+	tanksProps := web.TanksPageProps(*p.survey, p.draftIndex, p.trim, p.list, p.trimDir, p.listDir)
 
-	return tadaptor.Render(c, pages.Tanks(tanksLayoutProps, tanksPageProps))
+	return tadaptor.Render(c, pages.Tanks(tanksLayoutProps, tanksProps))
 }
 
 func (h *Handler) newBwTank(c *fiber.Ctx) error {
@@ -78,7 +83,7 @@ func (h *Handler) deleteBwTank(c *fiber.Ctx) error {
 		return err
 	}
 
-	tanksProps := web.TanksPageProps(*p.survey, p.draftIndex)
+	tanksProps := web.TanksPageProps(*p.survey, p.draftIndex, p.trim, p.list, p.trimDir, p.listDir)
 
 	c.Status(http.StatusOK)
 	return tadaptor.Render(c, tanks.BwTableHeaderForm(tanksProps, true))
@@ -99,7 +104,7 @@ func (h *Handler) updateBwTank(c *fiber.Ctx) error {
 		return err
 	}
 
-	tanksProps := web.TanksPageProps(*p.survey, p.draftIndex)
+	tanksProps := web.TanksPageProps(*p.survey, p.draftIndex, p.trim, p.list, p.trimDir, p.listDir)
 
 	c.Status(http.StatusOK)
 	return tadaptor.Render(c, templ.Join(
@@ -115,12 +120,10 @@ func (h *Handler) tanksCorrections(c *fiber.Ctx) error {
 
 	tank := p.tanks[p.tankIndex]
 	//TODO: Implement loading logic with corrections struct parsing
-	draftCalcs := calculation.CalcDraft(p.survey.Drafts[p.draftIndex], p.survey.VesselData)
-	tanksProps := web.TanksPageProps(*p.survey, p.draftIndex)
-	callibrationProps := web.CalibrationPageProps(tank, draftCalcs.TrueTrim, draftCalcs.ListDegrees)
+	tanksProps := web.TanksPageProps(*p.survey, p.draftIndex, p.trim, p.list, p.trimDir, p.listDir)
 
 	c.Status(http.StatusOK)
-	return tadaptor.Render(c, corrections.ModalForm(tanksProps, callibrationProps))
+	return tadaptor.Render(c, corrections.ModalForm(tank, tanksProps))
 }
 
 func getProps(h *Handler, c *fiber.Ctx) (*props, error) {
@@ -141,6 +144,23 @@ func getProps(h *Handler, c *fiber.Ctx) (*props, error) {
 		return nil, err
 	}
 
+	var trueTrim, listDegrees *float64
+	draft := survey.Drafts[draftIndex]
+	if draft.Marks.FwdPort.Value != nil && draft.Marks.FwdPort.Method != "" &&
+		draft.Marks.AftPort.Value != nil && draft.Marks.AftPort.Method != "" &&
+		draft.Marks.MidPort.Value != nil && draft.Marks.MidPort.Method != "" &&
+		draft.DistancePPFwd != nil && draft.DistancePPMid != nil && draft.DistancePPAft != nil &&
+		survey.VesselData.LBP > 0 {
+		results := calculation.CalcDraft(draft, survey.VesselData)
+		trueTrim = &results.TrueTrim
+		listDegrees = &results.ListDegrees
+	}
+	var trimDir, listDir string
+	if trueTrim != nil && listDegrees != nil {
+		trimDir = format.TrimDirection(*trueTrim)
+		listDir = format.ListDirection(*listDegrees)
+	}
+
 	tankID := c.Params("tankID")
 
 	if tankID == "" {
@@ -149,6 +169,10 @@ func getProps(h *Handler, c *fiber.Ctx) (*props, error) {
 			draftIndex: draftIndex,
 			survey:     survey,
 			user:       user,
+			trim:       trueTrim,
+			trimDir:    trimDir,
+			list:       listDegrees,
+			listDir:    listDir,
 		}, nil
 	}
 
@@ -168,5 +192,9 @@ func getProps(h *Handler, c *fiber.Ctx) (*props, error) {
 		tankID:     tankID,
 		tankIndex:  tankIndex,
 		tanks:      tanks,
+		trim:       trueTrim,
+		trimDir:    trimDir,
+		list:       listDegrees,
+		listDir:    listDir,
 	}, nil
 }

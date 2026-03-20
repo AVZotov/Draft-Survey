@@ -16,18 +16,14 @@ func TanksLayoutProps(user *types.User) components.LayoutProps {
 	}
 }
 
-func TanksPageProps(survey types.Survey, draftIndex int) components.TanksPageProps {
+func TanksPageProps(survey types.Survey, draftIndex int, trim, list *float64, trimDir, listDir string) components.TanksPageProps {
 	return components.TanksPageProps{
 		Survey:     survey,
 		DraftIndex: draftIndex,
-	}
-}
-
-func CalibrationPageProps(tank types.Tank, trim, list float64) components.CalibrationPageProps {
-	return components.CalibrationPageProps{
-		Tank: tank,
-		Trim: trim,
-		List: list,
+		Trim:       trim,
+		TrimDir:    trimDir,
+		List:       list,
+		ListDir:    listDir,
 	}
 }
 
