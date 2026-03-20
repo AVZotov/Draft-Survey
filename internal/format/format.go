@@ -6,6 +6,7 @@ import (
 	"slices"
 	"strconv"
 
+	"github.com/AVZotov/draft-survey/internal/types"
 	"github.com/AVZotov/draft-survey/internal/vessel"
 )
 
@@ -21,6 +22,13 @@ func FloatOrEmpty(v *float64) string {
 		return ""
 	}
 	return fmt.Sprintf("%g", *v)
+}
+
+func IntToStr(i int) string {
+	if i == 0 {
+		return "-"
+	}
+	return strconv.Itoa(i)
 }
 
 func Weight(v float64) string {
@@ -88,14 +96,11 @@ func MMCShortFormula(vesselType vessel.VesselType) string {
 
 // TrimDirection returns the trim direction as a string.
 // Positive trim = stern deeper = "Aft", negative = bow deeper = "Fwd"
-func TrimDirection(trim *float64) string {
-	if trim == nil {
-		return ""
-	}
+func TrimDirection(trim float64) string {
 	switch {
-	case *trim > 0:
+	case trim > 0:
 		return "Aft"
-	case *trim < 0:
+	case trim < 0:
 		return "Fwd"
 	default:
 		return "Even keel"
@@ -104,16 +109,17 @@ func TrimDirection(trim *float64) string {
 
 // ListDirection returns the list direction as a string.
 // Positive list = port side deeper = "Port", negative = starboard deeper = "Stbd"
-func ListDirection(list *float64) string {
-	if list == nil {
-		return ""
-	}
+func ListDirection(list float64) string {
 	switch {
-	case *list > 0:
+	case list > 0:
 		return "Port"
-	case *list < 0:
+	case list < 0:
 		return "Stbd"
 	default:
 		return ""
 	}
+}
+
+func TankNameID(prefix string, tank types.Tank) string {
+	return fmt.Sprintf("%s-%s", prefix, tank.ID)
 }

@@ -7,11 +7,11 @@ import (
 	"strconv"
 
 	"github.com/AVZotov/draft-survey/internal/calculation"
-	"github.com/AVZotov/draft-survey/internal/format"
 	"github.com/AVZotov/draft-survey/internal/handler/tadaptor"
 	"github.com/AVZotov/draft-survey/internal/types"
 	"github.com/AVZotov/draft-survey/web"
 	"github.com/AVZotov/draft-survey/web/components"
+	"github.com/AVZotov/draft-survey/web/templates/pages"
 	"github.com/AVZotov/draft-survey/web/widgets/tanks"
 	"github.com/AVZotov/draft-survey/web/widgets/tanks/corrections"
 	"github.com/a-h/templ"
@@ -19,169 +19,154 @@ import (
 	"github.com/google/uuid"
 )
 
+type props struct {
+	surveyID   string
+	draftIndex int
+	survey     *types.Survey
+	user       *types.User
+	tankID     string
+	tankIndex  int
+	tanks      []types.Tank
+}
+
 func (h *Handler) tanks(c *fiber.Ctx) error {
-	id := c.Params("id")
-	survey, err := h.surveyRepository.Get(id)
+	props, err := getProps(h, c)
 	if err != nil {
 		return err
 	}
 
-	draftIndexStr := c.Params("draftIndex")
-	draftIndex, err := strconv.Atoi(draftIndexStr)
-	if err != nil {
-		return err
-	}
+	tanksLayoutProps := web.TanksLayoutProps(props.user)
+	tanksPageProps := web.TanksPageProps(*props.survey, props.draftIndex)
 
-	user, err := h.userRepository.Get()
-	if err != nil {
-		return err
-	}
-
-	var totalBwWeight, totalFwWeight string
-	bwTanks := survey.Drafts[draftIndex].BallastWaterTanks
-	if bwTanks != nil {
-		totalBwWeight = format.WeightFormatted(calculation.TotalBallastWater(bwTanks))
-	}
-	fwTanks := survey.Drafts[draftIndex].FreshWaterTanks
-	if fwTanks != nil {
-		totalFwWeight = format.WeightFormatted(calculation.TotalFreshWater(fwTanks))
-	}
-
-	props := web.TanksPageProps(user, survey, draftIndexStr, string(survey.Drafts[draftIndex].Type), totalBwWeight, totalFwWeight)
-	return tadaptor.Render(c, web.Tanks(props, bwTanks, fwTanks))
+	return tadaptor.Render(c, pages.Tanks(tanksLayoutProps, tanksPageProps))
 }
 
 func (h *Handler) newBwTank(c *fiber.Ctx) error {
 	tankID := uuid.New().String()
-	id := c.Params("id")
-	draftIndexStr := c.Params("draftIndex")
-	draftIndex, err := strconv.Atoi(draftIndexStr)
-	if err != nil {
-		return err
-	}
-	survey, err := h.surveyRepository.Get(id)
+	p, err := getProps(h, c)
 	if err != nil {
 		return err
 	}
 
-	bwt := new(types.BallastWaterTank)
-	bwt.ID = tankID
-	h.parseBwTank(c, bwt)
+	bwt := types.Tank{
+		ID: tankID,
+	}
+	h.parseBwTank(c, &bwt)
 
-	survey.Drafts[draftIndex].BallastWaterTanks =
-		append(survey.Drafts[draftIndex].BallastWaterTanks, *bwt)
+	p.survey.Drafts[p.draftIndex].BallastWaterTanks =
+		append(p.survey.Drafts[p.draftIndex].BallastWaterTanks, bwt)
 
-	if err = h.surveyRepository.Save(survey); err != nil {
+	if err = h.surveyRepository.Save(p.survey); err != nil {
 		return err
 	}
 
 	return tadaptor.Render(c, templ.Join(
-		components.BwTankItem(survey.ID, draftIndexStr, *bwt),
-		tanks.BwAddRowForm(survey.ID, draftIndexStr, true)))
+		components.TankItem(p.survey.ID, p.draftIndex, bwt),
+		tanks.BwAddRowForm(p.survey.ID, p.draftIndex, true)))
 }
 
 func (h *Handler) deleteBwTank(c *fiber.Ctx) error {
-	id := c.Params("id")
-	survey, err := h.surveyRepository.Get(id)
+	p, err := getProps(h, c)
 	if err != nil {
 		return err
 	}
-	draftIndexStr := c.Params("draftIndex")
-	draftIndex, err := strconv.Atoi(draftIndexStr)
-	if err != nil {
-		return err
-	}
-	tankID := c.Params("tankID")
-	bwTanks := survey.Drafts[draftIndex].BallastWaterTanks
 
-	i := slices.IndexFunc(bwTanks, func(tank types.BallastWaterTank) bool {
-		return tank.ID == tankID
-	})
-	if i == -1 {
-		return errors.New("tank not found")
-	}
-	bwTanks = slices.Delete(bwTanks, i, i+1)
+	p.tanks = slices.Delete(p.tanks, p.tankIndex, p.tankIndex+1)
 
-	survey.Drafts[draftIndex].BallastWaterTanks = bwTanks
-	if err := h.surveyRepository.Save(survey); err != nil {
+	p.survey.Drafts[p.draftIndex].BallastWaterTanks = p.tanks
+	if err := h.surveyRepository.Save(p.survey); err != nil {
 		return err
 	}
 
-	totalWeight := format.WeightFormatted(calculation.TotalBallastWater(survey.Drafts[draftIndex].BallastWaterTanks))
+	tanksProps := web.TanksPageProps(*p.survey, p.draftIndex)
 
 	c.Status(http.StatusOK)
-	return tadaptor.Render(c, tanks.BwTableHeaderForm(
-		string(survey.Drafts[draftIndex].Type), totalWeight, true))
+	return tadaptor.Render(c, tanks.BwTableHeaderForm(tanksProps, true))
 }
 
 func (h *Handler) updateBwTank(c *fiber.Ctx) error {
-	id := c.Params("id")
-	survey, err := h.surveyRepository.Get(id)
+	p, err := getProps(h, c)
 	if err != nil {
 		return err
 	}
-	draftIndexStr := c.Params("draftIndex")
-	draftIndex, err := strconv.Atoi(draftIndexStr)
-	if err != nil {
-		return err
-	}
-	tankID := c.Params("tankID")
-	bwTanks := survey.Drafts[draftIndex].BallastWaterTanks
-	tankIndex := slices.IndexFunc(bwTanks, func(tank types.BallastWaterTank) bool {
-		return tank.ID == tankID
-	})
-	if tankIndex == -1 {
-		return errors.New("tank not found")
-	}
 
-	bwt := bwTanks[tankIndex]
+	tank := p.tanks[p.tankIndex]
+	h.parseBwTank(c, &tank)
 
-	h.parseBwTank(c, &bwt)
+	p.survey.Drafts[p.draftIndex].BallastWaterTanks[p.tankIndex] = tank
 
-	if bwt.Volume != nil && bwt.Density != nil {
-		bwt.Weight = bwt.GetWeight()
-	}
-
-	survey.Drafts[draftIndex].BallastWaterTanks[tankIndex] = bwt
-
-	if err := h.surveyRepository.Save(survey); err != nil {
+	if err := h.surveyRepository.Save(p.survey); err != nil {
 		return err
 	}
 
-	totalWeight := format.WeightFormatted(calculation.TotalBallastWater(survey.Drafts[draftIndex].BallastWaterTanks))
+	tanksProps := web.TanksPageProps(*p.survey, p.draftIndex)
 
 	c.Status(http.StatusOK)
 	return tadaptor.Render(c, templ.Join(
-		components.BwTankItem(survey.ID, draftIndexStr, bwt),
-		tanks.BwTableHeaderForm(string(survey.Drafts[draftIndex].Type), totalWeight, true)))
+		components.TankItem(p.survey.ID, p.draftIndex, tank),
+		tanks.BwTableHeaderForm(tanksProps, true)))
 }
 
-func (h *Handler) bwTanksCorrections(c *fiber.Ctx) error {
+func (h *Handler) tanksCorrections(c *fiber.Ctx) error {
+	p, err := getProps(h, c)
+	if err != nil {
+		return err
+	}
+
+	tank := p.tanks[p.tankIndex]
+	//TODO: Implement loading logic with corrections struct parsing
+	draftCalcs := calculation.CalcDraft(p.survey.Drafts[p.draftIndex], p.survey.VesselData)
+	tanksProps := web.TanksPageProps(*p.survey, p.draftIndex)
+	callibrationProps := web.CalibrationPageProps(tank, draftCalcs.TrueTrim, draftCalcs.ListDegrees)
+
+	c.Status(http.StatusOK)
+	return tadaptor.Render(c, corrections.ModalForm(tanksProps, callibrationProps))
+}
+
+func getProps(h *Handler, c *fiber.Ctx) (*props, error) {
 	id := c.Params("id")
 	survey, err := h.surveyRepository.Get(id)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	draftIndexStr := c.Params("draftIndex")
 	draftIndex, err := strconv.Atoi(draftIndexStr)
 	if err != nil {
-		return err
+		return nil, err
+	}
+
+	user, err := h.userRepository.Get()
+	if err != nil {
+		return nil, err
 	}
 
 	tankID := c.Params("tankID")
-	bwTanks := survey.Drafts[draftIndex].BallastWaterTanks
-	tankIndex := slices.IndexFunc(bwTanks, func(tank types.BallastWaterTank) bool {
+
+	if tankID == "" {
+		return &props{
+			surveyID:   id,
+			draftIndex: draftIndex,
+			survey:     survey,
+			user:       user,
+		}, nil
+	}
+
+	tanks := survey.Drafts[draftIndex].BallastWaterTanks
+	tankIndex := slices.IndexFunc(tanks, func(tank types.Tank) bool {
 		return tank.ID == tankID
 	})
 	if tankIndex == -1 {
-		return errors.New("tank not found")
+		return nil, errors.New("tank not found")
 	}
 
-	bwt := bwTanks[tankIndex]
-	//TODO: Implement loading logic with corrections struct parsing
-	draftCalcs := calculation.CalcDraft(survey.Drafts[draftIndex], survey.VesselData)
-
-	c.Status(http.StatusOK)
-	return tadaptor.Render(c, corrections.ModalForm(web.TanksCorrProps(survey, &bwt, draftIndex, &draftCalcs.ObservedTrim, &draftCalcs.ListDegrees)))
+	return &props{
+		surveyID:   id,
+		draftIndex: draftIndex,
+		survey:     survey,
+		user:       user,
+		tankID:     tankID,
+		tankIndex:  tankIndex,
+		tanks:      tanks,
+	}, nil
 }

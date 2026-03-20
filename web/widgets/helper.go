@@ -11,7 +11,7 @@ func formatFloat(f float64) string {
 
 func formatInt(i int) string {
 	if i == 0 {
-		return ""
+		return "-"
 	}
 	return strconv.Itoa(i)
 }

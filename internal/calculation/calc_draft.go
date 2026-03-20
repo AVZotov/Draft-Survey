@@ -28,6 +28,8 @@ func CalcDraft(draft types.Draft, v vessel.VesselData) DraftResult {
 	var netDisplacement float64
 	var constant float64
 	var currentDWT float64
+	var totalBwTanksWeight float64
+	var totalFwTanksWeight float64
 
 	meanDraft = MeanDrafts(draft.Marks)
 	if v.CorrectionMethod == vessel.CorrectionMethodFullLBP {
@@ -74,6 +76,8 @@ func CalcDraft(draft types.Draft, v vessel.VesselData) DraftResult {
 	)
 	constant = CalcConstant(netDisplacement, v.Lightship)
 	currentDWT = CalcCurrentDWT(displacementCorrected, v.Lightship)
+	totalBwTanksWeight = TotalTanksWeight(draft.BallastWaterTanks)
+	totalFwTanksWeight = TotalTanksWeight(draft.FreshWaterTanks)
 
 	return DraftResult{
 		MeanDraft:             meanDraft,
@@ -96,5 +100,7 @@ func CalcDraft(draft types.Draft, v vessel.VesselData) DraftResult {
 		NetDisplacement:       netDisplacement,
 		Constant:              constant,
 		CurrentDWT:            currentDWT,
+		TotalBwTanksWeight:    totalBwTanksWeight,
+		TotalFwTanksWeight:    totalFwTanksWeight,
 	}
 }

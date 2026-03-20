@@ -259,7 +259,11 @@ func (h *Handler) parseDraft(c *fiber.Ctx, survey *types.Survey) {
 	}
 }
 
-func (h *Handler) parseBwTank(c *fiber.Ctx, tank *types.BallastWaterTank) {
+func (h *Handler) parseBwTank(c *fiber.Ctx, tank *types.Tank) {
+	if tank == nil {
+		return
+	}
+
 	tName, err := parseString(c, constants.WtankName)
 	if err == nil {
 		tank.Name = tName

@@ -14,7 +14,7 @@ import (
 	"github.com/AVZotov/draft-survey/internal/constants"
 )
 
-func BwAddRowForm(surveyID, draftIndex string, isOOB bool) templ.Component {
+func BwAddRowForm(surveyID string, draftIndex int, isOOB bool) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -112,7 +112,7 @@ func BwAddRowForm(surveyID, draftIndex string, isOOB bool) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var6 string
-		templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("/api/v1/survey/%s/tanks/%s/bw-tank", surveyID, draftIndex))
+		templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("/api/v1/survey/%s/tanks/%d/bw-tank", surveyID, draftIndex))
 		if templ_7745c5c3_Err != nil {
 			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/bw-add-row-form.templ`, Line: 48, Col: 84}
 		}

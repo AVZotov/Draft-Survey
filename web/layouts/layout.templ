@@ -43,7 +43,7 @@ templ Layout(props components.LayoutProps) {
 				x-data="{dirty: false}"
 				x-on:close="dirty = false"
 				x-on:cancel.prevent="
-				if (!dirty) {$el.closest('dialog').close() }
+				if (!dirty) {$el.close(); return }
 				if (confirm('Unsaved changes. Close anyway?')) { $el.close() }
 				"
 			>

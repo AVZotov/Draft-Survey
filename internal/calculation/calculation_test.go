@@ -9,22 +9,22 @@ import (
 
 func fp(v float64) *float64 { return &v }
 
-func getFreshWaterTank() types.FreshWaterTank {
-	return types.FreshWaterTank{
+func getFreshWaterTank() types.Tank {
+	return types.Tank{
 		Name:     "test",
 		Sounding: fp(3.5),
 		Volume:   fp(3.5),
 	}
 }
 
-func getInitFreshWaterTanks() []types.FreshWaterTank {
-	return []types.FreshWaterTank{
+func getInitFreshWaterTanks() []types.Tank {
+	return []types.Tank{
 		{Name: "FW P", Sounding: fp(364.000), Volume: fp(364.000)},
 	}
 }
 
-func getBallastWaterTank() types.BallastWaterTank {
-	return types.BallastWaterTank{
+func getBallastWaterTank() types.Tank {
+	return types.Tank{
 		Name:     "test",
 		Sounding: fp(3.5),
 		Volume:   fp(3.5),
@@ -32,8 +32,8 @@ func getBallastWaterTank() types.BallastWaterTank {
 	}
 }
 
-func getInitBallastWaterTanks() []types.BallastWaterTank {
-	return []types.BallastWaterTank{
+func getInitBallastWaterTanks() []types.Tank {
+	return []types.Tank{
 		{Name: "FPT", Sounding: fp(10347.899), Volume: fp(10347.899), Density: fp(1.025)},
 	}
 }
@@ -103,7 +103,7 @@ func getInitDeductibles() types.Deductibles {
 func TestFreshWaterTank_GetWeight(t *testing.T) {
 	const weight = 3.5
 	tank := getFreshWaterTank()
-	tankWeight := tank.GetWeight()
+	tankWeight := tank.CalcWeight()
 	if tankWeight != weight {
 		t.Errorf("Expected %f, got %f", weight, tankWeight)
 	}
@@ -112,7 +112,7 @@ func TestFreshWaterTank_GetWeight(t *testing.T) {
 func TestBallastWaterTank_GetWeight(t *testing.T) {
 	const weight = 3.587
 	tank := getBallastWaterTank()
-	tankWeight := round3(tank.GetWeight())
+	tankWeight := round3(tank.CalcWeight())
 	if tankWeight != weight {
 		t.Errorf("Expected %f, got %f", weight, tankWeight)
 	}
@@ -122,7 +122,7 @@ func TestTotalFreshWater(t *testing.T) {
 	const weight = 364.000
 	tanks := getInitFreshWaterTanks()
 
-	totalWeight := TotalFreshWater(tanks)
+	totalWeight := TotalTanksWeight(tanks)
 	if totalWeight != weight {
 		t.Errorf("Expected %f, got %f", weight, totalWeight)
 	}
@@ -131,12 +131,12 @@ func TestTotalFreshWater(t *testing.T) {
 func TestTotalBallastWater(t *testing.T) {
 	const weight = 17.935
 	tank := getBallastWaterTank()
-	var ballastWaterTanks []types.BallastWaterTank
+	var ballastWaterTanks []types.Tank
 
 	for i := 0; i < 5; i++ {
 		ballastWaterTanks = append(ballastWaterTanks, tank)
 	}
-	totalWeight := round3(TotalBallastWater(ballastWaterTanks))
+	totalWeight := round3(TotalTanksWeight(ballastWaterTanks))
 	if totalWeight != weight {
 		t.Errorf("Expected %f, got %f", weight, totalWeight)
 	}

@@ -6,6 +6,31 @@ import (
 	"github.com/AVZotov/draft-survey/web/components"
 )
 
+func TanksLayoutProps(user *types.User) components.LayoutProps {
+	return components.LayoutProps{
+		Title:           "Tanks Reading",
+		MetaDescription: "Vessel tanks reading",
+		User:            user,
+		ExtraCSS:        []string{"/static/css/tanks.css"},
+		ExtraJS:         []string{"/static/js/tanks.js"},
+	}
+}
+
+func TanksPageProps(survey types.Survey, draftIndex int) components.TanksPageProps {
+	return components.TanksPageProps{
+		Survey:     survey,
+		DraftIndex: draftIndex,
+	}
+}
+
+func CalibrationPageProps(tank types.Tank, trim, list float64) components.CalibrationPageProps {
+	return components.CalibrationPageProps{
+		Tank: tank,
+		Trim: trim,
+		List: list,
+	}
+}
+
 func DashboardProps(user *types.User, survey *types.Survey) components.LayoutProps {
 	return components.LayoutProps{
 		Title:           "Dashboard",
@@ -47,40 +72,6 @@ func ResultsPageProps(user *types.User, survey *types.Survey, results *[]calcula
 		User:            user,
 		Survey:          survey,
 		Results:         results,
-	}
-}
-
-func TanksPageProps(user *types.User, survey *types.Survey, draftIndex, draftType, totalBwWeight, totalFwWeight string) components.LayoutProps {
-	meta := &components.MetaData{
-		SurveyID:      survey.ID,
-		DraftIndex:    draftIndex,
-		DratType:      draftType,
-		TotalBwWeight: totalBwWeight,
-		TotalFwWeight: totalFwWeight,
-	}
-	return components.LayoutProps{
-		Title:           "Tanks Reading",
-		MetaDescription: "Vessel tanks reading",
-		User:            user,
-		Survey:          survey,
-		ExtraCSS:        []string{"/static/css/tanks.css"},
-		ExtraJS:         []string{"/static/js/tanks.js"},
-		MetaData:        meta,
-	}
-}
-
-func TanksCorrProps(survey *types.Survey, tank *types.BallastWaterTank, draftIndex int, trim, list *float64) components.LayoutProps {
-	bwtCorrections := &components.BwTankCorrections{
-		DraftIndex: draftIndex,
-		Tank:       tank,
-		Trim:       trim,
-		List:       list,
-	}
-	return components.LayoutProps{
-		Title:             "Corrections",
-		MetaDescription:   "Tank corrections hydrostatic data",
-		Survey:            survey,
-		BwTankCorrections: bwtCorrections,
 	}
 }
 

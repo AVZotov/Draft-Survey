@@ -8,7 +8,7 @@ import (
 	"github.com/AVZotov/draft-survey/web/components"
 )
 
-templ ModalForm(props components.LayoutProps) {
+templ ModalForm(tp components.TanksPageProps, cp components.CalibrationPageProps) {
 	<form
 		id="app-modal-content"
 		x-on:change="dirty = true"
@@ -26,17 +26,17 @@ templ ModalForm(props components.LayoutProps) {
 				</div>
 				<div>
 					<div class="tcm-title">Volume Calculation</div>
-					<div class="tcm-tank-id">{ props.BwTankCorrections.Tank.Type } { props.BwTankCorrections.Tank.Name }</div>
+					<div class="tcm-tank-id">{ cp.Tank.Type } { cp.Tank.Type }</div>
 				</div>
 			</div>
 			<div class="tcm-context">
 				<div class="tcm-ctx-item">
 					<span class="tcm-ctx-label">Trim</span>
-					<span class="tcm-ctx-val">{ format.FloatOrEmpty(props.BwTankCorrections.Trim) }m { format.TrimDirection(props.BwTankCorrections.Trim) }</span>
+					<span class="tcm-ctx-val">{ format.WeightFormatted(cp.Trim) }m { format.TrimDirection(cp.Trim) }</span>
 				</div>
 				<div class="tcm-ctx-item">
 					<span class="tcm-ctx-label">List</span>
-					<span class="tcm-ctx-val">{ format.FloatOrEmpty(props.BwTankCorrections.List) }° { format.ListDirection(props.BwTankCorrections.List) }</span>
+					<span class="tcm-ctx-val">{ cp.List }° { format.ListDirection(cp.List) }</span>
 				</div>
 			</div>
 		</div>
@@ -51,7 +51,7 @@ templ ModalForm(props components.LayoutProps) {
 						<div class="tcm-select-wrap">
 							<select class="tcm-select" name={ constants.WtankType }>
 								for _, bwtType := range dictionaries.BallastWaterTankTypes {
-									if bwtType == props.BwTankCorrections.Tank.Type {
+									if bwtType == cp.Tank.Type {
 										<option value={ bwtType } selected>{ bwtType }</option>
 									} else {
 										<option value={ bwtType }>{ bwtType }</option>
@@ -65,7 +65,7 @@ templ ModalForm(props components.LayoutProps) {
 					</div>
 					<div class="tcm-field">
 						<label class="tcm-label">NAME</label>
-						<input class="tcm-input" type="text" name="tank_name" placeholder="e.g. 1S, Centre…" value={ props.BwTankCorrections.Tank.Name }/>
+						<input class="tcm-input" type="text" name="tank_name" placeholder="e.g. 1S, Centre…" value={ cp.Tank.Name }/>
 					</div>
 				</div>
 			</div>
@@ -79,7 +79,7 @@ templ ModalForm(props components.LayoutProps) {
 							class="tcm-input"
 							type="number"
 							name="tank_sounding"
-							value={ format.FloatOrEmpty(props.BwTankCorrections.Tank.Sounding) }
+							value={ format.FloatOrEmpty(cp.Tank.Sounding) }
 							placeholder="0.000"
 							step="any"
 						/>
@@ -90,7 +90,7 @@ templ ModalForm(props components.LayoutProps) {
 							class="tcm-input tcm-input--readonly"
 							type="number"
 							name="tank_volume"
-							value={ format.FloatOrEmpty(props.BwTankCorrections.Tank.Volume) }
+							value={ format.FloatOrEmpty(cp.Tank.Volume) }
 							placeholder="calculated"
 							readonly
 							tabindex="-1"
@@ -102,7 +102,7 @@ templ ModalForm(props components.LayoutProps) {
 							class="tcm-input"
 							type="number"
 							name="tank_density"
-							value={ format.FloatOrEmpty(props.BwTankCorrections.Tank.Density) }
+							value={ format.FloatOrEmpty(cp.Tank.Density) }
 							placeholder="global"
 							step="any"
 						/>
@@ -129,7 +129,7 @@ templ ModalForm(props components.LayoutProps) {
 							class="tcm-input"
 							type="number"
 							name="calib_ttl"
-							value={ format.FloatOrEmpty(props.BwTankCorrections.Tank.Correction.TableTrimLow) }
+							value={ format.FloatOrEmpty(cp.Tank.Correction.TableTrimLow) }
 							placeholder="e.g. -1.000"
 							step="any"
 						/>
@@ -140,7 +140,7 @@ templ ModalForm(props components.LayoutProps) {
 							class="tcm-input"
 							type="number"
 							name="calib_ttu"
-							value={ format.FloatOrEmpty(props.BwTankCorrections.Tank.Correction.TableTrimUpper) }
+							value={ format.FloatOrEmpty(cp.Tank.Correction.TableTrimUpper) }
 							placeholder="e.g. +3.000"
 							step="any"
 						/>
@@ -365,17 +365,21 @@ templ ModalForm(props components.LayoutProps) {
 			<div class="tcm-footer-btns">
 				<button
 					class="tcm-btn tcm-btn--cancel"
-					onclick="document.getElementById('app-modal').close();"
+					type="button"
+					x-on:click="
+					if (!dirty) {$el.closest('dialog').close(); return }
+					if (confirm('Unsaved changes. Close anyway?')) {$el.closest('dialog').close() }
+					"
 					value="cancel"
 				>Cancel</button>
 				<button
 					class="tcm-btn tcm-btn--confirm"
 					value="ok"
-					hx-put={ fmt.Sprintf("/survey/%s/tanks/%d/bw-tank/%s", props.Survey.ID, props.BwTankCorrections.DraftIndex, props.BwTankCorrections.Tank.ID) }
-					hx-target={ fmt.Sprintf("#bw-row-%s", props.BwTankCorrections.Tank.ID) }
+					hx-put={ fmt.Sprintf("api/v1/survey/%s/tanks/%d/bw-tank/%s", tp.Survey.ID, tp.DraftIndex, cp.Tank.ID) }
+					hx-target={ fmt.Sprintf("#bw-row-%s", cp.Tank.ID) }
 					hx-swap="morph:outerHTML"
 					hx-include="closest form"
-					onclick="document.getElementById('app-modal').close();"
+					hx-on::after-request="document.getElementById('app-modal').close();"
 				>
 					<svg viewBox="0 0 24 24">
 						<path d="M20 6L9 17l-5-5"></path>

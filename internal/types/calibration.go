@@ -16,7 +16,7 @@ type CalibrationRow struct {
 	VolumeTrimUpper *float64 `json:"calib_row_vol_trim_upper"`
 }
 
-type VolumeCorrectionData struct {
+type VolumeCalibrationData struct {
 	TableType      CalibrationTableType `json:"tank_calib_table_type"`
 	TableTrimLow   *float64             `json:"calib_ttl"`
 	TableTrimUpper *float64             `json:"calib_ttu"`

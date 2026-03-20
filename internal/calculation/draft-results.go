@@ -23,4 +23,6 @@ type DraftResult struct {
 	NetDisplacement       float64
 	Constant              float64
 	CurrentDWT            float64
+	TotalBwTanksWeight    float64
+	TotalFwTanksWeight    float64
 }

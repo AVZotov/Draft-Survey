@@ -5,19 +5,15 @@ import (
 	"github.com/AVZotov/draft-survey/internal/types"
 )
 
-type MetaData struct {
-	SurveyID      string
-	DraftIndex    string
-	DratType      string
-	TotalBwWeight string
-	TotalFwWeight string
+type CalibrationPageProps struct {
+	Tank types.Tank
+	Trim float64
+	List float64
 }
 
-type BwTankCorrections struct {
+type TanksPageProps struct {
+	Survey     types.Survey
 	DraftIndex int
-	Tank       *types.BallastWaterTank
-	Trim       *float64
-	List       *float64
 }
 
 type LayoutProps struct {
@@ -28,8 +24,6 @@ type LayoutProps struct {
 	Results         *[]calculation.DraftResult
 	ExtraCSS        []string
 	ExtraJS         []string
-	MetaData        *MetaData
-	*BwTankCorrections
 }
 
 type Version struct {

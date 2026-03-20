@@ -9,18 +9,10 @@ import (
 	"github.com/AVZotov/draft-survey/internal/vessel"
 )
 
-func TotalFreshWater(fwt []types.FreshWaterTank) float64 {
+func TotalTanksWeight(tanks []types.Tank) float64 {
 	var total float64
-	for _, t := range fwt {
-		total += round3(t.GetWeight())
-	}
-	return total
-}
-
-func TotalBallastWater(bwt []types.BallastWaterTank) float64 {
-	var total float64
-	for _, t := range bwt {
-		total += round3(t.GetWeight())
+	for _, t := range tanks {
+		total += round3(t.CalcWeight())
 	}
 	return total
 }
@@ -200,9 +192,9 @@ func CalcDensityCorrection(displacement float64, firstTrim float64, secondTrim f
 	return round3(displacementCorrected * (dockwaterDensity - tableDensity) / tableDensity)
 }
 
-func CalcTotalDeductibles(bwt []types.BallastWaterTank, fwt []types.FreshWaterTank, d types.Deductibles) float64 {
-	tbw := TotalBallastWater(bwt)
-	tfw := TotalFreshWater(fwt)
+func CalcTotalDeductibles(bwt []types.Tank, fwt []types.Tank, d types.Deductibles) float64 {
+	tbw := TotalTanksWeight(bwt)
+	tfw := TotalTanksWeight(fwt)
 
 	return round3(tbw + tfw + markVal(d.HFO) + markVal(d.MDO) + markVal(d.LubOil) + markVal(d.BilgeWater) + markVal(d.SewageWater) + markVal(d.Others))
 }
@@ -224,7 +216,7 @@ func CalcCurrentDWT(displCorrToDensity float64, lightship float64) float64 {
 	return round3(displCorrToDensity - lightship)
 }
 
-func CalcVolume(volumeCorrectionData types.VolumeCorrectionData, sounding, trim, list float64) float64 {
+func CalcVolume(volumeCorrectionData types.VolumeCalibrationData, sounding, trim, list float64) float64 {
 	switch volumeCorrectionData.TableType {
 	case constants.VolumeCalibrationType2:
 		return calcVolumeType2(sounding, trim, list, volumeCorrectionData, volumeCorrectionData.VolumeRows)
@@ -293,7 +285,7 @@ func calcVolumeByRows(sounding, trimOrList float64, rows []types.CalibrationRow,
 		list     — observed vessel list (midPort - midStbd), m
 		data     — tank calibration data
 */
-func calcVolumeType1(sounding, trim, list float64, data types.VolumeCorrectionData) float64 {
+func calcVolumeType1(sounding, trim, list float64, data types.VolumeCalibrationData) float64 {
 	ttl := markVal(data.TableTrimLow)
 	ttu := markVal(data.TableTrimUpper)
 
@@ -330,7 +322,7 @@ func calcVolumeType1(sounding, trim, list float64, data types.VolumeCorrectionDa
 		data     — Table 1 calibration data (sounding corrections)
 		volumeRows — Table 2 rows (volume at corrected sounding, trim = 0)
 */
-func calcVolumeType2(sounding, trim, list float64, data types.VolumeCorrectionData, volumeRows []types.CalibrationRow) float64 {
+func calcVolumeType2(sounding, trim, list float64, data types.VolumeCalibrationData, volumeRows []types.CalibrationRow) float64 {
 	ttl := markVal(data.TableTrimLow)
 	ttu := markVal(data.TableTrimUpper)
 
@@ -370,7 +362,7 @@ Parameters:
 	data       — Table 1 calibration data (volume corrections)
 	volumeRows — Table 2 rows (base volume at zero trim)
 */
-func calcVolumeType3(sounding, trim, list float64, data types.VolumeCorrectionData, volumeRows []types.CalibrationRow) float64 {
+func calcVolumeType3(sounding, trim, list float64, data types.VolumeCalibrationData, volumeRows []types.CalibrationRow) float64 {
 	ttl := markVal(data.TableTrimLow)
 	ttu := markVal(data.TableTrimUpper)
 
@@ -391,7 +383,7 @@ func calcVolumeType3(sounding, trim, list float64, data types.VolumeCorrectionDa
 }
 
 // Wrapper on true volume caclulations
-func CalcBwTankVolume(trim, listDegrees float64, tank types.BallastWaterTank) (float64, error) {
+func CalcBwTankVolume(trim, listDegrees float64, tank types.Tank) (float64, error) {
 	tableType := tank.Correction.TableType
 	if tableType == "" {
 		return 0, errors.New("no calibration table type selected")

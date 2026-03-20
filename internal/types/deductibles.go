@@ -1,47 +1,24 @@
 package types
 
-var _ Tank = (*BallastWaterTank)(nil)
-var _ Tank = (*FreshWaterTank)(nil)
-
-type Tank interface {
-	GetWeight() float64
+type Tank struct {
+	IsFWTTank  bool                  `json:"is_fresh_water_tank"`
+	Type       string                `json:"tank_type"`
+	Name       string                `json:"tank_name"`
+	ID         string                `json:"tank_id"`
+	Sounding   *float64              `json:"tank_sounding"`
+	Density    *float64              `json:"tank_density"`
+	Volume     *float64              `json:"tank_volume"`
+	Correction VolumeCalibrationData `json:"correction"`
 }
 
-type FreshWaterTank struct {
-	Type       string               `json:"tank_type"`
-	Name       string               `json:"tank_name"`
-	ID         string               `json:"tank_id"`
-	Sounding   *float64             `json:"tank_sounding"`
-	Volume     *float64             `json:"tank_volume"`
-	Correction VolumeCorrectionData `json:"correction"`
-	Weight     float64              `json:"tank_weight"`
-}
-
-func (fwt FreshWaterTank) GetWeight() float64 {
-	if fwt.Volume == nil {
-		return 0.0
+func (t Tank) CalcWeight() float64 {
+	if t.Volume == nil {
+		return 0.000
 	}
-	const density = 1.000
-	return *fwt.Volume * density
-}
-
-type BallastWaterTank struct {
-	Type       string               `json:"tank_type"`
-	Name       string               `json:"tank_name"`
-	ID         string               `json:"tank_id"`
-	Sounding   *float64             `json:"tank_sounding"`
-	Volume     *float64             `json:"tank_volume"`
-	Density    *float64             `json:"tank_density"`
-	Correction VolumeCorrectionData `json:"correction"`
-	Weight     float64              `json:"tank_weight"`
-}
-
-func (bwt BallastWaterTank) GetWeight() float64 {
-	if bwt.Volume == nil || bwt.Density == nil {
-		return 0
+	if t.IsFWTTank {
+		return *t.Volume
 	}
-
-	return *bwt.Volume * *bwt.Density
+	return *t.Volume * *t.Density
 }
 
 type OtherDeductibles struct {

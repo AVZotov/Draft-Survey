@@ -6,7 +6,7 @@ import (
 	"github.com/AVZotov/draft-survey/internal/constants"
 )
 
-templ BwAddRowForm(surveyID, draftIndex string, isOOB bool) {
+templ BwAddRowForm(surveyID string, draftIndex int, isOOB bool) {
 	<div
 		id="add-bw-row"
 		class="add-row"
@@ -45,7 +45,7 @@ templ BwAddRowForm(surveyID, draftIndex string, isOOB bool) {
 			id="add-bw-row-btn"
 			type="button"
 			disabled
-			hx-post={ fmt.Sprintf("/api/v1/survey/%s/tanks/%s/bw-tank", surveyID, draftIndex) }
+			hx-post={ fmt.Sprintf("/api/v1/survey/%s/tanks/%d/bw-tank", surveyID, draftIndex) }
 			hx-target="#bw-tanks-items"
 			hx-include="closest .add-row"
 			hx-swap="beforeend"

@@ -8,11 +8,11 @@ package tanks
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
-import "github.com/AVZotov/draft-survey/internal/types"
-
 import "github.com/AVZotov/draft-survey/web/components"
+import "fmt"
+import "github.com/AVZotov/draft-survey/internal/format"
 
-func Form(props components.LayoutProps, bwTanks []types.BallastWaterTank, fwTanks []types.FreshWaterTank) templ.Component {
+func Form(lp components.LayoutProps, tp components.TanksPageProps) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -33,27 +33,70 @@ func Form(props components.LayoutProps, bwTanks []types.BallastWaterTank, fwTank
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<main class=\"page-main__tanks\"><div class=\"tanks-wrap\"><div class=\"page-top\"><a href=\"#\" class=\"back-link\"><svg viewBox=\"0 0 24 24\"><path d=\"M19 12H5M12 19l-7-7 7-7\"></path></svg>Back to Draft Readings</a><h1 class=\"page-title\">BW / FW Tanks</h1><p class=\"page-meta\">OCEAN CHEERS · IMO 9233387 · Loading · Vanino, Russia</p></div><!-- DENSITY BAR --><div class=\"density-bar\"><span class=\"density-bar-label\">BW Density</span><div class=\"density-groups\"><div class=\"dg dg--ini\"><span class=\"dg-lbl\">Initial</span> <input class=\"den-in\" type=\"number\" id=\"den-ini\" placeholder=\"1.025\" step=\"any\" value=\"1.025\"> <span class=\"den-hint\">t/m³</span></div></div><span class=\"density-bar-note\">WARING! NOT IMPLEMENTED! Applied to BW tanks with empty density. Override per-tank if needed.</span></div><!-- ═══ BALLAST WATER ══════════════════════════════════════════ --><div class=\"tank-block tank-block--bw\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<main class=\"page-main__tanks\"><div class=\"tanks-wrap\"><div class=\"page-top\"><a href=\"#\" class=\"back-link\"><svg viewBox=\"0 0 24 24\"><path d=\"M19 12H5M12 19l-7-7 7-7\"></path></svg>Back to Draft Readings</a><h1 class=\"page-title\">BW / FW Tanks</h1><p class=\"page-meta\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = BwTableHeaderForm(props.MetaData.DratType, props.MetaData.TotalBwWeight, false).Render(ctx, templ_7745c5c3_Buffer)
+		var templ_7745c5c3_Var2 string
+		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%s · IMO %s · %s · %s",
+			tp.Survey.VesselData.Name,
+			tp.Survey.VesselData.IMO,
+			tp.Survey.CargoOperation.Operation,
+			tp.Survey.CargoOperation.PlaceOfInspection))
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/form.templ`, Line: 18, Col: 49}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "<div class=\"corr-banner\"><svg viewBox=\"0 0 24 24\"><circle cx=\"12\" cy=\"12\" r=\"10\"></circle><path d=\"M12 16v-4M12 8h.01\"></path></svg> Volumes corrected for Trim (2.437 m Aft) and List (0.053° Stbd). Correction method: Trim + List.</div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</p></div><!-- DENSITY BAR --><div class=\"density-bar\"><span class=\"density-bar-label\">BW Density</span><div class=\"density-groups\"><div class=\"dg dg--ini\"><span class=\"dg-lbl\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = BwBlock(props, bwTanks).Render(ctx, templ_7745c5c3_Buffer)
+		var templ_7745c5c3_Var3 string
+		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(string(tp.Survey.Drafts[tp.DraftIndex].Type))
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/form.templ`, Line: 26, Col: 73}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = BwAddRowForm(props.MetaData.SurveyID, props.MetaData.DraftIndex, false).Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "</span> <input class=\"den-in\" type=\"number\" id=\"dockwater_density\" placeholder=\"1.025\" step=\"any\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "</div><!-- ═══ FRESH WATER ════════════════════════════════════════════ --><div class=\"tank-block tank-block--fw\"><div class=\"tank-block-header\"><div class=\"blk-label\"><span class=\"blk-dot\"></span>Fresh Water Tanks</div><div class=\"blk-totals\"><div class=\"total-chip tc--ini\"><span class=\"total-chip-lbl\">Initial</span><span class=\"total-chip-val\" id=\"fw-ini-hdr\">— MT</span></div><div class=\"total-chip tc--fin\"><span class=\"total-chip-lbl\">Final</span><span class=\"total-chip-val\" id=\"fw-fin-hdr\">— MT</span></div></div></div><div class=\"ttbl-wrap\"><table class=\"ttbl\" id=\"fw-tbl\"><thead><tr class=\"tr-grp\"><th class=\"th-ph\" rowspan=\"2\"></th><th class=\"th-div\" rowspan=\"2\"></th><th class=\"th-ini\" colspan=\"4\">Initial</th><th class=\"th-div\" rowspan=\"2\"></th><th class=\"th-fin\" colspan=\"4\">Final</th><th class=\"th-ph\" rowspan=\"2\"></th></tr><tr class=\"tr-sub\"><th class=\"th-num ts-ini\">Sound, m</th><th class=\"th-num ts-ini\">Vol, m³</th><th class=\"th-num ts-ini\">Density</th><th class=\"th-num ts-ini\">MT</th><th class=\"th-num ts-fin\">Sound, m</th><th class=\"th-num ts-fin\">Vol, m³</th><th class=\"th-num ts-fin\">Density</th><th class=\"th-num ts-fin\">MT</th></tr></thead><tfoot class=\"ttbl-foot\"><tr><td class=\"td-tot-lbl\">Total</td><td class=\"td-div\"></td><td colspan=\"3\"></td><td class=\"td-tot-mt\" id=\"fw-ini-foot\">— MT</td><td class=\"td-div\"></td><td colspan=\"3\"></td><td class=\"td-tot-mt\" id=\"fw-fin-foot\">— MT</td><td></td></tr></tfoot></table></div><div class=\"add-row\"><button class=\"add-btn\" onclick=\"addTank('fw')\"><svg viewBox=\"0 0 24 24\"><path d=\"M12 5v14M5 12h14\"></path></svg>Add FW tank</button></div></div></div></main>")
+		var templ_7745c5c3_Var4 string
+		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(format.FloatOrEmpty(tp.Survey.Drafts[tp.DraftIndex].Density))
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/form.templ`, Line: 27, Col: 164}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "\"> <span class=\"den-hint\">t/m³</span></div></div><span class=\"density-bar-note\">WARING! NOT IMPLEMENTED! Applied to BW tanks with empty density. Override per-tank if needed.</span></div><!-- ═══ BALLAST WATER ══════════════════════════════════════════ --><div class=\"tank-block tank-block--bw\">")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = BwTableHeaderForm(tp, false).Render(ctx, templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "<div class=\"corr-banner\"><svg viewBox=\"0 0 24 24\"><circle cx=\"12\" cy=\"12\" r=\"10\"></circle><path d=\"M12 16v-4M12 8h.01\"></path></svg> Volumes corrected for Trim (2.437 m Aft) and List (0.053° Stbd). Correction method: Trim + List.</div>")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = BwBlock(tp).Render(ctx, templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = BwAddRowForm(tp.Survey.ID, tp.DraftIndex, false).Render(ctx, templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "</div><!-- ═══ FRESH WATER ════════════════════════════════════════════ --><div class=\"tank-block tank-block--fw\"><div class=\"tank-block-header\"><div class=\"blk-label\"><span class=\"blk-dot\"></span>Fresh Water Tanks</div><div class=\"blk-totals\"><div class=\"total-chip tc--ini\"><span class=\"total-chip-lbl\">Initial</span><span class=\"total-chip-val\" id=\"fw-ini-hdr\">— MT</span></div><div class=\"total-chip tc--fin\"><span class=\"total-chip-lbl\">Final</span><span class=\"total-chip-val\" id=\"fw-fin-hdr\">— MT</span></div></div></div><div class=\"ttbl-wrap\"><table class=\"ttbl\" id=\"fw-tbl\"><thead><tr class=\"tr-grp\"><th class=\"th-ph\" rowspan=\"2\"></th><th class=\"th-div\" rowspan=\"2\"></th><th class=\"th-ini\" colspan=\"4\">Initial</th><th class=\"th-div\" rowspan=\"2\"></th><th class=\"th-fin\" colspan=\"4\">Final</th><th class=\"th-ph\" rowspan=\"2\"></th></tr><tr class=\"tr-sub\"><th class=\"th-num ts-ini\">Sound, m</th><th class=\"th-num ts-ini\">Vol, m³</th><th class=\"th-num ts-ini\">Density</th><th class=\"th-num ts-ini\">MT</th><th class=\"th-num ts-fin\">Sound, m</th><th class=\"th-num ts-fin\">Vol, m³</th><th class=\"th-num ts-fin\">Density</th><th class=\"th-num ts-fin\">MT</th></tr></thead><tfoot class=\"ttbl-foot\"><tr><td class=\"td-tot-lbl\">Total</td><td class=\"td-div\"></td><td colspan=\"3\"></td><td class=\"td-tot-mt\" id=\"fw-ini-foot\">— MT</td><td class=\"td-div\"></td><td colspan=\"3\"></td><td class=\"td-tot-mt\" id=\"fw-fin-foot\">— MT</td><td></td></tr></tfoot></table></div><div class=\"add-row\"><button class=\"add-btn\" onclick=\"addTank('fw')\"><svg viewBox=\"0 0 24 24\"><path d=\"M12 5v14M5 12h14\"></path></svg>Add FW tank</button></div></div></div></main>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

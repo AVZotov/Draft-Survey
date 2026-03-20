@@ -1,6 +1,9 @@
 package tanks
 
-templ BwTableHeaderForm(draftType, totalWeight string, isOOB bool) {
+import "github.com/AVZotov/draft-survey/web/components"
+import "github.com/AVZotov/draft-survey/internal/calculation"
+
+templ BwTableHeaderForm(tp components.TanksPageProps, isOOB bool) {
 	<div
 		id="bw-table-header"
 		class="tank-block-header"
@@ -13,11 +16,11 @@ templ BwTableHeaderForm(draftType, totalWeight string, isOOB bool) {
 		</div>
 		<div class="blk-totals">
 			<div class="total-chip tc--ini">
-				<span class="total-chip-lbl">{ draftType }</span>
+				<span class="total-chip-lbl">{ string(tp.Survey.Drafts[tp.DraftIndex].Type) }</span>
 				<span
 					id="bw-total-weight"
 					class="total-chip-val"
-				>{ totalWeight } MT</span>
+				>{ calculation.CalcDraft(tp.Survey.Drafts[tp.DraftIndex], tp.Survey.VesselData).TotalBwTanksWeight } MT</span>
 			</div>
 		</div>
 	</div>

@@ -8,7 +8,10 @@ package tanks
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
-func BwTableHeaderForm(draftType, totalWeight string, isOOB bool) templ.Component {
+import "github.com/AVZotov/draft-survey/web/components"
+import "github.com/AVZotov/draft-survey/internal/calculation"
+
+func BwTableHeaderForm(tp components.TanksPageProps, isOOB bool) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -44,9 +47,9 @@ func BwTableHeaderForm(draftType, totalWeight string, isOOB bool) templ.Componen
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var2 string
-		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(draftType)
+		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(string(tp.Survey.Drafts[tp.DraftIndex].Type))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/bw-table-header-form.templ`, Line: 16, Col: 44}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/bw-table-header-form.templ`, Line: 19, Col: 79}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
@@ -57,9 +60,9 @@ func BwTableHeaderForm(draftType, totalWeight string, isOOB bool) templ.Componen
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var3 string
-		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(totalWeight)
+		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(calculation.CalcDraft(tp.Survey.Drafts[tp.DraftIndex], tp.Survey.VesselData).TotalBwTanksWeight)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/bw-table-header-form.templ`, Line: 20, Col: 18}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/bw-table-header-form.templ`, Line: 23, Col: 102}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 		if templ_7745c5c3_Err != nil {

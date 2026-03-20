@@ -7,24 +7,19 @@ import (
 	"github.com/AVZotov/draft-survey/internal/types"
 )
 
-templ BwTankItem(surveyID, draftIndex string, tank types.BallastWaterTank) {
-	{{
-		field := func(prefix string) string {
-			return fmt.Sprintf("%s-%s", prefix, tank.ID)
-		}
-	}}
+templ TankItem(surveyID string, draftIndex int, tank types.Tank) {
 	<tr
-		id={ field("bw-row") }
+		id={ format.TankNameID("tank-row", tank) }
 		hx-target="this"
 		hx-trigger="change changed target:input delay:500ms"
 		hx-sync="this:replace"
 		hx-include="this"
 		hx-swap="morph:outerHTML"
-		hx-put={ fmt.Sprintf("/api/v1/survey/%s/tanks/%s/bw-tank/%s", surveyID, draftIndex, tank.ID) }
+		hx-put={ fmt.Sprintf("/api/v1/survey/%s/tanks/%d/bw-tank/%s", surveyID, draftIndex, tank.ID) }
 	>
 		<td class="td-act">
 			<button
-				hx-get={ fmt.Sprintf("/survey/%s/tanks/%s/bw-tank/%s/corrections", surveyID, draftIndex, tank.ID) }
+				hx-get={ fmt.Sprintf("/survey/%s/tanks/%d/bw-tank/%s/corrections", surveyID, draftIndex, tank.ID) }
 				hx-target="#app-modal-content"
 				hx-on::after-request="document.getElementById('app-modal').showModal()"
 				class="rbtn calc"
@@ -44,22 +39,26 @@ templ BwTankItem(surveyID, draftIndex string, tank types.BallastWaterTank) {
 		</td>
 		<td class="td-div"></td>
 		<td>
-			<input id={ field("bw-sounding") } class="ti" type="number" name={ field(constants.TankSounding) } value={ format.FloatOrEmpty(tank.Sounding) } placeholder="0.000" step="any"/>
+			<input id={ format.TankNameID(constants.TankSounding, tank) } class="ti" type="number" name={ format.TankNameID(constants.TankSounding, tank) } value={ format.FloatOrEmpty(tank.Sounding) } placeholder="0.000" step="any"/>
 		</td>
 		<td>
-			<input id={ field("bw-volume") } class="ti" type="number" name={ field(constants.TankVolume) } value={ format.FloatOrEmpty(tank.Volume) } placeholder="Calculated" step="any"/>
+			<input id={ format.TankNameID(constants.TankVolume, tank) } class="ti" type="number" name={ format.TankNameID(constants.TankVolume, tank) } value={ format.FloatOrEmpty(tank.Volume) } placeholder="Calculated" step="any"/>
 		</td>
 		<td>
-			<input id={ field("bw-density") } class="ti" type="number" name={ field(constants.TankDensity) } value={ format.FloatOrEmpty(tank.Density) } placeholder="0.000" step="any"/>
+			if tank.IsFWTTank {
+				<input class="ti" type="number" readonly value="1"/>
+			} else {
+				<input id={ format.TankNameID(constants.TankDensity, tank) } class="ti" type="number" name={ format.TankNameID(constants.TankDensity, tank) } value={ format.FloatOrEmpty(tank.Density) } placeholder="0.000" step="any"/>
+			}
 		</td>
 		<td>
-			<input id={ field("bw-weight") } class="ti" type="text" readonly name={ field(constants.TankWeight) } value={ format.WeightFormatted(tank.Weight) } placeholder="Calculated"/>
+			<input id={ format.TankNameID(constants.TankWeight, tank) } class="ti" type="text" readonly name={ format.TankNameID(constants.TankWeight, tank) } value={ format.WeightFormatted(tank.CalcWeight()) } placeholder="Calculated"/>
 		</td>
 		<td class="td-div"></td>
 		<td class="td-act">
 			<button
 				hx-confirm="This operation can't be undone"
-				hx-delete={ fmt.Sprintf("/api/v1/survey/%s/tanks/%s/bw-tank/%s", surveyID, draftIndex, tank.ID) }
+				hx-delete={ fmt.Sprintf("/api/v1/survey/%s/tanks/%d/bw-tank/%s", surveyID, draftIndex, tank.ID) }
 				hx-target="closest tr"
 				hx-swap="delete swap:500ms"
 				class="rbtn remove"
